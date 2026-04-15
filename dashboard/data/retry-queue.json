@@ -1,0 +1,10 @@
+[
+  {
+    "broker": "whitepages",
+    "requestId": "dash-demo-001",
+    "reason": "transient_submit_error",
+    "status": "queued",
+    "attempt": 1,
+    "nextAttemptAt": "2026-04-15T12:15:00.000Z"
+  }
+]

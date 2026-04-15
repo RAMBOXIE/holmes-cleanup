@@ -1,0 +1,8 @@
+{
+  "preset": "standard",
+  "type": "dmca",
+  "dmcaTone": "standard",
+  "keywords": "unauthorized repost",
+  "notify": "none",
+  "exportBeforeDelete": "ask"
+}

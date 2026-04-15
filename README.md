@@ -14,6 +14,7 @@ In today’s internet environment, privacy abuse, data broker exposure, and unau
 ## Current status (2026-04-15)
 - ✅ P0 complete: manual trigger gate, triple-confirm risk gate, pre-delete export prompt, notification branching, credential policy guardrails.
 - ✅ P1 complete: sample intake (keywords + user sample file), sample normalization/dedup, dry-run runner, unit tests.
+- ✅ Quick Mode, local Queue Dashboard, preset templates, and Proof Report generation are available.
 - ✅ Flowchart available for review.
 - 🔜 P2 next: pluggable mock executor, platform strategy templates, multilingual prompt packs.
 
@@ -43,6 +44,10 @@ In today’s internet environment, privacy abuse, data broker exposure, and unau
 - `DMCA_TEMPLATES.md` — Bilingual DMCA draft templates with placeholders.
 - `TODO.md` — Prioritized backlog and validation records.
 - `scripts/holmes-cleanup.mjs` — Dry-run orchestration entry.
+- `scripts/build-dashboard-data.mjs` — Generates local dashboard demo JSON.
+- `scripts/generate-proof-report.mjs` — Builds Markdown proof reports from execution JSON.
+- `dashboard/` — Local static queue dashboard.
+- `templates/` — Broker and DMCA preset JSON files.
 - `references/` — Risk gate and input schema docs.
 - `tests/` — Node test coverage for guardrails.
 - `examples/sample.json` — Sample input payload.
@@ -50,8 +55,15 @@ In today’s internet environment, privacy abuse, data broker exposure, and unau
 ## Quick run
 ```bash
 cd D:\Projects\holmes-cleanup
+npm run quick
 npm run dry
 npm test
+```
+
+`npm run quick` is the minimal-input full flow. It auto-selects the local sample file, dry-run mode, no notification, and export-before-delete `ask`, then blocks at any missing safety gate. For a fresh quick run, the expected block is the high-risk confirmation gate:
+
+```bash
+npm run quick -- --confirm1 YES --confirm2 YES --confirm3 YES --export-answer no
 ```
 
 ## Example command
@@ -60,6 +72,53 @@ npm run run -- --manual --keywords "mirror,reupload" --sample-file ./examples/sa
   --confirm1 YES --confirm2 YES --confirm3 YES \
   --export-before-delete ask --export-answer no --notify none
 ```
+
+## Preset templates
+Use `--preset <name>` to load preset parameters from `templates/`. User-supplied CLI flags override preset values.
+
+Broker presets:
+- `spokeo`
+- `whitepages`
+- `beenverified`
+
+DMCA presets:
+- `standard`
+- `urgent`
+- `followup`
+
+Example:
+```bash
+npm run run -- --manual --preset spokeo --keywords "custom search" \
+  --confirm1 YES --confirm2 YES --confirm3 YES \
+  --export-before-delete ask --export-answer no
+```
+
+## Queue Dashboard
+Generate demo data, then open the static dashboard with a local static server:
+
+```bash
+npm run dashboard:build-data
+```
+
+Files are written to `dashboard/data/*.json`. The dashboard reads:
+- `dashboard/data/retry-queue.json`
+- `dashboard/data/manual-review-queue.json`
+- `dashboard/data/status.json`
+
+## Proof Report
+Generate a demo proof report:
+
+```bash
+npm run report:proof
+```
+
+Generate a report from an execution result JSON:
+
+```bash
+node scripts/generate-proof-report.mjs ./path/to/execution-result.json
+```
+
+Reports are written to `reports/proof-<timestamp>.md` and include timeline, pass/fail status, reasons not executed, confirmation records, export decision, and queue status.
 
 ## Scope disclaimer
 This project does **not** currently call real external APIs in this phase. It is a safe dry-run foundation designed for iterative hardening before production integrations.

@@ -1,0 +1,8 @@
+{
+  "preset": "urgent",
+  "type": "dmca",
+  "dmcaTone": "urgent",
+  "keywords": "urgent unauthorized repost",
+  "notify": "none",
+  "exportBeforeDelete": "ask"
+}

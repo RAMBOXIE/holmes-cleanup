@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-04-15T11:30:40.070Z",
+  "mode": "dry-run",
+  "counters": {
+    "retryQueued": 1,
+    "manualReviewOpen": 1,
+    "successful": 2,
+    "blocked": 1
+  }
+}

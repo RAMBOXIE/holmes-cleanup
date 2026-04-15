@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Holmes Cleanup Queue Dashboard</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Dry-run local dashboard</p>
+        <h1>Queue Dashboard</h1>
+        <p>Review retry work, manual review items, and current status counters from local JSON files.</p>
+      </header>
+
+      <section class="counters" id="counters" aria-label="Status counters"></section>
+
+      <section class="grid">
+        <article>
+          <h2>Retry Queue</h2>
+          <div id="retry-queue" class="table-wrap"></div>
+        </article>
+        <article>
+          <h2>Manual Review Queue</h2>
+          <div id="manual-review-queue" class="table-wrap"></div>
+        </article>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

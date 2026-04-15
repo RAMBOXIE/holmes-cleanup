@@ -1,9 +1,49 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { loadPresetParams, mergePresetArgs } from './presets.mjs';
 
 export function runHolmesCleanup(argv = [], options = {}) {
   const cwd = options.cwd || process.cwd();
-  const args = parseArgs(argv);
+  const parsedArgs = parseArgs(argv);
+  const isQuickMode = parsedArgs.command === 'quick' || parsedArgs.quick === true;
+  let args = parsedArgs;
+
+  if (parsedArgs.preset) {
+    try {
+      args = mergePresetArgs(loadPresetParams(parsedArgs.preset, { cwd }), parsedArgs);
+    } catch (error) {
+      const payload = {
+        status: 'blocked',
+        session: {
+          trigger: isQuickMode ? 'quick' : parsedArgs.manual ? 'manual' : 'unknown',
+          notify: parsedArgs.notify || 'none',
+          exportBeforeDelete: parsedArgs.exportBeforeDelete || 'ask'
+        },
+        checks: [{ name: 'presetLoad', pass: false, detail: String(error.message || error) }],
+        nextActions: ['Use --preset with one of: spokeo, whitepages, beenverified, standard, urgent, followup.'],
+        findingsPlaceholder: {
+          mode: 'dry-run',
+          collectedFrom: [],
+          keywordCount: 0,
+          sampleCount: 0,
+          normalizedSamples: [],
+          notes: []
+        }
+      };
+      return jsonResult(1, payload);
+    }
+  }
+
+  if (isQuickMode) {
+    args = {
+      ...args,
+      manual: true,
+      sampleFile: args.sampleFile || './examples/sample.json',
+      notify: args.notify || 'none',
+      exportBeforeDelete: args.exportBeforeDelete || 'ask'
+    };
+  }
+
   const checks = [];
   const nextActions = [];
   const findingsPlaceholder = {
@@ -18,9 +58,10 @@ export function runHolmesCleanup(argv = [], options = {}) {
   const result = {
     status: 'blocked',
     session: {
-      trigger: args.manual ? 'manual' : 'unknown',
+      trigger: isQuickMode ? 'quick' : args.manual ? 'manual' : 'unknown',
       notify: args.notify || 'none',
-      exportBeforeDelete: args.exportBeforeDelete || 'ask'
+      exportBeforeDelete: args.exportBeforeDelete || 'ask',
+      preset: args.preset || null
     },
     checks,
     nextActions,
@@ -39,6 +80,7 @@ export function runHolmesCleanup(argv = [], options = {}) {
     nextActions.push('提供 --keywords "k1,k2" 或 --sample-file <path>');
     return jsonResult(1, result);
   }
+  checks.push({ name: 'inputSource', pass: true, detail: '已提供输入来源。' });
 
   if (args.keywords) {
     const keywordList = args.keywords.split(',').map(s => s.trim()).filter(Boolean);
@@ -81,7 +123,11 @@ export function runHolmesCleanup(argv = [], options = {}) {
       pass: false,
       detail: '高风险操作必须提供 --confirm1 YES --confirm2 YES --confirm3 YES（缺一不可）。'
     });
-    nextActions.push('补齐三次确认参数后重试');
+    nextActions.push(
+      isQuickMode
+        ? 'Provide --confirm1 YES --confirm2 YES --confirm3 YES to acknowledge high-risk actions.'
+        : '补齐三次确认参数后重试'
+    );
     return jsonResult(1, result);
   }
   checks.push({ name: 'riskTripleConfirm', pass: true, detail: '三次确认齐全。' });
@@ -100,7 +146,11 @@ export function runHolmesCleanup(argv = [], options = {}) {
         pass: false,
         detail: '当前为 ask 模式，必须提供 --export-answer yes|no 以继续。'
       });
-      nextActions.push('明确回答是否导出：--export-answer yes 或 --export-answer no');
+      nextActions.push(
+        isQuickMode
+          ? 'Provide --export-answer yes or --export-answer no before any delete-capable step.'
+          : '明确回答是否导出：--export-answer yes 或 --export-answer no'
+      );
       return jsonResult(1, result);
     }
     checks.push({ name: 'exportBeforeDelete', pass: true, detail: `用户已回答导出决策：${args.exportAnswer}` });
@@ -169,7 +219,10 @@ function parseArgs(argv) {
   const out = {};
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
-    if (!token.startsWith('--')) continue;
+    if (!token.startsWith('--')) {
+      if (!out.command) out.command = token;
+      continue;
+    }
 
     const key = token.slice(2);
     const next = argv[i + 1];

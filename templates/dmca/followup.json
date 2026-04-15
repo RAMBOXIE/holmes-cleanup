@@ -1,0 +1,8 @@
+{
+  "preset": "followup",
+  "type": "dmca",
+  "dmcaTone": "followup",
+  "keywords": "dmca followup",
+  "notify": "none",
+  "exportBeforeDelete": "ask"
+}

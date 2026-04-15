@@ -1,0 +1,8 @@
+{
+  "preset": "spokeo",
+  "type": "broker",
+  "broker": "spokeo",
+  "keywords": "spokeo exposure",
+  "notify": "none",
+  "exportBeforeDelete": "ask"
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "broker": "spokeo",
+    "requestId": "dash-demo-002",
+    "reason": "retry_limit_reached",
+    "status": "open",
+    "createdAt": "2026-04-15T12:00:00.000Z"
+  }
+]
