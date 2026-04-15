@@ -15,6 +15,7 @@ In today’s internet environment, privacy abuse, data broker exposure, and unau
 - ✅ P0 complete: manual trigger gate, triple-confirm risk gate, pre-delete export prompt, notification branching, credential policy guardrails.
 - ✅ P1 complete: sample intake (keywords + user sample file), sample normalization/dedup, dry-run runner, unit tests.
 - ✅ Quick Mode, local Queue Dashboard, preset templates, and Proof Report generation are available.
+- ✅ Conversation Wizard v1 state machine + prompt pack + CLI demo are available.
 - ✅ Flowchart available for review.
 - 🔜 P2 next: pluggable mock executor, platform strategy templates, multilingual prompt packs.
 
@@ -57,6 +58,7 @@ In today’s internet environment, privacy abuse, data broker exposure, and unau
 cd D:\Projects\holmes-cleanup
 npm run quick
 npm run dry
+npm run wizard:demo
 npm test
 ```
 
@@ -65,6 +67,25 @@ npm test
 ```bash
 npm run quick -- --confirm1 YES --confirm2 YES --confirm3 YES --export-answer no
 ```
+
+## Conversation Wizard
+Clawbot-style wizard is implemented under `src/wizard/engine.mjs` with full state sequence:
+
+`WELCOME -> GOAL -> SCOPE -> INPUT -> AUTH -> PLAN -> RISK_CONFIRM_1 -> RISK_CONFIRM_2 -> RISK_CONFIRM_3 -> EXPORT_DECISION -> EXECUTE -> REPORT -> CLOSE`
+
+Run local interactive demo:
+
+```bash
+npm run wizard:demo
+```
+
+Supported runtime commands in every state:
+- `status`
+- `back`
+- `pause`
+- `resume`
+
+Quick mode integration: when key fields are missing (e.g., triple risk confirmation or export decision), result `nextActions` includes wizard-friendly action objects with `state`, `missingFields`, and `command`.
 
 ## Example command
 ```bash

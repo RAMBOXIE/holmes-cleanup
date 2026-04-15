@@ -78,6 +78,7 @@ export function runHolmesCleanup(argv = [], options = {}) {
   if (!args.keywords && !args.sampleFile) {
     checks.push({ name: 'inputSource', pass: false, detail: '至少提供一种输入来源：--keywords 或 --sample-file。' });
     nextActions.push('提供 --keywords "k1,k2" 或 --sample-file <path>');
+    nextActions.push(wizardHint('INPUT', ['keywords|sampleFile'], 'Provide evidence source in wizard INPUT state.'));
     return jsonResult(1, result);
   }
   checks.push({ name: 'inputSource', pass: true, detail: '已提供输入来源。' });
@@ -112,6 +113,7 @@ export function runHolmesCleanup(argv = [], options = {}) {
     } catch (error) {
       checks.push({ name: 'sampleFileInput', pass: false, detail: `样本文件读取失败：${String(error.message || error)}` });
       nextActions.push('检查 --sample-file 路径和 JSON 格式');
+      nextActions.push(wizardHint('INPUT', ['sampleFile'], 'Fix sample input then continue wizard.'));
       return jsonResult(1, result);
     }
   }
@@ -128,6 +130,7 @@ export function runHolmesCleanup(argv = [], options = {}) {
         ? 'Provide --confirm1 YES --confirm2 YES --confirm3 YES to acknowledge high-risk actions.'
         : '补齐三次确认参数后重试'
     );
+    nextActions.push(wizardHint('RISK_CONFIRM_1', ['riskConfirm1', 'riskConfirm2', 'riskConfirm3'], 'Complete 3-step risk confirmation in wizard.'));
     return jsonResult(1, result);
   }
   checks.push({ name: 'riskTripleConfirm', pass: true, detail: '三次确认齐全。' });
@@ -136,6 +139,7 @@ export function runHolmesCleanup(argv = [], options = {}) {
   if (!['ask', 'yes', 'no'].includes(exportBeforeDelete)) {
     checks.push({ name: 'exportBeforeDelete', pass: false, detail: '--export-before-delete 仅支持 ask|yes|no。' });
     nextActions.push('使用 --export-before-delete ask|yes|no');
+    nextActions.push(wizardHint('EXPORT_DECISION', ['exportDecision'], 'Set export decision before delete-capable step.'));
     return jsonResult(1, result);
   }
 
@@ -151,6 +155,7 @@ export function runHolmesCleanup(argv = [], options = {}) {
           ? 'Provide --export-answer yes or --export-answer no before any delete-capable step.'
           : '明确回答是否导出：--export-answer yes 或 --export-answer no'
       );
+      nextActions.push(wizardHint('EXPORT_DECISION', ['exportDecision'], 'Answer export decision in wizard.'));
       return jsonResult(1, result);
     }
     checks.push({ name: 'exportBeforeDelete', pass: true, detail: `用户已回答导出决策：${args.exportAnswer}` });
@@ -185,6 +190,16 @@ export function runHolmesCleanup(argv = [], options = {}) {
   nextActions.push('当前为 dry-run 骨架，可在 P1/P2 接入真实执行器。');
 
   return jsonResult(0, result);
+}
+
+function wizardHint(state, missingFields = [], guidance = '') {
+  return {
+    type: 'wizard',
+    state,
+    missingFields,
+    command: 'npm run wizard:demo',
+    guidance
+  };
 }
 
 function normalizeSamples(samples) {

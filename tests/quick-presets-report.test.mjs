@@ -19,9 +19,10 @@ test('quick mode uses defaults but blocks at missing risk confirmations with cle
   assert.equal(payload.findingsPlaceholder.mode, 'dry-run');
   assert.equal(payload.checks.some(check => check.name === 'inputSource' && check.pass), true);
   assert.equal(payload.checks.some(check => check.name === 'riskTripleConfirm' && !check.pass), true);
-  assert.deepEqual(payload.nextActions, [
-    'Provide --confirm1 YES --confirm2 YES --confirm3 YES to acknowledge high-risk actions.'
-  ]);
+  assert.equal(payload.nextActions[0], 'Provide --confirm1 YES --confirm2 YES --confirm3 YES to acknowledge high-risk actions.');
+  assert.equal(payload.nextActions[1].type, 'wizard');
+  assert.equal(payload.nextActions[1].state, 'RISK_CONFIRM_1');
+  assert.equal(payload.nextActions[1].command, 'npm run wizard:demo');
 });
 
 test('preset params load and merge while user input wins', () => {
