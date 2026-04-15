@@ -44,15 +44,19 @@ function humanize(value) {
 }
 
 try {
-  const [retry, manualReview, status] = await Promise.all([
+  const [retry, manualReview, completed, failed, status] = await Promise.all([
     loadJson('./data/retry-queue.json'),
     loadJson('./data/manual-review-queue.json'),
+    loadJson('./data/completed.json'),
+    loadJson('./data/failed.json'),
     loadJson('./data/status.json')
   ]);
 
   renderCounters(status);
   renderTable('retry-queue', retry);
   renderTable('manual-review-queue', manualReview);
+  renderTable('completed', completed);
+  renderTable('failed', failed);
 } catch (error) {
   document.body.insertAdjacentHTML('beforeend', `<p class="error">${error.message}</p>`);
 }

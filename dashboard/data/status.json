@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-15T11:30:40.070Z",
-  "mode": "dry-run",
+  "generatedAt": "2026-04-15T12:43:11.578Z",
+  "mode": "live-aware",
   "counters": {
-    "retryQueued": 1,
-    "manualReviewOpen": 1,
-    "successful": 2,
-    "blocked": 1
+    "pendingRetry": 0,
+    "manualReview": 1,
+    "completed": 0,
+    "failed": 1
   }
 }

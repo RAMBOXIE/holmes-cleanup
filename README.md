@@ -16,8 +16,9 @@ In today’s internet environment, privacy abuse, data broker exposure, and unau
 - ✅ P1 complete: sample intake (keywords + user sample file), sample normalization/dedup, dry-run runner, unit tests.
 - ✅ Quick Mode, local Queue Dashboard, preset templates, and Proof Report generation are available.
 - ✅ Conversation Wizard v1 state machine + prompt pack + CLI demo are available.
+- ✅ B1 real-loop MVP available: persisted queues (JSON + file lock), auth TTL/scope guard, live-mode Spokeo adapter, queue CLI (list/retry/resolve).
 - ✅ Flowchart available for review.
-- 🔜 P2 next: pluggable mock executor, platform strategy templates, multilingual prompt packs.
+- 🔜 P2 next: broker-specific production integrations (official endpoints), stronger credential vaulting, richer dashboard UX.
 
 ## Core rules (must-not-break)
 1. **Manual trigger only** (`--manual` required), no scheduler mode.
@@ -114,16 +115,30 @@ npm run run -- --manual --preset spokeo --keywords "custom search" \
   --export-before-delete ask --export-answer no
 ```
 
+## Real-loop commands (MVP)
+```bash
+# Live run (Spokeo adapter + real HTTP submit endpoint)
+node scripts/b1-live.mjs run --live --request-id demo-live-001 \
+  --auth-token <token> --auth-scopes submit:spokeo --auth-expires-at 2026-12-31T00:00:00.000Z
+
+# Queue CLI
+node scripts/queue-cli.mjs list
+node scripts/queue-cli.mjs retry --id <retryItemId> --auth-token <token> --auth-scopes submit:spokeo --auth-expires-at 2026-12-31T00:00:00.000Z
+node scripts/queue-cli.mjs resolve --id <manualReviewId> --resolution resolved
+```
+
 ## Queue Dashboard
-Generate demo data, then open the static dashboard with a local static server:
+Export dashboard data from persisted queue state:
 
 ```bash
-npm run dashboard:build-data
+npm run dashboard:build-data -- data/queue-state.json
 ```
 
 Files are written to `dashboard/data/*.json`. The dashboard reads:
 - `dashboard/data/retry-queue.json`
 - `dashboard/data/manual-review-queue.json`
+- `dashboard/data/completed.json`
+- `dashboard/data/failed.json`
 - `dashboard/data/status.json`
 
 ## Proof Report
@@ -142,6 +157,10 @@ node scripts/generate-proof-report.mjs ./path/to/execution-result.json
 Reports are written to `reports/proof-<timestamp>.md` and include timeline, pass/fail status, reasons not executed, confirmation records, export decision, and queue status.
 
 ## Scope disclaimer
-This project does **not** currently call real external APIs in this phase. It is a safe dry-run foundation designed for iterative hardening before production integrations.
+Current MVP supports **real HTTP submission** in `--live` mode via the Spokeo adapter using a configurable endpoint (default `https://postman-echo.com/post`) for verifiable closed-loop validation.
 
-当前阶段不会调用真实外部 API。现版本是可验证的安全骨架，用于后续稳健接入生产执行器。
+- ✅ Real in MVP: authenticated request construction, live HTTP submit, persisted retry/manual queues, retry escalation and queue operations.
+- ⚠️ Substitute in MVP: endpoint is a controlled/verifiable HTTP endpoint (not official Spokeo production API).
+- 🔜 Next: replace with official broker endpoint + anti-bot compliant integration.
+
+当前 MVP 在 `--live` 模式下已支持真实 HTTP 提交（默认使用可验证受控 endpoint），用于“真执行闭环”验证；但官方生产接口接入仍属于下一阶段。

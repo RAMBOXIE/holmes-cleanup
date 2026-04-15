@@ -1,0 +1,8 @@
+[
+  {
+    "broker": "spokeo",
+    "requestId": "e2e-fail-001",
+    "reason": "retry_limit_reached",
+    "at": "2026-04-15T12:41:18.136Z"
+  }
+]

@@ -11,10 +11,12 @@
     "quick": "node scripts/holmes-cleanup.mjs quick",
     "dry": "node scripts/holmes-cleanup.mjs --manual --keywords \"demo\" --sample-file ./examples/sample.json --confirm1 YES --confirm2 YES --confirm3 YES --export-before-delete ask --export-answer no --notify none",
     "b1:demo": "node scripts/b1-demo.mjs",
+    "b1:live": "node scripts/b1-live.mjs run --live",
+    "queue": "node scripts/queue-cli.mjs",
     "wizard:demo": "node scripts/wizard-demo.mjs",
     "dashboard:build-data": "node scripts/build-dashboard-data.mjs",
-    "report:proof": "node scripts/generate-proof-report.mjs --demo",
-    "test": "node tests/holmes-cleanup.test.mjs && node tests/b1-queue.test.mjs && node tests/quick-presets-report.test.mjs && node tests/wizard-engine.test.mjs",
-    "test:b1": "node tests/b1-queue.test.mjs"
+    "report:proof": "node scripts/generate-proof-report.mjs",
+    "test": "node tests/holmes-cleanup.test.mjs && node tests/b1-queue.test.mjs && node tests/quick-presets-report.test.mjs && node tests/wizard-engine.test.mjs && node tests/real-loop.test.mjs",
+    "test:b1": "node tests/b1-queue.test.mjs && node tests/real-loop.test.mjs"
   }
 }

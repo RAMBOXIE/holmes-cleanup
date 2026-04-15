@@ -1,9 +1,52 @@
 [
   {
-    "broker": "spokeo",
-    "requestId": "dash-demo-002",
+    "id": "spokeo:e2e-fail-001:1776256878136",
     "reason": "retry_limit_reached",
-    "status": "open",
-    "createdAt": "2026-04-15T12:00:00.000Z"
+    "payload": {
+      "broker": "spokeo",
+      "requestId": "e2e-fail-001",
+      "request": {
+        "requestId": "e2e-fail-001",
+        "broker": "spokeo",
+        "adapterType": "broker",
+        "dryRun": true,
+        "action": "remove-data-broker-record",
+        "identityHints": {
+          "fullName": "Ada Example",
+          "emails": [
+            "ada@example.test"
+          ],
+          "phones": [
+            "+15550101010"
+          ],
+          "usernames": [],
+          "jurisdiction": "US"
+        },
+        "preparedAt": "2026-04-15T12:41:18.135Z"
+      },
+      "input": {
+        "requestId": "e2e-fail-001",
+        "person": {
+          "fullName": "Ada Example",
+          "emails": [
+            "ada@example.test"
+          ],
+          "phones": [
+            "+15550101010"
+          ],
+          "jurisdiction": "US"
+        },
+        "simulate": {
+          "spokeo": "transient-error"
+        },
+        "authToken": "demo_token",
+        "authScopes": "submit:spokeo",
+        "authExpiresAt": "2026-12-31T00:00:00.000Z"
+      },
+      "errorCode": "BROKER_RATE_LIMITED",
+      "queueKey": "spokeo:e2e-fail-001"
+    },
+    "createdAt": "2026-04-15T12:41:18.136Z",
+    "status": "open"
   }
 ]

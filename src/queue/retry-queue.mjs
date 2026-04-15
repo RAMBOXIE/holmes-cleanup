@@ -4,8 +4,19 @@ export class RetryQueue {
     this.baseDelayMs = Number.isInteger(options.baseDelayMs) ? options.baseDelayMs : 1000;
     this.factor = Number.isFinite(options.factor) ? options.factor : 2;
     this.maxDelayMs = Number.isInteger(options.maxDelayMs) ? options.maxDelayMs : 60000;
-    this.items = [];
+    this.items = Array.isArray(options.items) ? [...options.items] : [];
     this.attemptCounts = new Map();
+    for (const item of this.items) {
+      const key = queueKey(item.payload);
+      const prev = this.attemptCounts.get(key) || 0;
+      this.attemptCounts.set(key, Math.max(prev, item.attempt || 0));
+    }
+    if (options.seedAttempts && typeof options.seedAttempts === 'object') {
+      for (const [key, value] of Object.entries(options.seedAttempts)) {
+        const prev = this.attemptCounts.get(key) || 0;
+        this.attemptCounts.set(key, Math.max(prev, Number(value) || 0));
+      }
+    }
   }
 
   getAttemptCount(payload) {
@@ -27,6 +38,7 @@ export class RetryQueue {
     );
 
     const item = {
+      id: `${key}:${attempt}`,
       reason,
       payload,
       error: serializeError(error),
@@ -42,7 +54,7 @@ export class RetryQueue {
   }
 }
 
-function queueKey(payload = {}) {
+export function queueKey(payload = {}) {
   return payload.queueKey || `${payload.broker || 'unknown'}:${payload.requestId || 'unknown'}`;
 }
 

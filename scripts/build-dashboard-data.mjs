@@ -2,44 +2,30 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { createDefaultStore } from '../src/queue/state-store.mjs';
+
+const statePath = path.resolve(process.argv[2] || 'data/queue-state.json');
+const store = createDefaultStore({ filePath: statePath });
+const state = store.read();
 
 const dataDir = path.resolve('dashboard', 'data');
 fs.mkdirSync(dataDir, { recursive: true });
 
-const retry = [
-  {
-    broker: 'whitepages',
-    requestId: 'dash-demo-001',
-    reason: 'transient_submit_error',
-    status: 'queued',
-    attempt: 1,
-    nextAttemptAt: '2026-04-15T12:15:00.000Z'
-  }
-];
-
-const manualReview = [
-  {
-    broker: 'spokeo',
-    requestId: 'dash-demo-002',
-    reason: 'retry_limit_reached',
-    status: 'open',
-    createdAt: '2026-04-15T12:00:00.000Z'
-  }
-];
-
 const status = {
   generatedAt: new Date().toISOString(),
-  mode: 'dry-run',
+  mode: 'live-aware',
   counters: {
-    retryQueued: retry.length,
-    manualReviewOpen: manualReview.length,
-    successful: 2,
-    blocked: 1
+    pendingRetry: state.retry.filter(item => item.status === 'queued').length,
+    manualReview: state.manualReview.filter(item => item.status === 'open').length,
+    completed: state.completed.length,
+    failed: state.failed.length
   }
 };
 
-fs.writeFileSync(path.join(dataDir, 'retry-queue.json'), JSON.stringify(retry, null, 2));
-fs.writeFileSync(path.join(dataDir, 'manual-review-queue.json'), JSON.stringify(manualReview, null, 2));
+fs.writeFileSync(path.join(dataDir, 'retry-queue.json'), JSON.stringify(state.retry, null, 2));
+fs.writeFileSync(path.join(dataDir, 'manual-review-queue.json'), JSON.stringify(state.manualReview, null, 2));
+fs.writeFileSync(path.join(dataDir, 'completed.json'), JSON.stringify(state.completed, null, 2));
+fs.writeFileSync(path.join(dataDir, 'failed.json'), JSON.stringify(state.failed, null, 2));
 fs.writeFileSync(path.join(dataDir, 'status.json'), JSON.stringify(status, null, 2));
 
-process.stdout.write(`Wrote dashboard demo data to ${dataDir}\n`);
+process.stdout.write(`Wrote dashboard data from ${statePath} to ${dataDir}\n`);

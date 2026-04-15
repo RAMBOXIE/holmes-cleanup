@@ -1,0 +1,114 @@
+{
+  "status": "ok",
+  "mode": "live",
+  "inputRequestId": "e2e-success-001",
+  "brokers": [
+    "spokeo"
+  ],
+  "results": [
+    {
+      "broker": "spokeo",
+      "status": "success",
+      "dryRun": false,
+      "requestId": "e2e-success-001",
+      "ticketId": "spokeo-e2e-success-001-1776256835850",
+      "candidateRecords": [
+        {
+          "broker": "spokeo",
+          "matchStrength": "sample",
+          "removalPath": "dry-run-prefilled-request"
+        }
+      ],
+      "notes": [
+        "Live HTTP submission executed against configured endpoint."
+      ],
+      "evidence": {
+        "endpoint": "https://postman-echo.com/post",
+        "httpStatus": 200,
+        "echoRequestId": "e2e-success-001"
+      }
+    }
+  ],
+  "queues": {
+    "retry": [],
+    "manualReview": [],
+    "completed": [
+      {
+        "broker": "beenverified",
+        "requestId": "b1-test-003",
+        "status": "completed",
+        "live": false,
+        "at": "2026-04-15T12:39:45.266Z",
+        "evidence": null
+      },
+      {
+        "broker": "beenverified",
+        "requestId": "b1-test-003",
+        "status": "completed",
+        "live": false,
+        "at": "2026-04-15T12:39:51.786Z",
+        "evidence": null
+      },
+      {
+        "broker": "beenverified",
+        "requestId": "b1-test-003",
+        "status": "completed",
+        "live": false,
+        "at": "2026-04-15T12:40:21.697Z",
+        "evidence": null
+      },
+      {
+        "broker": "beenverified",
+        "requestId": "b1-test-003",
+        "status": "completed",
+        "live": false,
+        "at": "2026-04-15T12:40:30.324Z",
+        "evidence": null
+      },
+      {
+        "broker": "spokeo",
+        "requestId": "e2e-success-001",
+        "status": "completed",
+        "live": true,
+        "at": "2026-04-15T12:40:35.850Z",
+        "evidence": {
+          "endpoint": "https://postman-echo.com/post",
+          "httpStatus": 200,
+          "echoRequestId": "e2e-success-001"
+        }
+      }
+    ],
+    "failed": [
+      {
+        "broker": "whitepages",
+        "requestId": "b1-test-002",
+        "reason": "retry_limit_reached",
+        "at": "2026-04-15T12:39:45.264Z"
+      },
+      {
+        "broker": "whitepages",
+        "requestId": "b1-test-002",
+        "reason": "retry_limit_reached",
+        "at": "2026-04-15T12:39:51.784Z"
+      },
+      {
+        "broker": "whitepages",
+        "requestId": "b1-test-002",
+        "reason": "retry_limit_reached",
+        "at": "2026-04-15T12:40:21.695Z"
+      },
+      {
+        "broker": "whitepages",
+        "requestId": "b1-test-002",
+        "reason": "retry_limit_reached",
+        "at": "2026-04-15T12:40:30.322Z"
+      }
+    ]
+  },
+  "summary": {
+    "attempted": 1,
+    "successful": 1,
+    "retryQueued": 0,
+    "manualReviewQueued": 0
+  }
+}
