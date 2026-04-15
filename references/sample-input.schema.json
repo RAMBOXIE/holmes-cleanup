@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.holmes-cleanup/sample-input.schema.json",
+  "title": "Holmes Cleanup Sample Input",
+  "description": "用于 dry-run 的样本输入结构定义。真实性由用户判断，工具仅负责流程与整理。",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "keywords": {
+      "type": "array",
+      "description": "关键词自动收集占位输入",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "samples": {
+      "type": "array",
+      "description": "用户提供样本集合",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "source", "evidence"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "description": "样本来源，例如 url/text/id",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "default": []
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "platforms": {
+      "type": "array",
+      "description": "目标平台占位",
+      "items": {
+        "type": "string",
+        "enum": ["web", "telegram", "email", "signal", "other"]
+      },
+      "default": []
+    }
+  },
+  "required": ["keywords", "samples", "platforms"]
+}

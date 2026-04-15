@@ -1,0 +1,24 @@
+{
+  "keywords": ["mirror", "reupload"],
+  "platforms": ["x", "reddit", "github"],
+  "samples": [
+    {
+      "sample_id": "s1",
+      "platform": "x",
+      "url": "https://x.com/example/status/123",
+      "evidence_refs": ["shot-1.png"]
+    },
+    {
+      "sample_id": "s1-dup",
+      "platform": "x",
+      "url": "https://x.com/example/status/123",
+      "evidence_refs": ["shot-dup.png"]
+    },
+    {
+      "sample_id": "s2",
+      "platform": "reddit",
+      "text": "reupload link in thread",
+      "evidence_refs": []
+    }
+  ]
+}

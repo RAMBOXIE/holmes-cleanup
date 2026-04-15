@@ -1,0 +1,11 @@
+{
+  "name": "holmes-cleanup",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "run": "node scripts/holmes-cleanup.mjs",
+    "dry": "node scripts/holmes-cleanup.mjs --manual --keywords \"demo\" --sample-file ./examples/sample.json --confirm1 YES --confirm2 YES --confirm3 YES --export-before-delete ask --export-answer no --notify none",
+    "test": "node --test tests/*.test.mjs"
+  }
+}
