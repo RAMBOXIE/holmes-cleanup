@@ -25,10 +25,22 @@ In today’s internet environment, privacy abuse, data broker exposure, and unau
 5. Piracy sample authenticity is **user-judged**; tool provides workflow and capability only.
 6. Credentials follow **minimum scope + shortest TTL + post-task wipe**.
 
+## Differentiation (vs. competitors)
+**Positioning**: Our functional goals are aligned with common privacy cleanup / takedown competitors (discover, prepare, submit, follow-up), but our product form is intentionally different.
+
+- **Agent-native Skill form**: designed as a reusable Skill contract rather than a single fixed UI flow.
+- **Conversational orchestration**: state-machine execution in dialogue (`goal -> scope -> auth -> evidence -> risk-confirm -> export -> execute -> notify -> close`).
+- **Safety governance first**: manual trigger, triple-confirm for high-risk actions, export-before-delete, auditable logs, shortest-lifetime credentials.
+
+竞品关系说明：功能目标可以一致，但我们在交互形态与可扩展形态上不同——强调 Agent 可编排、可审计、可插拔扩展。
+
 ## Repository structure
 - `SKILL.md` — Skill definition and operating guidance.
 - `IMPLEMENTATION_PLAN.md` — MVP architecture and checkpoints.
 - `FLOWCHART.md` — Review-friendly process flow (Mermaid).
+- `ADAPTER_SPEC.md` — Unified adapter contracts for broker/social/dmca.
+- `CONVERSATION_PROTOCOL.md` — Dialogue state machine and failure handling rules.
+- `DMCA_TEMPLATES.md` — Bilingual DMCA draft templates with placeholders.
 - `TODO.md` — Prioritized backlog and validation records.
 - `scripts/holmes-cleanup.mjs` — Dry-run orchestration entry.
 - `references/` — Risk gate and input schema docs.

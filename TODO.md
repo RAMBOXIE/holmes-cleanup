@@ -22,6 +22,7 @@
 - [ ] Better review summary format (human audit-friendly)
 - [ ] Bilingual prompt packs (EN primary, 中文辅助)
 - [ ] Future adapter interface for real platform integrations
+- [ ] 竞品覆盖清单（按 broker/social/dmca 三类映射：能力项、缺口项、替代策略）
 
 ---
 
