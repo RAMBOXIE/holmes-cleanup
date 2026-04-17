@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { runHolmesCleanup } from '../src/holmes-cleanup-cli.mjs';
 
-const projectRoot = 'D:/Projects/holmes-cleanup';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, '..');
 const samplePath = path.join(projectRoot, 'examples', 'sample.json');
 
 function run(args) {

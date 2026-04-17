@@ -1,0 +1,801 @@
+{
+  "version": 1,
+  "categories": [
+    "people-search",
+    "background-check",
+    "phone-lookup",
+    "public-records",
+    "marketing-data",
+    "financial",
+    "location-data",
+    "email-data",
+    "social-media",
+    "reputation",
+    "property",
+    "identity-resolution"
+  ],
+  "brokers": {
+    "spokeo": {
+      "displayName": "Spokeo",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": null,
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "SPOKEO_LIVE_ENDPOINT",
+        "officialEndpointMode": "api"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "api": {
+          "endpointEnv": "SPOKEO_OFFICIAL_API_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "requestId",
+            "action",
+            "identityHints.fullName"
+          ]
+        },
+        "form": {
+          "endpointEnv": "SPOKEO_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "requestId",
+            "identityHints"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 6,
+        "jitterMsMin": 250,
+        "jitterMsMax": 1250,
+        "backoff": "exponential"
+      },
+      "userAgentStrategy": {
+        "mode": "declared-automation",
+        "defaultUserAgent": "HolmesCleanup/0.1 compliance-contact"
+      },
+      "captchaToHumanQueue": {
+        "enabled": true,
+        "queue": "manualReview",
+        "reason": "captcha_requires_human"
+      },
+      "complianceNotes": [
+        "Use only official removal endpoints or broker-published forms.",
+        "Do not bypass access controls, captchas, or terms gates.",
+        "Log termsAccepted, lawfulBasis, and operatorId for each live official attempt."
+      ],
+      "template": {
+        "keywords": "spokeo exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "whitepages": {
+      "displayName": "Whitepages",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": null,
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [],
+      "template": {
+        "keywords": "whitepages exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "beenverified": {
+      "displayName": "BeenVerified",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": null,
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [],
+      "template": {
+        "keywords": "beenverified exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "intelius": {
+      "displayName": "Intelius",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.intelius.com/opt-out",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "INTELIUS_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Requires email verification after opt-out submission."
+      ],
+      "template": {
+        "keywords": "intelius exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "peoplefinder": {
+      "displayName": "PeopleFinder",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.peoplefinder.com/optout",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "PEOPLEFINDER_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Shared opt-out system with Intelius (same parent company)."
+      ],
+      "template": {
+        "keywords": "peoplefinder exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "truepeoplesearch": {
+      "displayName": "TruePeopleSearch",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.truepeoplesearch.com/removal",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "TRUEPEOPLESEARCH_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 1000,
+        "jitterMsMax": 3000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Removal is per-listing; must identify specific record URL first."
+      ],
+      "template": {
+        "keywords": "truepeoplesearch exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "fastpeoplesearch": {
+      "displayName": "FastPeopleSearch",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.fastpeoplesearch.com/removal",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "FASTPEOPLESEARCH_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 1000,
+        "jitterMsMax": 3000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Requires CAPTCHA; route to manual review if detected."
+      ],
+      "template": {
+        "keywords": "fastpeoplesearch exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "radaris": {
+      "displayName": "Radaris",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://radaris.com/control/privacy",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "RADARIS_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Requires account creation for opt-out. Multi-step process."
+      ],
+      "template": {
+        "keywords": "radaris exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "mylife": {
+      "displayName": "MyLife",
+      "category": "reputation",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.mylife.com/ccpa/index.pubview",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "MYLIFE_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "CCPA-based removal form. May require identity verification."
+      ],
+      "template": {
+        "keywords": "mylife exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "pipl": {
+      "displayName": "Pipl",
+      "category": "identity-resolution",
+      "jurisdiction": "US",
+      "optOutUrl": "https://pipl.com/personal-information-removal-request",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "PIPL_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName",
+            "identityHints.emails"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 2,
+        "jitterMsMin": 1000,
+        "jitterMsMax": 3000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Enterprise-grade identity resolution service. Removal may take longer."
+      ],
+      "template": {
+        "keywords": "pipl exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "zabasearch": {
+      "displayName": "ZabaSearch",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.zabasearch.com/block_records",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "ZABASEARCH_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Routes through Intelius opt-out system."
+      ],
+      "template": {
+        "keywords": "zabasearch exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "thatsthem": {
+      "displayName": "ThatsThem",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://thatsthem.com/optout",
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "THATSTHEM_LIVE_ENDPOINT"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "THATSTHEM_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Direct opt-out form; no account needed."
+      ],
+      "template": {
+        "keywords": "thatsthem exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "nuwber": {
+      "displayName": "Nuwber",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://nuwber.com/removal/link",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "NUWBER_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Requires specific record URL for removal."
+      ],
+      "template": {
+        "keywords": "nuwber exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "peekyou": {
+      "displayName": "PeekYou",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.peekyou.com/about/contact/optout",
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "PEEKYOU_LIVE_ENDPOINT"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "PEEKYOU_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Contact form based opt-out."
+      ],
+      "template": {
+        "keywords": "peekyou exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "instantcheckmate": {
+      "displayName": "Instant Checkmate",
+      "category": "background-check",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.instantcheckmate.com/opt-out/",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "INSTANTCHECKMATE_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Multi-step: search → select record → confirm opt-out → email verification."
+      ],
+      "template": {
+        "keywords": "instantcheckmate exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "truthfinder": {
+      "displayName": "TruthFinder",
+      "category": "background-check",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.truthfinder.com/opt-out/",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "TRUTHFINDER_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Requires email verification. Removal within 48 hours."
+      ],
+      "template": {
+        "keywords": "truthfinder exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "ussearch": {
+      "displayName": "US Search",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.ussearch.com/opt-out/",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "USSEARCH_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Standard form-based opt-out."
+      ],
+      "template": {
+        "keywords": "ussearch exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "addresses": {
+      "displayName": "Addresses.com",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.addresses.com/optout",
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "ADDRESSES_LIVE_ENDPOINT"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "ADDRESSES_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Shared system with Intelius network."
+      ],
+      "template": {
+        "keywords": "addresses exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "cocofinder": {
+      "displayName": "CocoFinder",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://cocofinder.com/remove-my-info",
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "COCOFINDER_LIVE_ENDPOINT"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "COCOFINDER_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Direct removal form."
+      ],
+      "template": {
+        "keywords": "cocofinder exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "usphonebook": {
+      "displayName": "USPhoneBook",
+      "category": "phone-lookup",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.usphonebook.com/opt-out",
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "USPHONEBOOK_LIVE_ENDPOINT",
+        "bodyStrategy": "phone-centric"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "USPHONEBOOK_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.phones"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Phone-number-centric removal. Requires specific listing URL."
+      ],
+      "template": {
+        "keywords": "usphonebook exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "cyberbackgroundchecks": {
+      "displayName": "CyberBackgroundChecks",
+      "category": "background-check",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.cyberbackgroundchecks.com/removal",
+      "optOutMethod": "form",
+      "adapterMode": "dry-run",
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "CYBERBACKGROUNDCHECKS_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 3,
+        "jitterMsMin": 500,
+        "jitterMsMax": 2000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Requires specific record URL. Removal within 72 hours."
+      ],
+      "template": {
+        "keywords": "cyberbackgroundchecks exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "familytreenow": {
+      "displayName": "FamilyTreeNow",
+      "category": "public-records",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.familytreenow.com/optout",
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "FAMILYTREENOW_LIVE_ENDPOINT"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "FAMILYTREENOW_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Direct opt-out; no account required."
+      ],
+      "template": {
+        "keywords": "familytreenow exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    },
+    "checkpeople": {
+      "displayName": "CheckPeople",
+      "category": "people-search",
+      "jurisdiction": "US",
+      "optOutUrl": "https://www.checkpeople.com/opt-out",
+      "optOutMethod": "form",
+      "adapterMode": "live",
+      "live": {
+        "endpointEnvVar": "CHECKPEOPLE_LIVE_ENDPOINT"
+      },
+      "officialEndpoint": {
+        "enabled": false,
+        "form": {
+          "endpointEnv": "CHECKPEOPLE_OFFICIAL_FORM_ENDPOINT",
+          "endpoint": null,
+          "method": "POST",
+          "requiredFields": [
+            "identityHints.fullName"
+          ]
+        }
+      },
+      "rateLimitPolicy": {
+        "requestsPerMinute": 4,
+        "jitterMsMin": 500,
+        "jitterMsMax": 1500,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Standard form-based opt-out with email verification."
+      ],
+      "template": {
+        "keywords": "checkpeople exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      }
+    }
+  }
+}

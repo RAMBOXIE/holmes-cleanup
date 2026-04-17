@@ -1,9 +1,10 @@
-export function createDryRunBrokerAdapter({ name, displayName }) {
+export function createDryRunBrokerAdapter({ name, displayName, optOutUrl = null, optOutMethod = 'form', category = 'people-search', jurisdiction = 'US' }) {
   return {
     name,
     displayName,
     adapterType: 'broker',
     dryRun: true,
+    meta: { optOutUrl, optOutMethod, category, jurisdiction },
 
     prepareRequest(input = {}) {
       const requestId = input.requestId || `b1-${name}-dry-run`;

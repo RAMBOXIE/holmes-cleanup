@@ -25,7 +25,7 @@ export async function runB1Pipeline({
   const audit = [...state.audit];
   const session = auth || await AuthSession.fromSourcesWithSecretStore({ input });
 
-  const validation = session.validate({ requiredScopes: live ? ['submit:spokeo'] : [], minTtlSeconds: 60 });
+  const validation = session.validate({ requiredScopes: [], minTtlSeconds: 60 });
   if (live && !validation.ok) {
     const payload = {
       status: 'blocked',

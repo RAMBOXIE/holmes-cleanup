@@ -3,12 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { runHolmesCleanup } from '../src/holmes-cleanup-cli.mjs';
 import { loadPresetParams, mergePresetArgs } from '../src/presets.mjs';
 import { generateProofReport } from '../scripts/generate-proof-report.mjs';
 
-const projectRoot = 'D:/Projects/holmes-cleanup';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, '..');
 
 test('quick mode uses defaults but blocks at missing risk confirmations with clear nextActions', () => {
   const result = runHolmesCleanup(['quick'], { cwd: projectRoot });

@@ -50,7 +50,10 @@ const input = {
 };
 
 const live = Boolean(args.live);
-const result = await runB1Pipeline({ brokers: ['spokeo'], input, store, live });
+const brokers = args.brokers
+  ? args.brokers.split(',').map(b => b.trim()).filter(Boolean)
+  : undefined;
+const result = await runB1Pipeline({ brokers, input, store, live });
 
 if (args['output-json']) {
   const outPath = path.resolve(args['output-json']);

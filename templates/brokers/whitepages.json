@@ -1,8 +1,0 @@
-{
-  "preset": "whitepages",
-  "type": "broker",
-  "broker": "whitepages",
-  "keywords": "whitepages exposure",
-  "notify": "none",
-  "exportBeforeDelete": "ask"
-}

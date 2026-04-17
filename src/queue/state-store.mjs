@@ -10,6 +10,8 @@ const DEFAULT_STATE = {
   audit: []
 };
 
+const STALE_LOCK_MS = 30_000; // lock older than 30s is considered stale
+
 export class QueueStateStore {
   constructor({ filePath = path.resolve('data', 'queue-state.json'), lockTimeoutMs = 3000 } = {}) {
     this.filePath = filePath;
@@ -50,12 +52,38 @@ export class QueueStateStore {
 
   async acquireLock() {
     const started = Date.now();
+    let staleLockCleaned = false;
+
     while (Date.now() - started < this.lockTimeoutMs) {
+      // Check for stale lock before retrying
+      if (!staleLockCleaned && fs.existsSync(this.lockPath)) {
+        try {
+          const lockContent = fs.readFileSync(this.lockPath, 'utf8').trim();
+          const lockData = JSON.parse(lockContent);
+          const lockAge = Date.now() - lockData.createdAt;
+          const lockPid = lockData.pid;
+
+          const pidAlive = isProcessAlive(lockPid);
+          if (!pidAlive || lockAge > STALE_LOCK_MS) {
+            fs.unlinkSync(this.lockPath);
+            staleLockCleaned = true;
+            // Fall through to try acquiring
+          }
+        } catch {
+          // Lock file is corrupt or unreadable — remove it
+          try { fs.unlinkSync(this.lockPath); } catch {}
+          staleLockCleaned = true;
+        }
+      }
+
       try {
         const fd = fs.openSync(this.lockPath, 'wx');
+        // Write PID + timestamp so other processes can detect stale locks
+        const lockInfo = JSON.stringify({ pid: process.pid, createdAt: Date.now() });
+        fs.writeSync(fd, lockInfo);
         return () => {
           fs.closeSync(fd);
-          if (fs.existsSync(this.lockPath)) fs.unlinkSync(this.lockPath);
+          try { fs.unlinkSync(this.lockPath); } catch {}
         };
       } catch (error) {
         if (error.code !== 'EEXIST') throw error;
@@ -68,4 +96,13 @@ export class QueueStateStore {
 
 export function createDefaultStore(options = {}) {
   return new QueueStateStore(options);
+}
+
+function isProcessAlive(pid) {
+  try {
+    process.kill(pid, 0); // signal 0 = existence check, does not kill
+    return true;
+  } catch {
+    return false;
+  }
 }

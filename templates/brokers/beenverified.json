@@ -1,8 +1,0 @@
-{
-  "preset": "beenverified",
-  "type": "broker",
-  "broker": "beenverified",
-  "keywords": "beenverified exposure",
-  "notify": "none",
-  "exportBeforeDelete": "ask"
-}

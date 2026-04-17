@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const STATES = Object.freeze([
   'WELCOME',
@@ -47,7 +48,9 @@ const REQUIRED_BY_STATE = Object.freeze({
   REPORT: ['reportSummary']
 });
 
-const PROMPT_DIR = path.resolve('D:/Projects/holmes-cleanup/prompts/wizard');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
+const PROMPT_DIR = path.join(PROJECT_ROOT, 'prompts', 'wizard');
 
 export function createSession(seed = {}) {
   return {

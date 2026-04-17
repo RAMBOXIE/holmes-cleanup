@@ -84,12 +84,15 @@ export class SecretStore {
     if (this.canUseDpapi()) {
       return { provider: 'windows-dpapi', ciphertext: dpapiProtect(plaintext) };
     }
-    const key = this.fallbackKey();
+    const salt = crypto.randomBytes(16);
+    const key = this.deriveKey(salt);
     const iv = crypto.randomBytes(12);
     const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
     const ciphertext = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
     return {
       provider: 'aes-256-gcm',
+      kdf: 'scrypt',
+      salt: salt.toString('base64'),
       iv: iv.toString('base64'),
       tag: cipher.getAuthTag().toString('base64'),
       ciphertext: ciphertext.toString('base64')
@@ -103,9 +106,13 @@ export class SecretStore {
     if (record.provider !== 'aes-256-gcm') {
       throw new Error(`Unsupported secret provider: ${record.provider}`);
     }
+    // Derive key: scrypt if salt present, legacy SHA-256 for old records
+    const key = record.kdf === 'scrypt' && record.salt
+      ? this.deriveKey(Buffer.from(record.salt, 'base64'))
+      : this.legacyKey();
     const decipher = crypto.createDecipheriv(
       'aes-256-gcm',
-      this.fallbackKey(),
+      key,
       Buffer.from(record.iv, 'base64')
     );
     decipher.setAuthTag(Buffer.from(record.tag, 'base64'));
@@ -119,7 +126,15 @@ export class SecretStore {
     return !this.forceFallback && this.platform === 'win32';
   }
 
-  fallbackKey() {
+  deriveKey(salt) {
+    if (!this.masterKey) {
+      throw new Error('HOLMES_SECRET_MASTER_KEY is required when Windows DPAPI is unavailable.');
+    }
+    return crypto.scryptSync(this.masterKey, salt, 32, { N: 16384, r: 8, p: 1 });
+  }
+
+  // Backward compatibility for secrets encrypted before scrypt migration
+  legacyKey() {
     if (!this.masterKey) {
       throw new Error('HOLMES_SECRET_MASTER_KEY is required when Windows DPAPI is unavailable.');
     }
