@@ -13,28 +13,35 @@ Your personal data is collected by hundreds of data brokers (Spokeo, Whitepages,
 
 ## Quick Start
 
-### Zero-install (recommended)
+**Zero-install — one line from any terminal:**
 
 ```bash
-# Run directly from GitHub — no clone, no install
-npx -p github:RAMBOXIE/holmes-cleanup holmes-cleanup scan --name "Your Name" --email "you@example.com"
+npx github:RAMBOXIE/holmes-cleanup scan --name "Your Name" --email "you@example.com"
 ```
 
-### Or clone locally
+That's it. No clone, no install, runs anywhere with Node 20+.
+
+### Other ways to run
+
+<details>
+<summary>Clone locally</summary>
 
 ```bash
 git clone https://github.com/RAMBOXIE/holmes-cleanup
 cd holmes-cleanup
-node scripts/index.mjs scan --name "Your Name" --email "you@example.com"
+node scripts/index.mjs scan --name "..." --email "..."
 ```
+</details>
 
-### Or install globally
+<details>
+<summary>Install globally (npm link)</summary>
 
 ```bash
 git clone https://github.com/RAMBOXIE/holmes-cleanup
 cd holmes-cleanup && npm link
-holmes-cleanup scan --name "Your Name" --email "you@example.com"
+holmes-cleanup scan --name "..." --email "..."
 ```
+</details>
 
 ### Sample output
 
