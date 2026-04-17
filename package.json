@@ -36,8 +36,9 @@
   "author": "RAMBOXIE",
   "type": "module",
   "bin": {
+    "holmes-cleanup": "./scripts/index.mjs",
     "holmes-scan": "./scripts/scan-demo.mjs",
-    "holmes": "./scripts/holmes-cleanup.mjs"
+    "holmes": "./scripts/index.mjs"
   },
   "engines": {
     "node": ">=20"

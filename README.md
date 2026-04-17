@@ -13,10 +13,27 @@ Your personal data is collected by hundreds of data brokers (Spokeo, Whitepages,
 
 ## Quick Start
 
+### Zero-install (recommended)
+
+```bash
+# Run directly from GitHub — no clone, no install
+npx -p github:RAMBOXIE/holmes-cleanup holmes-cleanup scan --name "Your Name" --email "you@example.com"
+```
+
+### Or clone locally
+
 ```bash
 git clone https://github.com/RAMBOXIE/holmes-cleanup
 cd holmes-cleanup
-node scripts/scan-demo.mjs --name "Your Name" --email "you@example.com"
+node scripts/index.mjs scan --name "Your Name" --email "you@example.com"
+```
+
+### Or install globally
+
+```bash
+git clone https://github.com/RAMBOXIE/holmes-cleanup
+cd holmes-cleanup && npm link
+holmes-cleanup scan --name "Your Name" --email "you@example.com"
 ```
 
 ### Sample output
@@ -143,37 +160,43 @@ Persistent retry/manual-review/dead-letter queues, HMAC-signed audit trail, tran
 
 ## Commands
 
-```bash
-# Scan only (no removal)
-node scripts/scan-demo.mjs --name "John Doe" --email "j@x.com"
-node scripts/scan-demo.mjs --name "..." --output-md ./my-report.md
+All subcommands work via `holmes-cleanup <cmd>` (after `npm link` or publish) or `node scripts/index.mjs <cmd>` (local) or `npx -p github:RAMBOXIE/holmes-cleanup holmes-cleanup <cmd>` (zero-install).
 
-# Full wizard (scan → review → cleanup)
-npm run wizard:demo
+```bash
+# Privacy scan (no removal, no API calls, 10 seconds)
+holmes-cleanup scan --name "John Doe" --email "j@x.com"
+holmes-cleanup scan --name "..." --output-md ./my-report.md
+holmes-cleanup scan --name "..." --output-json ./my-report.json --json
+
+# Full interactive wizard (scan → review → cleanup)
+holmes-cleanup wizard
 
 # Dry-run cleanup with presets
-npm run run -- --manual --preset spokeo --confirm1 YES --confirm2 YES --confirm3 YES \
+holmes-cleanup cleanup --manual --preset spokeo \
+  --confirm1 YES --confirm2 YES --confirm3 YES \
   --export-before-delete ask --export-answer no
 
 # Live submission (real HTTP against test endpoint)
-npm run b1:live -- --brokers spokeo,thatsthem,peekyou --full-name "Test User"
+holmes-cleanup b1-live run --live --brokers spokeo,thatsthem,peekyou \
+  --full-name "Test User"
 
 # Queue management
-node scripts/queue-cli.mjs list
-node scripts/queue-cli.mjs retry --id <retryItemId>
-node scripts/queue-cli.mjs resolve --id <manualReviewId> --resolution resolved
+holmes-cleanup queue list
+holmes-cleanup queue retry --id <retryItemId>
+holmes-cleanup queue resolve --id <manualReviewId> --resolution resolved
 
-# Local dashboard
-npm run dashboard:build-data -- data/queue-state.json
-npm run dashboard:watch -- data/queue-state.json
+# Local dashboard (static HTML, no backend)
+holmes-cleanup dashboard data/queue-state.json
 # Open dashboard/index.html in browser
 
 # Proof report (audit trail in Markdown)
-npm run report:proof
+holmes-cleanup report ./path/to/execution-result.json
 
 # All 64 tests
 npm test
 ```
+
+Subcommand shortcut: `holmes-scan` is an alias for `holmes-cleanup scan`.
 
 ---
 
