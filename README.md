@@ -5,7 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Tests](https://img.shields.io/badge/tests-64%20passing-brightgreen)](#testing)
-[![Brokers](https://img.shields.io/badge/brokers-200-blue)](#broker-coverage)
+[![Brokers](https://img.shields.io/badge/brokers-201-blue)](#broker-coverage)
+[![Opt-Out](https://img.shields.io/badge/opt--out%20supported-28%20brokers-green)](#commands)
 
 Your personal data is collected by hundreds of data brokers (Spokeo, Whitepages, Acxiom, LexisNexis…) and resold for $200-500/yr per person. DeleteMe charges $129/yr to remove it. **Holmes-Cleanup does the same — free, self-hosted, and auditable.**
 
@@ -148,7 +149,9 @@ Persistent retry/manual-review/dead-letter queues, HMAC-signed audit trail, tran
 | **Reputation** | 7 | BrandYourself, Reputation.com, RepDigger, NetReputation |
 | **Identity Resolution** | 7 | FullContact, Throtle, Infutor, Tapad, LiveIntent |
 
-**Live submission**: 8 brokers (Spokeo, Thatsthem, Peekyou, Addresses, CocoFinder, Checkpeople, FamilyTreeNow, USPhoneBook) support real HTTP opt-out submission via configurable endpoints (default `postman-echo.com` for closed-loop validation). The other 192 are dry-run blueprints with verified opt-out URLs — add endpoint config to upgrade.
+**Browser-assisted opt-out**: 28 brokers support guided removal via `holmes-cleanup opt-out`. Holmes opens your browser to the real opt-out URL, pre-fills the data to paste, and guides you through captchas + email verification. Includes the big names (Spokeo, Whitepages, BeenVerified, Intelius, Radaris), background check (InstantCheckmate, TruthFinder), credit bureaus (LexisNexis, Equifax), and more. See `holmes-cleanup opt-out --help` for the full list.
+
+**Live HTTP submission**: 8 brokers have adapters for real HTTP submission via configurable endpoints (default `postman-echo.com` for closed-loop validation). The other 173 are dry-run blueprints with verified opt-out URLs — future batches can extend browser-assisted support to more.
 
 ---
 
@@ -186,12 +189,22 @@ holmes-cleanup scan --name "John Doe" --email "j@x.com"
 holmes-cleanup scan --name "..." --output-md ./my-report.md
 holmes-cleanup scan --name "..." --output-json ./my-report.json --json
 
-# Browser-assisted opt-out (opens browser + guides you through 8 real brokers)
+# Browser-assisted opt-out (opens browser + guides you through 28 real brokers)
 holmes-cleanup opt-out --broker spokeo --email you@example.com --full-name "Your Name"
-holmes-cleanup opt-out --broker spokeo,peekyou,thatsthem --email you@example.com --full-name "Your Name"
+holmes-cleanup opt-out --broker spokeo,whitepages,beenverified --email you@example.com --full-name "Your Name"
 
-# Supported brokers (opt-out): spokeo, thatsthem, peekyou, addresses,
-# cocofinder, checkpeople, familytreenow, usphonebook
+# Supported brokers (28 total, covering top-visibility targets):
+#   People search (17): spokeo, whitepages, beenverified, intelius, peoplefinder,
+#     truepeoplesearch, fastpeoplesearch, radaris, zabasearch, thatsthem, nuwber,
+#     peekyou, ussearch, addresses, cocofinder, checkpeople, truecaller
+#   Background check (3): instantcheckmate, truthfinder, cyberbackgroundchecks
+#   Public records (1): familytreenow
+#   Phone lookup (2): usphonebook, hiya
+#   Reputation (1): mylife
+#   Identity resolution (1): pipl
+#   Marketing data (1): acxiom
+#   Financial (2): lexisnexis, equifax
+#
 # Tool opens your browser to the opt-out page, shows which fields to fill,
 # tells you what captcha/email verification to expect, then records a
 # follow-up for 30-day re-verification.

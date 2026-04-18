@@ -130,7 +130,34 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.whitepages.com/",
+        "searchHint": "Search your name + city/state. Click your result, copy the profile URL from browser address bar.",
+        "optOutUrl": "https://www.whitepages.com/suppression-requests",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your Whitepages profile URL"
+          },
+          {
+            "name": "reason",
+            "label": "Reason for opt-out",
+            "default": "I want my data removed"
+          },
+          {
+            "name": "phone",
+            "label": "Phone number for verification call",
+            "fromInput": "phone"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": false,
+        "phoneVerification": true,
+        "estimatedMinutes": 8,
+        "processingDays": 14
+      }
     },
     "beenverified": {
       "displayName": "BeenVerified",
@@ -158,7 +185,40 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.beenverified.com/app/optout/search",
+        "searchHint": "Search your name + state. Find your record and click Proceed to Opt Out.",
+        "optOutUrl": "https://www.beenverified.com/app/optout/search",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First name",
+            "fromInput": "firstName"
+          },
+          {
+            "name": "lastName",
+            "label": "Last name",
+            "fromInput": "lastName"
+          },
+          {
+            "name": "state",
+            "label": "State",
+            "fromInput": "state"
+          },
+          {
+            "name": "email",
+            "label": "Email for confirmation",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "emailVerificationExpiryHours": 24,
+        "estimatedMinutes": 8,
+        "processingDays": 7
+      }
     },
     "intelius": {
       "displayName": "Intelius",
@@ -199,7 +259,34 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": false,
+        "optOutUrl": "https://www.intelius.com/opt-out",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First name",
+            "fromInput": "firstName"
+          },
+          {
+            "name": "lastName",
+            "label": "Last name",
+            "fromInput": "lastName"
+          },
+          {
+            "name": "email",
+            "label": "Email for verification",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "emailVerificationExpiryHours": 24,
+        "estimatedMinutes": 6,
+        "processingDays": 14,
+        "notes": "Shares backend with PeopleConnect network (PeopleFinder, US Search, Classmates). Removal may cover multiple sites."
+      }
     },
     "peoplefinder": {
       "displayName": "PeopleFinder",
@@ -240,7 +327,29 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.peoplefinder.com/",
+        "searchHint": "Search yourself, copy the record URL, paste below.",
+        "optOutUrl": "https://www.peoplefinder.com/optout",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your PeopleFinder profile URL"
+          },
+          {
+            "name": "email",
+            "label": "Email for verification",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 7,
+        "processingDays": 14,
+        "notes": "Part of Intelius network."
+      }
     },
     "truepeoplesearch": {
       "displayName": "TruePeopleSearch",
@@ -281,7 +390,28 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.truepeoplesearch.com/",
+        "searchHint": "Search your name + city. Each record is a separate URL — copy each one you want removed.",
+        "optOutUrl": "https://www.truepeoplesearch.com/removal",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your TruePeopleSearch record URL"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 6,
+        "processingDays": 2
+      }
     },
     "fastpeoplesearch": {
       "displayName": "FastPeopleSearch",
@@ -322,7 +452,28 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.fastpeoplesearch.com/",
+        "searchHint": "Search and find your record, copy URL. Captcha shown before opt-out form.",
+        "optOutUrl": "https://www.fastpeoplesearch.com/removal",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your FastPeopleSearch record URL"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 6,
+        "processingDays": 2
+      }
     },
     "radaris": {
       "displayName": "Radaris",
@@ -363,7 +514,30 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://radaris.com/",
+        "searchHint": "Search and find your profile. Copy the URL. You may need to create a free account to complete removal.",
+        "optOutUrl": "https://radaris.com/control/privacy",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your Radaris profile URL"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "accountRequired": "radaris",
+        "estimatedMinutes": 12,
+        "processingDays": 30,
+        "notes": "Requires creating a free Radaris account to control privacy. Known to re-add data periodically — re-check after 90 days."
+      }
     },
     "mylife": {
       "displayName": "MyLife",
@@ -401,7 +575,44 @@
         "name",
         "social-profiles",
         "court-records"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.mylife.com/",
+        "searchHint": "Search name + state. MyLife is aggressive — may require multiple attempts.",
+        "optOutUrl": "https://www.mylife.com/ccpa/index.pubview",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First name",
+            "fromInput": "firstName"
+          },
+          {
+            "name": "lastName",
+            "label": "Last name",
+            "fromInput": "lastName"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          },
+          {
+            "name": "dob",
+            "label": "Date of birth (if asked)"
+          },
+          {
+            "name": "state",
+            "label": "State",
+            "fromInput": "state"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 12,
+        "processingDays": 10,
+        "notes": "MyLife is infamous for re-listing data. Check back after 90 days."
+      }
     },
     "pipl": {
       "displayName": "Pipl",
@@ -443,7 +654,43 @@
         "address",
         "social-profiles",
         "username"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": false,
+        "optOutUrl": "https://pipl.com/personal-information-removal-request",
+        "fields": [
+          {
+            "name": "fullName",
+            "label": "Full name",
+            "fromInput": "fullName"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          },
+          {
+            "name": "phone",
+            "label": "Phone (optional)",
+            "fromInput": "phone"
+          },
+          {
+            "name": "address",
+            "label": "Address (optional)",
+            "fromInput": "address"
+          },
+          {
+            "name": "requestType",
+            "label": "Request type",
+            "default": "CCPA - Disclosure + Deletion"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 8,
+        "processingDays": 30,
+        "notes": "B2B identity resolution service. CA residents may need to upload CA ID."
+      }
     },
     "zabasearch": {
       "displayName": "ZabaSearch",
@@ -484,7 +731,29 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.zabasearch.com/",
+        "searchHint": "Search your name + state. Copy each record URL.",
+        "optOutUrl": "https://www.zabasearch.com/block_records",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your ZabaSearch record URL"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 6,
+        "processingDays": 14,
+        "notes": "Uses Intelius backend; removal may apply to multiple Intelius-network sites."
+      }
     },
     "thatsthem": {
       "displayName": "ThatsThem",
@@ -615,7 +884,28 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://nuwber.com/",
+        "searchHint": "Search name + city. Copy the profile URL.",
+        "optOutUrl": "https://nuwber.com/removal/link",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your Nuwber profile URL"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 6,
+        "processingDays": 3
+      }
     },
     "peekyou": {
       "displayName": "PeekYou",
@@ -731,7 +1021,29 @@
         "email",
         "court-records",
         "employment"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.instantcheckmate.com/",
+        "searchHint": "Search your name + state. Click your record to get the URL.",
+        "optOutUrl": "https://www.instantcheckmate.com/opt-out/",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your Instant Checkmate record URL"
+          },
+          {
+            "name": "email",
+            "label": "Email for verification",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "emailVerificationExpiryHours": 24,
+        "estimatedMinutes": 7,
+        "processingDays": 2
+      }
     },
     "truthfinder": {
       "displayName": "TruthFinder",
@@ -772,7 +1084,29 @@
         "email",
         "court-records",
         "employment"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.truthfinder.com/",
+        "searchHint": "Search name + state. Copy your record URL.",
+        "optOutUrl": "https://www.truthfinder.com/opt-out/",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your TruthFinder record URL"
+          },
+          {
+            "name": "email",
+            "label": "Email for verification",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "emailVerificationExpiryHours": 24,
+        "estimatedMinutes": 7,
+        "processingDays": 2
+      }
     },
     "ussearch": {
       "displayName": "US Search",
@@ -813,7 +1147,28 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.ussearch.com/",
+        "searchHint": "Search your name + state. Find your record, copy URL. Part of Intelius network.",
+        "optOutUrl": "https://www.ussearch.com/opt-out/",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your US Search record URL"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 7,
+        "processingDays": 14
+      }
     },
     "addresses": {
       "displayName": "Addresses.com",
@@ -1084,7 +1439,28 @@
         "email",
         "court-records",
         "employment"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": true,
+        "searchUrl": "https://www.cyberbackgroundchecks.com/",
+        "searchHint": "Search and find your record. Copy the URL.",
+        "optOutUrl": "https://www.cyberbackgroundchecks.com/removal",
+        "fields": [
+          {
+            "name": "profileUrl",
+            "label": "Your CyberBackgroundChecks record URL"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 6,
+        "processingDays": 3
+      }
     },
     "familytreenow": {
       "displayName": "FamilyTreeNow",
@@ -1743,7 +2119,28 @@
         "email",
         "age",
         "relatives"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": false,
+        "optOutUrl": "https://www.truecaller.com/unlisting",
+        "fields": [
+          {
+            "name": "phone",
+            "label": "Phone number (with country code, e.g. +15551234567)",
+            "fromInput": "phone"
+          },
+          {
+            "name": "reason",
+            "label": "Reason for unlisting",
+            "default": "Privacy"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": false,
+        "estimatedMinutes": 3,
+        "processingDays": 1,
+        "notes": "IMPORTANT: If you have the Truecaller app, deactivate your account first (Settings > Privacy Center > Deactivate). Otherwise unlisting will fail."
+      }
     },
     "usatrace": {
       "displayName": "USATrace",
@@ -3741,7 +4138,62 @@
         "email",
         "address",
         "phone"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": false,
+        "optOutUrl": "https://isapps.acxiom.com/optout/optout.aspx",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First name",
+            "fromInput": "firstName"
+          },
+          {
+            "name": "lastName",
+            "label": "Last name",
+            "fromInput": "lastName"
+          },
+          {
+            "name": "address",
+            "label": "Street address",
+            "fromInput": "address"
+          },
+          {
+            "name": "city",
+            "label": "City",
+            "fromInput": "city"
+          },
+          {
+            "name": "state",
+            "label": "State",
+            "fromInput": "state"
+          },
+          {
+            "name": "zip",
+            "label": "ZIP code"
+          },
+          {
+            "name": "phone",
+            "label": "Phone",
+            "fromInput": "phone"
+          },
+          {
+            "name": "email",
+            "label": "Email (required for confirmation)",
+            "fromInput": "email"
+          },
+          {
+            "name": "nameVariants",
+            "label": "All name variants (nicknames, former names)",
+            "hint": "Include married/maiden names, alternate spellings"
+          }
+        ],
+        "captcha": null,
+        "emailVerification": true,
+        "estimatedMinutes": 10,
+        "processingDays": 14,
+        "notes": "Largest consumer data broker in US. Must respond to confirmation email to activate. Phone alt: 1-877-774-2094."
+      }
     },
     "oracle-datacloud": {
       "displayName": "Oracle Data Cloud",
@@ -4208,7 +4660,57 @@
         "name",
         "address",
         "financial"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": false,
+        "optOutUrl": "https://consumer.risk.lexisnexis.com/request",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First name",
+            "fromInput": "firstName"
+          },
+          {
+            "name": "lastName",
+            "label": "Last name",
+            "fromInput": "lastName"
+          },
+          {
+            "name": "dob",
+            "label": "Date of birth (MM/DD/YYYY)"
+          },
+          {
+            "name": "ssn",
+            "label": "Social Security Number (for verification)",
+            "hint": "SENSITIVE: Only submit if you trust the HTTPS connection. Mail-in form is an alternative."
+          },
+          {
+            "name": "driversLicense",
+            "label": "Driver license number + state"
+          },
+          {
+            "name": "address",
+            "label": "Current home address",
+            "fromInput": "address"
+          },
+          {
+            "name": "phone",
+            "label": "Phone OR email (at least one)",
+            "fromInput": "phone"
+          },
+          {
+            "name": "email",
+            "label": "Phone OR email (at least one)",
+            "fromInput": "email"
+          }
+        ],
+        "captcha": null,
+        "emailVerification": false,
+        "mailVerification": true,
+        "estimatedMinutes": 15,
+        "processingDays": 30,
+        "notes": "SENSITIVE: asks for SSN + DL# to verify identity. Verification via US mail letter. Mail-in alt available at P.O. Box 105108, Atlanta GA 30348. Phone: 1-866-897-8126."
+      }
     },
     "equifax": {
       "displayName": "Equifax",
@@ -4233,7 +4735,51 @@
         "name",
         "address",
         "financial"
-      ]
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": false,
+        "optOutUrl": "https://myprivacy.equifax.com/",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First name",
+            "fromInput": "firstName"
+          },
+          {
+            "name": "lastName",
+            "label": "Last name",
+            "fromInput": "lastName"
+          },
+          {
+            "name": "dob",
+            "label": "Date of birth"
+          },
+          {
+            "name": "ssn",
+            "label": "Last 4 digits of SSN"
+          },
+          {
+            "name": "address",
+            "label": "Current address",
+            "fromInput": "address"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "fromInput": "email"
+          },
+          {
+            "name": "requestType",
+            "label": "Request type",
+            "default": "Do Not Sell or Share My Personal Information"
+          }
+        ],
+        "captcha": "recaptcha",
+        "emailVerification": true,
+        "estimatedMinutes": 10,
+        "processingDays": 45,
+        "notes": "Credit bureau. This is the CCPA/privacy portal — separate from credit freeze (https://www.equifax.com/personal/credit-report-services/credit-freeze/) and prescreen opt-out (https://www.optoutprescreen.com/, shared across all 3 bureaus)."
+      }
     },
     "experian": {
       "displayName": "Experian",
@@ -5931,6 +6477,60 @@
         "name",
         "email"
       ]
+    },
+    "hiya": {
+      "displayName": "Hiya",
+      "category": "phone-lookup",
+      "jurisdiction": "US",
+      "optOutUrl": "https://hiyahelp.zendesk.com/hc/en-us/articles/360001093027-Manage-My-Data",
+      "optOutMethod": "email",
+      "adapterMode": "dry-run",
+      "rateLimitPolicy": {
+        "requestsPerMinute": 2,
+        "jitterMsMin": 1000,
+        "jitterMsMax": 3000,
+        "backoff": "exponential"
+      },
+      "complianceNotes": [
+        "Email-based submission to DPO@hiya.com. Requires proof-of-ownership document."
+      ],
+      "template": {
+        "keywords": "hiya exposure",
+        "notify": "none",
+        "exportBeforeDelete": "ask"
+      },
+      "dataTypes": [
+        "name",
+        "phone"
+      ],
+      "optOutFlow": {
+        "needsProfileSearch": false,
+        "optOutUrl": "https://hiyahelp.zendesk.com/hc/en-us/articles/360001093027-Manage-My-Data",
+        "fields": [
+          {
+            "name": "phone",
+            "label": "Phone number to remove",
+            "fromInput": "phone"
+          },
+          {
+            "name": "fullName",
+            "label": "Name associated with number",
+            "fromInput": "fullName"
+          },
+          {
+            "name": "proofDocument",
+            "label": "Proof of ownership (screenshot: bill/contract showing your name + phone)",
+            "hint": "You upload this as email attachment to DPO@hiya.com"
+          }
+        ],
+        "captcha": null,
+        "emailVerification": false,
+        "estimatedMinutes": 5,
+        "processingDays": 3,
+        "submissionMethod": "email",
+        "submissionTarget": "DPO@hiya.com",
+        "notes": "Submission is email-based. Send to DPO@hiya.com with subject 'Advanced Data Management' and attach proof document."
+      }
     }
   }
 }

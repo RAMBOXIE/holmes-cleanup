@@ -33,7 +33,7 @@ test('scan phase progresses through all 5 states', () => {
   assert.equal(session.currentState, 'SCAN_RUNNING');
   assert.ok(session.data.scanResult, 'scanResult should be set after SCAN_INPUT');
   assert.equal(typeof session.data.privacyScore, 'number');
-  assert.equal(session.data.scanResult.summary.totalBrokers, 200);
+  assert.equal(session.data.scanResult.summary.totalBrokers, 201);
 
   // SCAN_RUNNING -> SCAN_REPORT
   handleInput(session, 'next');
@@ -97,7 +97,7 @@ test('scanResult contains all expected fields', () => {
   assert.ok(['low', 'moderate', 'high', 'critical'].includes(sr.riskLevel));
   assert.ok(Array.isArray(sr.exposures));
   assert.ok(Array.isArray(sr.recommendations));
-  assert.equal(sr.summary.totalBrokers, 200);
+  assert.equal(sr.summary.totalBrokers, 201);
 });
 
 test('SCAN_REPORT prompt interpolates scan variables', () => {

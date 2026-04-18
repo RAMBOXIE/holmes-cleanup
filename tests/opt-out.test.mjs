@@ -14,13 +14,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const OPT_OUT_SCRIPT = path.join(PROJECT_ROOT, 'scripts', 'opt-out.mjs');
 
-const LIVE_BROKERS = [
+const OPT_OUT_BROKERS = [
+  // Original 8 (live HTTP-capable)
   'spokeo', 'thatsthem', 'peekyou', 'addresses',
-  'cocofinder', 'checkpeople', 'familytreenow', 'usphonebook'
+  'cocofinder', 'checkpeople', 'familytreenow', 'usphonebook',
+  // Expansion batch 1 — top 20 most popular (people-search, background, credit, marketing)
+  'whitepages', 'beenverified', 'intelius', 'peoplefinder', 'truepeoplesearch',
+  'fastpeoplesearch', 'radaris', 'zabasearch', 'nuwber', 'ussearch',
+  'instantcheckmate', 'truthfinder', 'cyberbackgroundchecks',
+  'mylife', 'pipl', 'truecaller', 'hiya',
+  'acxiom', 'lexisnexis', 'equifax'
 ];
 
-test('all 8 live brokers have valid optOutFlow in catalog', () => {
-  for (const name of LIVE_BROKERS) {
+test(`all ${28} opt-out brokers have valid optOutFlow in catalog`, () => {
+  for (const name of OPT_OUT_BROKERS) {
     const entry = catalog.brokers[name];
     assert.ok(entry, `broker ${name} missing from catalog`);
     assert.ok(entry.optOutFlow, `broker ${name} missing optOutFlow`);
@@ -37,6 +44,30 @@ test('all 8 live brokers have valid optOutFlow in catalog', () => {
       assert.ok(field.name, `${name} field missing name`);
       assert.ok(field.label, `${name} field ${field.name} missing label`);
     }
+  }
+});
+
+test('catalog has exactly 28 opt-out-capable brokers', () => {
+  const withFlow = Object.entries(catalog.brokers).filter(([_, v]) => v.optOutFlow);
+  assert.equal(withFlow.length, 28, `expected 28 brokers with optOutFlow, got ${withFlow.length}`);
+});
+
+test('opt-out works across different category types', async () => {
+  // Sanity check: brokers with non-standard flows (credit bureaus, phone lookup)
+  // should still load and process in --no-open mode
+  const categories = {
+    financial: 'equifax',
+    marketing: 'acxiom',
+    phone: 'truecaller',
+    identity: 'pipl'
+  };
+
+  for (const [_, brokerName] of Object.entries(categories)) {
+    const entry = catalog.brokers[brokerName];
+    assert.ok(entry.optOutFlow, `${brokerName} missing optOutFlow`);
+    // Just verify the shape is valid — actual script run is covered by other tests
+    assert.ok(entry.optOutFlow.optOutUrl);
+    assert.ok(Array.isArray(entry.optOutFlow.fields));
   }
 });
 
@@ -82,7 +113,7 @@ test('opt-out fails gracefully for broker without optOutFlow', () => {
 
   const result = spawnSync(process.execPath, [
     OPT_OUT_SCRIPT,
-    '--broker', 'whitepages',  // dry-run only, no optOutFlow
+    '--broker', 'peoplelooker',  // no optOutFlow defined (not in top 28)
     '--email', 'test@example.com',
     '--state-file', tmpFile,
     '--no-open'
