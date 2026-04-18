@@ -159,6 +159,7 @@ Persistent retry/manual-review/dead-letter queues, HMAC-signed audit trail, tran
 
 - 🔍 **Privacy Scanner** — 200 brokers, 0-100 score, instant heuristic
 - 🗑️ **18-state Wizard** — conversational opt-out flow, back/pause/resume commands
+- 🔁 **Verify Loop** — 30-day re-check with HTTP liveness; proves "actually removed" vs "still present"
 - 🏦 **Encrypted Secret Store** — scrypt KDF + per-secret salt, Windows DPAPI preferred, AES-GCM fallback
 - ✍️ **Signed Audit Trail** — HMAC-SHA256 over canonical JSON, timing-safe verification
 - 🔁 **Persistent Queues** — retry (exponential backoff) / manual-review / dead-letter with SHA-256 dedupe
@@ -192,6 +193,16 @@ holmes-cleanup scan --name "..." --output-json ./my-report.json --json
 # Browser-assisted opt-out (opens browser + guides you through 58 real brokers)
 holmes-cleanup opt-out --broker spokeo --email you@example.com --full-name "Your Name"
 holmes-cleanup opt-out --broker spokeo,whitepages,beenverified --email you@example.com --full-name "Your Name"
+
+# Verify whether past opt-out submissions actually worked (30-day re-check loop)
+holmes-cleanup verify                  # check entries past recheckAt date
+holmes-cleanup verify --all            # check every followUp entry (ignore schedule)
+holmes-cleanup verify --broker spokeo  # check specific broker(s)
+holmes-cleanup verify --no-fetch       # dry-run, just list pending
+
+# Verify output: ✅ removed / ❌ still-present / ❓ unknown (captcha/timeout/etc)
+# Updates queue state with verification results + writes HMAC-signed audit events.
+# Suggests re-submitting opt-out for still-present brokers.
 
 # Supported brokers (58 total — now covering all 3 credit bureaus + top B2B data firms):
 #   People search (27): spokeo, whitepages, beenverified, intelius, peoplefinder,
