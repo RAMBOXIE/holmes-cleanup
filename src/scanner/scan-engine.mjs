@@ -1,17 +1,16 @@
-import { createRequire } from 'node:module';
-import crypto from 'node:crypto';
+// Isomorphic: works in Node (>=20) and browsers. No Node-specific imports.
+// Callers MUST pass `options.catalog` (the broker-catalog.json contents).
+// - CLI: import via `with { type: 'json' }`
+// - Web: bundle via Vite's JSON import
+
 import { identityFields, buildCategoryStats, buildExposureProfile } from './exposure-profile.mjs';
 import { calculatePrivacyScore, overallRiskLevel, CATEGORY_RISK } from './scoring.mjs';
 
-// Load catalog — default path, overridable via options.catalog
-const require = createRequire(import.meta.url);
-let defaultCatalog = null;
-
-function loadDefaultCatalog() {
-  if (!defaultCatalog) {
-    defaultCatalog = require('../adapters/brokers/config/broker-catalog.json');
-  }
-  return defaultCatalog;
+function randomHex(bytes) {
+  // globalThis.crypto.getRandomValues exists in Node 20+ AND all modern browsers
+  const buf = new Uint8Array(bytes);
+  globalThis.crypto.getRandomValues(buf);
+  return Array.from(buf).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 /**
@@ -26,8 +25,8 @@ function loadDefaultCatalog() {
  * @param {string}   [identity.jurisdiction='US']
  * @param {string}   [identity.city]
  * @param {string}   [identity.state]
- * @param {Object}   [options]
- * @param {Object}   [options.catalog] - Override catalog for testing
+ * @param {Object}   options
+ * @param {Object}   options.catalog - REQUIRED: broker-catalog.json contents
  * @param {string[]} [options.brokers] - Limit to specific broker names
  * @returns {ScanResult}
  */
@@ -35,8 +34,11 @@ export function runHeuristicScan(identity, options = {}) {
   if (!identity || !identity.fullName) {
     throw new Error('identity.fullName is required for privacy scan.');
   }
+  if (!options.catalog || !options.catalog.brokers) {
+    throw new Error('options.catalog is required (pass broker-catalog.json contents).');
+  }
 
-  const catalog = options.catalog || loadDefaultCatalog();
+  const catalog = options.catalog;
   const brokerEntries = Object.entries(catalog.brokers);
 
   // Filter to requested brokers if specified
@@ -71,7 +73,7 @@ export function runHeuristicScan(identity, options = {}) {
   const recommendations = buildRecommendations(exposures);
 
   return {
-    scanId: `scan_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
+    scanId: `scan_${Date.now()}_${randomHex(4)}`,
     scannedAt: new Date().toISOString(),
     identity: redactIdentity(identity),
     privacyScore,

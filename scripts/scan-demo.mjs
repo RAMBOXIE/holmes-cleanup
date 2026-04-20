@@ -5,6 +5,7 @@ import path from 'node:path';
 import { runHeuristicScan } from '../src/scanner/scan-engine.mjs';
 import { renderScanReport } from '../src/scanner/scan-report.mjs';
 import { renderShareBanner, renderShareCardSvg } from '../src/scanner/share-card.mjs';
+import catalog from '../src/adapters/brokers/config/broker-catalog.json' with { type: 'json' };
 
 function parseArgs(argv) {
   const out = {};
@@ -62,7 +63,7 @@ const identity = {
   state: args.state || null
 };
 
-const result = runHeuristicScan(identity);
+const result = runHeuristicScan(identity, { catalog });
 
 // File outputs
 if (args['output-json']) {

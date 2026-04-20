@@ -2,6 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { runHeuristicScan } from '../src/scanner/scan-engine.mjs';
+import catalog from '../src/adapters/brokers/config/broker-catalog.json' with { type: 'json' };
+
+// Shorthand: pass the real catalog unless test overrides it
+function scan(identity, opts = {}) {
+  return runHeuristicScan(identity, { catalog, ...opts });
+}
 
 const fullIdentity = {
   fullName: 'John Doe',
@@ -19,7 +25,7 @@ const minimalIdentity = {
 };
 
 test('scan returns valid ScanResult shape', () => {
-  const result = runHeuristicScan(fullIdentity);
+  const result = scan(fullIdentity);
 
   assert.ok(result.scanId.startsWith('scan_'));
   assert.ok(result.scannedAt);
@@ -36,22 +42,22 @@ test('scan returns valid ScanResult shape', () => {
 });
 
 test('scan processes all brokers by default (210 after batch2 additions)', () => {
-  const result = runHeuristicScan(fullIdentity);
+  const result = scan(fullIdentity);
   assert.equal(result.summary.totalBrokers, 210);
   assert.equal(result.exposures.length, 210);
 });
 
 test('full identity yields higher score than minimal identity', () => {
-  const fullResult = runHeuristicScan(fullIdentity);
-  const minResult = runHeuristicScan(minimalIdentity);
+  const fullResult = scan(fullIdentity);
+  const minResult = scan(minimalIdentity);
 
   assert.ok(fullResult.privacyScore > minResult.privacyScore,
     `Full: ${fullResult.privacyScore} should be > Minimal: ${minResult.privacyScore}`);
 });
 
 test('US jurisdiction matches US brokers with higher confidence', () => {
-  const usResult = runHeuristicScan({ ...fullIdentity, jurisdiction: 'US' });
-  const euResult = runHeuristicScan({ ...fullIdentity, jurisdiction: 'EU' });
+  const usResult = scan({ ...fullIdentity, jurisdiction: 'US' });
+  const euResult = scan({ ...fullIdentity, jurisdiction: 'EU' });
 
   // US brokers should give higher avg confidence for US identity
   const usAvg = usResult.exposures.reduce((sum, e) => sum + e.confidence, 0) / usResult.exposures.length;
@@ -74,20 +80,20 @@ test('scan with custom catalog override works', () => {
     }
   };
 
-  const result = runHeuristicScan(fullIdentity, { catalog: testCatalog });
+  const result = runHeuristicScan(fullIdentity, { catalog: testCatalog });  // deliberately uses test catalog
   assert.equal(result.summary.totalBrokers, 1);
   assert.equal(result.exposures[0].broker, 'test-broker');
   assert.equal(result.exposures[0].displayName, 'Test Broker');
 });
 
 test('scan with broker filter limits results', () => {
-  const result = runHeuristicScan(fullIdentity, { brokers: ['spokeo', 'whitepages'] });
+  const result = scan(fullIdentity, { brokers: ['spokeo', 'whitepages'] });
   assert.equal(result.summary.totalBrokers, 2);
   assert.equal(result.exposures.length, 2);
 });
 
 test('every exposure has required fields', () => {
-  const result = runHeuristicScan(fullIdentity);
+  const result = scan(fullIdentity);
   for (const exp of result.exposures) {
     assert.ok(exp.broker, 'missing broker');
     assert.ok(exp.displayName, 'missing displayName');
@@ -102,7 +108,7 @@ test('every exposure has required fields', () => {
 });
 
 test('identity is redacted in result', () => {
-  const result = runHeuristicScan(fullIdentity);
+  const result = scan(fullIdentity);
   assert.ok(!result.identity.fullName, 'fullName should be redacted');
   assert.ok(result.identity.name, 'redacted name should exist');
   assert.ok(result.identity.name.includes('.'), 'redacted name should be abbreviated');
@@ -111,6 +117,11 @@ test('identity is redacted in result', () => {
 });
 
 test('throws when fullName is missing', () => {
-  assert.throws(() => runHeuristicScan({}), /fullName is required/);
-  assert.throws(() => runHeuristicScan(null), /fullName is required/);
+  assert.throws(() => runHeuristicScan({}, { catalog }), /fullName is required/);
+  assert.throws(() => runHeuristicScan(null, { catalog }), /fullName is required/);
+});
+
+test('throws when catalog is missing', () => {
+  assert.throws(() => runHeuristicScan({ fullName: 'X' }), /catalog is required/);
+  assert.throws(() => runHeuristicScan({ fullName: 'X' }, {}), /catalog is required/);
 });

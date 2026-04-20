@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runHeuristicScan } from '../scanner/scan-engine.mjs';
+import catalog from '../adapters/brokers/config/broker-catalog.json' with { type: 'json' };
 
 export const STATES = Object.freeze([
   // Scan phase (new)
@@ -201,7 +202,7 @@ function applyStateInput(session, text) {
         session.data.scanIdentity = identity;
         // Run scan synchronously (pure computation, no external calls)
         try {
-          const result = runHeuristicScan(identity);
+          const result = runHeuristicScan(identity, { catalog });
           session.data.scanResult = result;
           session.data.privacyScore = result.privacyScore;
         } catch (err) {
