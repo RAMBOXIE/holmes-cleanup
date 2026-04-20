@@ -1,0 +1,59 @@
+name: "🔧 Broker opt-out flow broken"
+description: "A broker's opt-out page changed and Holmes's current flow doesn't match anymore."
+title: "[broker] <broker-name>: <what broke>"
+labels: ["broker-broken"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Broker sites change their forms constantly — we depend on users flagging these.
+
+  - type: input
+    id: broker
+    attributes:
+      label: Broker name
+      description: "Key from the catalog (e.g., spokeo, whitepages, beenverified)"
+      placeholder: "spokeo"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: What changed?
+      options:
+        - opt-out URL is 404 / moved
+        - Form fields changed (extra or missing)
+        - Added captcha that wasn't there
+        - Added account requirement
+        - Email verification flow changed
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: What does the current form look like?
+      description: "Paste a screenshot or describe the fields, captcha type, verification method."
+      placeholder: "The form now asks for..."
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: New opt-out URL (if changed)
+      placeholder: "https://newbroker.example.com/new-optout"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: verified
+    attributes:
+      label: Confirmation
+      options:
+        - label: "I verified this on the actual broker site, not just a news article"
+          required: true
+        - label: "I'm reporting in good faith, not trying to discourage use of the broker"
+          required: true

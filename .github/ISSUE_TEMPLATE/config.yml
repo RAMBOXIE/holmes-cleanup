@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "🔒 Security vulnerability (private report)"
+    url: https://github.com/RAMBOXIE/holmes-cleanup/security/advisories/new
+    about: "Found a security bug? Report privately, not as a public issue. See SECURITY.md."
+  - name: "💬 Question or discussion"
+    url: https://github.com/RAMBOXIE/holmes-cleanup/discussions
+    about: "For general questions, ideas, or showing off your scan score — use Discussions."

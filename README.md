@@ -4,9 +4,9 @@
 
 `210 brokers scanned · 58 with semi-automated opt-out · all 3 US credit bureaus · 30-day verify loop · 0 data leaves your machine`
 
+[![Tests](https://github.com/RAMBOXIE/holmes-cleanup/actions/workflows/test.yml/badge.svg)](https://github.com/RAMBOXIE/holmes-cleanup/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
-[![Tests](https://img.shields.io/badge/tests-95%20passing-brightgreen)](#testing)
 [![Brokers](https://img.shields.io/badge/brokers-210-blue)](#broker-coverage)
 [![Opt-Out](https://img.shields.io/badge/opt--out%20supported-58%20brokers-green)](#commands)
 
