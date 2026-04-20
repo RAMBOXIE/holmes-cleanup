@@ -12,7 +12,11 @@
 
 Your personal data is collected by hundreds of data brokers (Spokeo, Whitepages, Acxiom, LexisNexis…) and resold for $200-500/yr per person. DeleteMe charges $129/yr to remove it. **Holmes-Cleanup does the same — free, self-hosted, and auditable.**
 
-**Try it now (no install, 10 seconds):**
+**Try it now — two zero-install options:**
+
+🌐 **In your browser**: [ramboxie.github.io/holmes-cleanup](https://ramboxie.github.io/holmes-cleanup/) · 100% client-side, nothing transmitted
+
+💻 **In your terminal** (10 seconds):
 ```bash
 npx github:RAMBOXIE/holmes-cleanup scan --name "Your Name"
 ```

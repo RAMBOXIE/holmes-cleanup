@@ -5,6 +5,23 @@ All notable changes to Holmes-Cleanup will be documented here. Format follows [K
 ## [Unreleased]
 
 ### Added
+- **Static web app** at [`web/`](./web/):
+  - Zero-install browser experience for non-developers
+  - Dark-themed single-page app (Vite + vanilla JS, no framework)
+  - Uses the same `src/scanner/` modules as the CLI (single source of truth)
+  - Share card preview + PNG/SVG download directly from browser
+  - 58 broker opt-out cards with direct links, captcha warnings, processing time
+  - 100% client-side — no server, no tracking, no cookies
+  - Deployed via GitHub Actions to GitHub Pages on every push
+  - URL: https://ramboxie.github.io/holmes-cleanup/
+  - Bundle size: ~145 KB (27 KB gzipped) including the 210-broker catalog
+- **`scan-engine.mjs` refactored to be isomorphic** (Node + browser):
+  - Dropped `node:module.createRequire` and `node:crypto`
+  - Uses `globalThis.crypto.getRandomValues()` (Node 20+ and all modern browsers)
+  - `options.catalog` is now required — callers explicitly pass it
+  - Call sites updated: `scripts/scan-demo.mjs`, `src/wizard/engine.mjs`, and tests
+- **CI**: New `.github/workflows/deploy-web.yml` — builds and deploys web app automatically when `web/`, `src/scanner/`, or the catalog changes
+
 - **Share Card feature** (`src/scanner/share-card.mjs`):
   - Privacy-preserving SVG card generator (1200×630, OG-image standard)
   - Shareable terminal banner printed at top of `scan` output by default
