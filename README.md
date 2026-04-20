@@ -197,6 +197,14 @@ holmes-cleanup scan --name "John Doe" --email "j@x.com"
 holmes-cleanup scan --name "..." --output-md ./my-report.md
 holmes-cleanup scan --name "..." --output-json ./my-report.json --json
 
+# Generate a privacy-preserving share card (1200x630 SVG)
+# Safe to post publicly — contains ONLY aggregate score + category stats,
+# no name, email, or phone.
+holmes-cleanup scan --name "..." --share-card ./my-privacy-card.svg
+
+# Quieter output (for CI / scripting):
+holmes-cleanup scan --name "..." --no-banner --no-color
+
 # Browser-assisted opt-out (opens browser + guides you through 58 real brokers)
 holmes-cleanup opt-out --broker spokeo --email you@example.com --full-name "Your Name"
 holmes-cleanup opt-out --broker spokeo,whitepages,beenverified --email you@example.com --full-name "Your Name"

@@ -5,11 +5,22 @@ All notable changes to Holmes-Cleanup will be documented here. Format follows [K
 ## [Unreleased]
 
 ### Added
+- **Share Card feature** (`src/scanner/share-card.mjs`):
+  - Privacy-preserving SVG card generator (1200×630, OG-image standard)
+  - Shareable terminal banner printed at top of `scan` output by default
+  - Contains ONLY aggregate score + category stats — no name, email, or phone
+  - Color-coded by risk level (red/orange/yellow/green)
+  - New `--share-card <path>` flag on `scan` command
+  - New `--no-banner` + `--no-color` flags for CI / quiet modes
 - `.github/workflows/test.yml` — CI running tests on Ubuntu / macOS / Windows × Node 20 / 22
 - `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`
 - `CHANGELOG.md` (this file)
 - Issue templates: broker-broken, bug report, feature request
 - `.gitattributes` normalizing line endings across platforms
+
+### Tests
+- 13 new tests in `tests/share-card.test.mjs` — banner consistency, SVG validity, privacy-preserving content, color-by-risk-level, CLI integration
+- Total test count: 95 → 108
 
 ## [0.2.0] — 2026-04-17
 

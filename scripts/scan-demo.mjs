@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { runHeuristicScan } from '../src/scanner/scan-engine.mjs';
 import { renderScanReport } from '../src/scanner/scan-report.mjs';
+import { renderShareBanner, renderShareCardSvg } from '../src/scanner/share-card.mjs';
 
 function parseArgs(argv) {
   const out = {};
@@ -34,8 +35,14 @@ Options:
   --state "State"          State/province
   --output-json path       Write JSON result to file
   --output-md path         Write Markdown report to file
+  --share-card path        Write privacy-preserving SVG share card (1200x630) to path
   --json                   Output JSON to stdout instead of Markdown
+  --no-banner              Suppress the terminal banner (for CI / scripting)
+  --no-color               Disable ANSI colors in banner
   --help                   Show this help
+
+The share card is ANONYMOUS: it contains your aggregate privacy score and
+category stats only, never your name, email, or phone. Safe to post publicly.
 `);
   process.exit(0);
 }
@@ -57,7 +64,7 @@ const identity = {
 
 const result = runHeuristicScan(identity);
 
-// Output
+// File outputs
 if (args['output-json']) {
   const outPath = path.resolve(args['output-json']);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
@@ -70,8 +77,25 @@ if (args['output-md']) {
   fs.writeFileSync(outPath, renderScanReport(result));
 }
 
+if (args['share-card']) {
+  const outPath = path.resolve(args['share-card']);
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.writeFileSync(outPath, renderShareCardSvg(result));
+}
+
+// Stdout output
 if (args.json) {
   process.stdout.write(JSON.stringify(result, null, 2) + '\n');
 } else {
+  // Default: banner (for screenshot sharing) + full markdown report
+  if (!args['no-banner']) {
+    const useColor = !args['no-color'];
+    process.stdout.write(renderShareBanner(result, { color: useColor }) + '\n\n');
+  }
   process.stdout.write(renderScanReport(result) + '\n');
+
+  // Friendly hint about share-card if not already used
+  if (!args['share-card'] && !args['no-banner']) {
+    process.stdout.write(`\n💡 Want a shareable image? Add --share-card ./my-card.svg (anonymous, safe to post)\n`);
+  }
 }
