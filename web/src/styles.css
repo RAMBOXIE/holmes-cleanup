@@ -422,3 +422,13 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 }
 .privacy-footer a { color: var(--text-dim); text-decoration: underline; }
 .privacy-footer a:hover { color: var(--accent); }
+
+.legal-notice {
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  font-style: normal;
+}

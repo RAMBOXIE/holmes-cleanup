@@ -1,6 +1,6 @@
 # Vanish
 
-> 🔍 **Scan 210 data brokers in 10 seconds.** Open-source alternative to DeleteMe ($129/yr), Optery ($99/yr), Incogni ($99/yr). MIT-licensed, local-first, zero telemetry.
+> 🔍 **Scan 210 data brokers in 10 seconds.** Open-source alternative to DeleteMe ($129+/yr), Optery ($99+/yr), Incogni ($99+/yr). MIT-licensed, local-first, zero telemetry.
 
 `210 brokers scanned · 58 with semi-automated opt-out · all 3 US credit bureaus · 30-day verify loop · 0 data leaves your machine`
 
@@ -10,7 +10,7 @@
 [![Brokers](https://img.shields.io/badge/brokers-210-blue)](#broker-coverage)
 [![Opt-Out](https://img.shields.io/badge/opt--out%20supported-58%20brokers-green)](#commands)
 
-Your personal data is collected by hundreds of data brokers (Spokeo, Whitepages, Acxiom, LexisNexis…) and resold for $200-500/yr per person. DeleteMe charges $129/yr to remove it. **Vanish does the same — free, self-hosted, and auditable.**
+Your personal data is collected by hundreds of data brokers (Spokeo, Whitepages, Acxiom, LexisNexis…) and resold for $200-500/yr per person. DeleteMe charges from $129/yr to remove it. **Vanish does the same — free, self-hosted, and auditable.**
 
 **Try it now — two zero-install options:**
 
@@ -133,8 +133,8 @@ Persistent retry/manual-review/dead-letter queues, HMAC-signed audit trail, tran
 
 | Feature | Vanish | DeleteMe | Optery | Incogni |
 |---------|:---:|:---:|:---:|:---:|
-| **Price** | Free (MIT) | $129/yr | $99-249/yr | $99/yr |
-| **Brokers covered** | 200 | 750+ | 350+ | 180+ |
+| **Price** | Free (MIT) | $129+/yr | $99+/yr | $99+/yr |
+| **Brokers covered** | 210 | 750+ | 350+ | 180+ |
 | **Open source** | ✅ | ❌ | ❌ | ❌ |
 | **Self-hosted** | ✅ | ❌ | ❌ | ❌ |
 | **Data never leaves your machine** | ✅ | ❌ | ❌ | ❌ |
@@ -375,3 +375,15 @@ No new `.mjs` file, no registry import. Registry auto-loads from catalog.
 ---
 
 **If Vanish helps you, star ⭐ the repo** — it helps others discover a free alternative to $100+/yr privacy services.
+
+---
+
+## Legal & Trademark Notice
+
+**DeleteMe®**, **Optery®**, and **Incogni®** are trademarks of their respective owners (Abine, Inc.; Optery, Inc.; Surfshark B.V.). **Vanish is not affiliated with, endorsed by, or sponsored by any of these services.**
+
+References to competitor products exist solely for **factual comparison** (truthful comparative advertising, permitted under US Lanham Act §43(a), EU Directive 2006/114/EC, and similar frameworks).
+
+Pricing referenced ($129+/yr, $99+/yr, etc.) is **approximate and current as of April 2026**. These services use tiered pricing — the figures shown are entry-level. Check each service's official website for current and complete pricing.
+
+Vanish is a community-maintained, MIT-licensed open-source project. It does not offer a commercial service. It does not warrant any particular outcome of opt-out submissions; each broker's response is governed by their own policies and applicable privacy laws (CCPA, GDPR, etc.).

@@ -23,7 +23,7 @@ metadata:
 
 # vanish
 
-> Privacy scanner + opt-out orchestrator for 200 data brokers. Free open-source alternative to DeleteMe ($129/yr), Optery ($99-249/yr), Incogni ($99/yr). Agent-native, audit-signed, local-first.
+> Privacy scanner + opt-out orchestrator for 210 data brokers. Free open-source alternative to DeleteMe ($129+/yr), Optery ($99+/yr), Incogni ($99+/yr). Agent-native, audit-signed, local-first.
 
 ## Capabilities
 
