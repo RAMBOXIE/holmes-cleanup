@@ -24,6 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const SUBCOMMANDS = {
   scan:       'scan-demo.mjs',
+  'ai-scan':  'ai-scan.mjs',
   'opt-out':  'opt-out.mjs',
   verify:     'verify.mjs',
   cleanup:    'vanish.mjs',
@@ -45,6 +46,9 @@ Usage:
 Commands:
   scan        Scan 210 brokers for your privacy exposure (0-100 score)
               Example: vanish scan --name "John Doe" --email "j@x.com"
+
+  ai-scan     Check which LLM companies train on your data (30 platforms)
+              Example: vanish ai-scan --linkedin --twitter --chatgpt
 
   opt-out     Browser-assisted opt-out for 58 supported brokers
               Example: vanish opt-out --broker spokeo --email you@example.com

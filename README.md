@@ -2,7 +2,7 @@
 
 > 🔍 **Scan 210 data brokers in 10 seconds.** Open-source alternative to DeleteMe ($129+/yr), Optery ($99+/yr), Incogni ($99+/yr). MIT-licensed, local-first, zero telemetry.
 
-`210 brokers scanned · 58 with semi-automated opt-out · all 3 US credit bureaus · 30-day verify loop · 0 data leaves your machine`
+`210 data brokers · 30 AI-training platforms · 58 with semi-automated opt-out · all 3 US credit bureaus · 30-day verify loop · 0 data leaves your machine`
 
 [![Tests](https://github.com/RAMBOXIE/vanish/actions/workflows/test.yml/badge.svg)](https://github.com/RAMBOXIE/vanish/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -169,6 +169,7 @@ Persistent retry/manual-review/dead-letter queues, HMAC-signed audit trail, tran
 ## Features
 
 - 🔍 **Privacy Scanner** — 210 brokers, 0-100 score, instant heuristic
+- 🤖 **AI Training Exposure Scan** — check 30 LLM platforms (ChatGPT, Claude, Gemini, LinkedIn, Reddit, etc.) for default-opted-in data training. Unique to Vanish — competitors don't cover this
 - 🗑️ **18-state Wizard** — conversational opt-out flow, back/pause/resume commands
 - 🔁 **Verify Loop** — 30-day re-check with HTTP liveness; proves "actually removed" vs "still present"
 - 🏦 **Encrypted Secret Store** — scrypt KDF + per-secret salt, Windows DPAPI preferred, AES-GCM fallback
@@ -208,6 +209,20 @@ vanish scan --name "..." --share-card ./my-privacy-card.svg
 
 # Quieter output (for CI / scripting):
 vanish scan --name "..." --no-banner --no-color
+
+# AI training exposure scan — which LLM companies train on your data?
+# No personal data sent. We just need to know which platforms you use.
+vanish ai-scan --linkedin --twitter --chatgpt --reddit
+vanish ai-scan --use linkedin,twitter,chatgpt,reddit      # CSV alt
+vanish ai-scan --all                                      # all 30 platforms
+vanish ai-scan --all --output-md ./ai-report.md
+
+# Covered (30 platforms): ChatGPT, Claude, Gemini, Copilot, Meta AI, Perplexity,
+# LinkedIn, Reddit, Twitter/X (Grok), Stack Overflow, Tumblr, Medium, Quora,
+# Facebook, Pinterest, Grammarly, Notion AI, Otter, Zoom, Slack, Gmail, Outlook,
+# GitHub Copilot, Cursor, Adobe, Canva, DeviantArt, Shutterstock, Figma, ArtStation
+# Each entry shows: default consent (opted-in/opted-out/licensed), opt-out URL,
+# estimated time, and difficulty.
 
 # Browser-assisted opt-out (opens browser + guides you through 58 real brokers)
 vanish opt-out --broker spokeo --email you@example.com --full-name "Your Name"

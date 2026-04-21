@@ -5,6 +5,21 @@ All notable changes to Vanish will be documented here. Format follows [Keep a Ch
 ## [Unreleased]
 
 ### Added
+- **🤖 AI Training Exposure Scanner** (`src/ai-scanner/`, new subcommand `vanish ai-scan`):
+  - New catalog: 30 major LLM platforms across 6 categories (chat / content / productivity / creative / email / dev)
+  - Classifies each as `exposed` (opted-in by default), `licensed` (data sold to AI companies), `safe` (opted-out by default), `action-needed` (policy unclear), or `not-applicable` (you don't use it)
+  - Per-platform metadata: default consent state, opt-out URL, opt-out method + difficulty, estimated time, data types used, AI models trained
+  - Quick wins list (easy + medium difficulty opt-outs with URLs)
+  - Licensed-content list (platforms that have sold your data — opt-out only affects future training)
+  - Hard opt-outs list (GDPR/CCPA email-only paths)
+  - Exposure score 0-100 with colored bar + risk level (critical/high/moderate/low)
+  - Accepts explicit flags (`--linkedin --twitter`) or CSV (`--use linkedin,twitter`) or `--all` (worst-case)
+  - Outputs: terminal banner + Markdown report + JSON (`--json`)
+  - **Zero data transmission** — scan takes no personal information, just platform names
+  - Covered platforms include ChatGPT, Claude, Gemini, Copilot, Meta AI, Perplexity, LinkedIn, Reddit, Twitter/X (Grok), Stack Overflow, Tumblr, Medium, Quora, Facebook, Pinterest, Grammarly, Notion AI, Otter, Zoom, Slack, Gmail, Outlook, GitHub Copilot, Cursor, Adobe, Canva, DeviantArt, Shutterstock, Figma, ArtStation
+  - All data verified April 2026. Notes call out recent policy changes (LinkedIn 2024, Reddit deals, Meta EU objection form)
+- 20 new tests (`tests/ai-scan.test.mjs`): catalog integrity, classification logic, score boundaries, CLI integration. Total test count: 109 → 129
+
 - **Static web app** at [`web/`](./web/):
   - Zero-install browser experience for non-developers
   - Dark-themed single-page app (Vite + vanilla JS, no framework)
