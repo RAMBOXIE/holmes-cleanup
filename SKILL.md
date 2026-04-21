@@ -1,6 +1,6 @@
 ---
 name: vanish
-description: Privacy scanner + opt-out orchestrator for 200 data brokers. Scan your exposure in 10s (0-100 score), then remove with a guided 18-step wizard. Free open-source alternative to DeleteMe / Optery / Incogni. Agent-native, audit-signed (HMAC-SHA256), local-first. Triple-confirm safety gates for high-risk actions; user-controlled export decision before any delete; shortest-TTL credentials wiped after task.
+description: Privacy scanner + opt-out orchestrator for 210 data brokers. Scan your exposure in 10s (0-100 score), then remove with a guided 18-step wizard. Free open-source alternative to DeleteMe / Optery / Incogni. Agent-native, audit-signed (HMAC-SHA256), local-first. Triple-confirm safety gates for high-risk actions; user-controlled export decision before any delete; shortest-TTL credentials wiped after task.
 version: 0.2.0
 metadata:
   openclaw:
@@ -28,10 +28,10 @@ metadata:
 ## Capabilities
 
 ### 🔍 scan — Privacy exposure assessment
-Heuristic scan across 200 brokers in 10 seconds, no external API calls, no data leaves the machine. Produces a 0-100 privacy score, per-broker likelihood (`likely` / `possible` / `unlikely`) and risk tier (`critical` / `high` / `moderate` / `low`), plus prioritized category-grouped recommendations. Markdown + JSON report output.
+Heuristic scan across 210 brokers in 10 seconds, no external API calls, no data leaves the machine. Produces a 0-100 privacy score, per-broker likelihood (`likely` / `possible` / `unlikely`) and risk tier (`critical` / `high` / `moderate` / `low`), plus prioritized category-grouped recommendations. Markdown + JSON report output.
 
 ### 🗑️ cleanup — Opt-out submission workflow
-18-state conversational wizard for preparing and submitting opt-out requests. Real HTTP submission for 8 brokers via configurable endpoint (default `postman-echo.com` for verifiable closed-loop validation); other 192 brokers are dry-run blueprints with verified opt-out URLs. Triple-confirm for high-risk actions, export decision before any delete.
+18-state conversational wizard for preparing and submitting opt-out requests. Real HTTP submission for 8 brokers via configurable endpoint (default `postman-echo.com` for verifiable closed-loop validation); other 202 brokers are dry-run blueprints with verified opt-out URLs. 58 support browser-assisted opt-out with captcha guidance and email verification prompts. Triple-confirm for high-risk actions, export decision before any delete.
 
 ### ✍️ audit — HMAC-signed event trail
 Every state mutation is HMAC-SHA256 signed over canonical JSON with timing-safe verification. `VANISH_AUDIT_HMAC_KEY` required in production (code warns in dev, silent in test). Proof reports render to Markdown.
@@ -116,7 +116,7 @@ npx github:RAMBOXIE/vanish scan --name "..." --email "..."
 | Secret storage | scrypt KDF + per-secret salt; Windows DPAPI preferred, AES-GCM fallback |
 | Compliance block | Live official mode requires `termsAccepted`, `lawfulBasis`, `operatorId` |
 
-## Broker coverage — 200 brokers / 12 categories
+## Broker coverage — 210 brokers / 12 categories
 
 | Category | Count | Examples |
 |----------|------|----------|
@@ -152,10 +152,10 @@ Scan mode requires zero env vars — pure local computation.
 - **Live official broker mode**: compliance-gated by default; requires `termsAccepted`, `lawfulBasis`, `operatorId` before submission. Without configured endpoints, defaults to test/echo mode.
 - **No background automation**: every run requires explicit manual trigger.
 - **Credential persistence**: only via the encrypted secret store with TTL enforcement; no plaintext storage.
-- **Dry-run by default**: 192 of 200 brokers remain dry-run until endpoint config is added.
+- **Dry-run by default**: 202 of 210 brokers remain dry-run until endpoint config is added. 58 support browser-assisted opt-out.
 
 ## Tests
 
-64 tests across 15 files covering: safety gates, queue state persistence, retry/dead-letter routing, secret encryption, audit signing, wizard state transitions, scan scoring, 200-broker registration, live HTTP round-trip against postman-echo.
+109 tests across 17 files covering: safety gates, queue state persistence, retry/dead-letter routing, secret encryption, audit signing, wizard state transitions, scan scoring, 210-broker registration, live HTTP round-trip against postman-echo, follow-up verify classification, browser-assisted opt-out flows, share card rendering.
 
 Run: `npm test`

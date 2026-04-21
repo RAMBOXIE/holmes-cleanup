@@ -1,7 +1,7 @@
 {
   "name": "vanish",
   "version": "0.2.0",
-  "description": "Open-source privacy scanner + opt-out orchestrator for 200 data brokers. Free alternative to DeleteMe, Optery, Incogni. Local-first, audit-signed, MIT-licensed.",
+  "description": "Open-source privacy scanner + opt-out orchestrator for 210 data brokers. Free alternative to DeleteMe, Optery, Incogni. Local-first, audit-signed, MIT-licensed.",
   "keywords": [
     "privacy",
     "data-broker",

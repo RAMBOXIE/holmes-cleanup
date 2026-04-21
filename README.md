@@ -78,9 +78,9 @@ Identity: A. Lovelace
 [█████████████░░░░░░░] 63/100
 
 ## Exposure Summary
-- Total brokers scanned: 200
+- Total brokers scanned: 210
 - Likely exposed: 115
-- Possibly exposed: 85
+- Possibly exposed: 95
 
 ## Risk Distribution
 - Critical: 95
@@ -100,7 +100,7 @@ Identity: A. Lovelace
 
 ### 1. Scan (10 seconds, zero API calls)
 
-Heuristic scanner estimates your exposure across 200 brokers using a 5-factor confidence algorithm:
+Heuristic scanner estimates your exposure across 210 brokers using a 5-factor confidence algorithm:
 - **Data-type coverage**: does the broker collect what you have?
 - **Category risk**: people-search = critical, property-records = low
 - **Jurisdiction match**: US brokers for US users, etc.
@@ -144,7 +144,7 @@ Persistent retry/manual-review/dead-letter queues, HMAC-signed audit trail, tran
 
 ---
 
-## Broker Coverage (200 brokers)
+## Broker Coverage (210 brokers)
 
 | Category | Count | Examples |
 |----------|------|----------|
@@ -162,13 +162,13 @@ Persistent retry/manual-review/dead-letter queues, HMAC-signed audit trail, tran
 
 **Browser-assisted opt-out**: 58 brokers support guided removal via `vanish opt-out`. Vanish opens your browser to the real opt-out URL, pre-fills the data to paste, and guides you through captchas + email verification. Includes the big names (Spokeo, Whitepages, BeenVerified, Intelius, Radaris), background check (InstantCheckmate, TruthFinder), credit bureaus (LexisNexis, Equifax, Experian, TransUnion), and more. See `vanish opt-out --help` for the full list.
 
-**Live HTTP submission**: 8 brokers have adapters for real HTTP submission via configurable endpoints (default `postman-echo.com` for closed-loop validation). The other 173 are dry-run blueprints with verified opt-out URLs — future batches can extend browser-assisted support to more.
+**Live HTTP submission**: 8 brokers have adapters for real HTTP submission via configurable endpoints (default `postman-echo.com` for closed-loop validation). The other 202 are dry-run blueprints with verified opt-out URLs — future batches can extend browser-assisted support to more.
 
 ---
 
 ## Features
 
-- 🔍 **Privacy Scanner** — 200 brokers, 0-100 score, instant heuristic
+- 🔍 **Privacy Scanner** — 210 brokers, 0-100 score, instant heuristic
 - 🗑️ **18-state Wizard** — conversational opt-out flow, back/pause/resume commands
 - 🔁 **Verify Loop** — 30-day re-check with HTTP liveness; proves "actually removed" vs "still present"
 - 🏦 **Encrypted Secret Store** — scrypt KDF + per-secret salt, Windows DPAPI preferred, AES-GCM fallback
@@ -269,7 +269,7 @@ vanish dashboard data/queue-state.json
 # Proof report (audit trail in Markdown)
 vanish report ./path/to/execution-result.json
 
-# All 64 tests
+# All 109 tests
 npm test
 ```
 
@@ -290,7 +290,7 @@ src/
 │   ├── registry.mjs            # Catalog-driven adapter registry
 │   └── brokers/
 │       ├── config/
-│       │   └── broker-catalog.json   # Single source of truth (200 brokers)
+│       │   └── broker-catalog.json   # Single source of truth (210 brokers)
 │       ├── _dry-run-broker.mjs       # Base factory
 │       └── _live-broker.mjs          # Live HTTP submission factory
 ├── wizard/
@@ -305,7 +305,7 @@ src/
 
 prompts/wizard/                 # 18 .md prompt templates per state
 scripts/                        # CLI entry points
-tests/                          # 64 tests across 15 files
+tests/                          # 109 tests across 15 files
 ```
 
 ---
@@ -318,7 +318,7 @@ tests/                          # 64 tests across 15 files
 - ✅ 18-state wizard with scan → handoff → cleanup flow
 - ✅ Real HTTP submission for 8 brokers via test endpoint
 - ✅ Audit, queues, secret store hardened
-- ✅ 64 tests passing
+- ✅ 109 tests passing across 3 OSes × 2 Node versions (CI)
 
 **Next (P2)**:
 - 🔜 Production endpoint configuration for people-search brokers

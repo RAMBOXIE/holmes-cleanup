@@ -7,7 +7,7 @@
 //   npx vanish <subcommand> [args...]  (after npm publish)
 //
 // Subcommands:
-//   scan       Run the privacy scan across 200 data brokers
+//   scan       Run the privacy scan across 210 data brokers
 //   cleanup    Run the opt-out wizard / dry-run submission
 //   wizard     Interactive conversation wizard (scan + cleanup)
 //   b1-live    Live HTTP submission against configured endpoints
@@ -37,13 +37,13 @@ const SUBCOMMANDS = {
 };
 
 const HELP = `
-Vanish — privacy scanner + opt-out orchestrator for 200 data brokers
+Vanish — privacy scanner + opt-out orchestrator for 210 data brokers
 
 Usage:
   vanish <command> [options]
 
 Commands:
-  scan        Scan 200 brokers for your privacy exposure (0-100 score)
+  scan        Scan 210 brokers for your privacy exposure (0-100 score)
               Example: vanish scan --name "John Doe" --email "j@x.com"
 
   opt-out     Browser-assisted opt-out for 58 supported brokers

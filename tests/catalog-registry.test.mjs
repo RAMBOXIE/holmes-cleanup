@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
 
-test('catalog registers exactly 200 brokers', () => {
+test('catalog registers exactly 210 brokers', () => {
   const all = listBrokerAdapters();
   assert.equal(all.length, 210);
 });
