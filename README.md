@@ -224,6 +224,21 @@ vanish ai-scan --all --output-md ./ai-report.md
 # Each entry shows: default consent (opted-in/opted-out/licensed), opt-out URL,
 # estimated time, and difficulty.
 
+# Browser-assisted AI training opt-out (opens each settings page + walkthrough)
+# For 26 platforms with known UI walkthroughs — prints exact toggle name,
+# opens the URL, waits for confirmation, records HMAC-signed audit trail.
+vanish ai-opt-out --chatgpt                      # single platform
+vanish ai-opt-out --chatgpt --linkedin --cursor  # batch
+vanish ai-opt-out --use chatgpt,linkedin,cursor  # CSV alt
+vanish ai-opt-out --all                          # all 26 non-safe platforms
+vanish ai-opt-out --chatgpt --clipboard          # also copies target setting name
+                                                 #   → paste into Ctrl/Cmd+F on page
+
+# Each walkthrough includes: exact UI string to find, step-by-step instructions,
+# tier overrides (e.g., "ChatGPT Team/Enterprise already opted-out"), verification
+# hint ("toggle shows grey/off"). 60-day re-verify because platforms silently
+# reset settings after policy updates.
+
 # Browser-assisted opt-out (opens browser + guides you through 58 real brokers)
 vanish opt-out --broker spokeo --email you@example.com --full-name "Your Name"
 vanish opt-out --broker spokeo,whitepages,beenverified --email you@example.com --full-name "Your Name"

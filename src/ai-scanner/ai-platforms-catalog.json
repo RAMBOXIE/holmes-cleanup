@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "lastVerified": "2026-04",
   "categories": {
     "chat": "LLM chat services (user conversations used for training)",
@@ -29,7 +29,17 @@
       "aiModels": ["GPT-4", "GPT-4o", "GPT-5"],
       "region": "global",
       "signalAsked": "chatgpt",
-      "notes": "Setting: \"Improve the model for everyone\" → toggle OFF. Team/Enterprise plans are opted-out by default. API usage is not used for training."
+      "notes": "Setting: \"Improve the model for everyone\" → toggle OFF. Team/Enterprise plans are opted-out by default. API usage is not used for training.",
+      "walkthrough": {
+        "targetSetting": "Improve the model for everyone",
+        "steps": [
+          "Click your profile icon (bottom-left in ChatGPT web)",
+          "Settings → Data controls",
+          "Toggle 'Improve the model for everyone' to OFF"
+        ],
+        "verification": "Toggle shows grey/off. No confirm button — change saves instantly.",
+        "tierOverrides": "Team/Enterprise users are already opted-out — this is only needed for Free/Plus/Pro individual accounts."
+      }
     },
     "anthropic-claude": {
       "displayName": "Anthropic Claude",
@@ -43,7 +53,8 @@
       "aiModels": ["Claude 3.5", "Claude 3.7", "Claude 4"],
       "region": "global",
       "signalAsked": "claude",
-      "notes": "Claude does NOT train on consumer chat data by default. Explicit opt-in required. Safest major chat platform for privacy."
+      "notes": "Claude does NOT train on consumer chat data by default. Explicit opt-in required. Safest major chat platform for privacy.",
+      "walkthrough": null
     },
     "google-gemini": {
       "displayName": "Google Gemini",
@@ -57,7 +68,18 @@
       "aiModels": ["Gemini", "Gemini Advanced"],
       "region": "global",
       "signalAsked": "gemini",
-      "notes": "Gemini App Activity toggle at myactivity.google.com. Workspace Business/Enterprise have different rules — check admin console. Human reviewers see sampled chats."
+      "notes": "Gemini App Activity toggle at myactivity.google.com. Workspace Business/Enterprise have different rules — check admin console. Human reviewers see sampled chats.",
+      "walkthrough": {
+        "targetSetting": "Gemini Apps Activity",
+        "steps": [
+          "Open myactivity.google.com/product/gemini",
+          "Click 'Turn off' next to 'Gemini Apps Activity'",
+          "Confirm: choose 'Turn off' or 'Turn off and delete activity' (recommended)",
+          "Click the dropdown next to 'Auto-delete activity older than' → set to '3 months' (shortest)"
+        ],
+        "verification": "Status changes from 'On' to 'Off' with timestamp of change",
+        "tierOverrides": "Workspace Business/Enterprise: check admin console → Apps → Google Workspace → Gemini → data sharing policy. Admin controls override individual toggles."
+      }
     },
     "microsoft-copilot": {
       "displayName": "Microsoft Copilot",
@@ -71,7 +93,18 @@
       "aiModels": ["GPT-4o (via Microsoft)", "Copilot"],
       "region": "global",
       "signalAsked": "copilot",
-      "notes": "Microsoft 365 Copilot (business) does NOT train on your data. Free Copilot chat (copilot.microsoft.com) does — opt out via account privacy settings."
+      "notes": "Microsoft 365 Copilot (business) does NOT train on your data. Free Copilot chat (copilot.microsoft.com) does — opt out via account privacy settings.",
+      "walkthrough": {
+        "targetSetting": "Model training on text",
+        "steps": [
+          "Sign in at account.microsoft.com/privacy",
+          "Scroll to 'Model training on text' section",
+          "Click 'Turn off model training on text'",
+          "Confirm in dialog"
+        ],
+        "verification": "Status shows 'Off' with confirmation timestamp",
+        "tierOverrides": "M365 Copilot (paid business) is already opted-out — this is only needed for free copilot.microsoft.com users."
+      }
     },
     "meta-ai": {
       "displayName": "Meta AI (Facebook/Instagram/WhatsApp)",
@@ -85,7 +118,19 @@
       "aiModels": ["Llama", "Meta AI"],
       "region": "global (EU/UK opt-out stronger)",
       "signalAsked": "meta",
-      "notes": "EU/UK users get explicit objection form. US users have limited opt-out — Meta argues 'legitimate interest'. Must submit objection form; approval discretionary."
+      "notes": "EU/UK users get explicit objection form. US users have limited opt-out — Meta argues 'legitimate interest'. Must submit objection form; approval discretionary.",
+      "walkthrough": {
+        "targetSetting": "Objection to use of your info for AI",
+        "steps": [
+          "Open the objection form at facebook.com/help/contact/1638046109699208",
+          "Select your country (EU/UK/Switzerland get strongest protections)",
+          "Fill in your full name + email (must match your account)",
+          "In the reason field: state you object to processing of your personal data for AI model training under GDPR Art. 21 (EU) or similar local law",
+          "Submit and save the confirmation email"
+        ],
+        "verification": "You receive a case reference email within 24-72 hours. Approval decision can take 30-90 days.",
+        "tierOverrides": "EU/UK/Swiss users have a legal right under GDPR — approval is effectively automatic. US users may be denied (Meta argues 'legitimate interest')."
+      }
     },
     "perplexity-ai": {
       "displayName": "Perplexity AI",
@@ -99,7 +144,18 @@
       "aiModels": ["Perplexity native", "GPT-4", "Claude (user choice)"],
       "region": "global",
       "signalAsked": "perplexity",
-      "notes": "'AI Data Retention' toggle in account settings. Pro users opted-out by default."
+      "notes": "'AI Data Retention' toggle in account settings. Pro users opted-out by default.",
+      "walkthrough": {
+        "targetSetting": "AI Data Retention",
+        "steps": [
+          "Sign in at perplexity.ai",
+          "Click your avatar → Settings → Account",
+          "Scroll to 'AI Data Retention'",
+          "Toggle OFF"
+        ],
+        "verification": "Toggle shows grey/off state",
+        "tierOverrides": "Pro/Enterprise users are already opted-out by default."
+      }
     },
 
     "linkedin": {
@@ -115,7 +171,17 @@
       "region": "global (EU/UK/Swiss/HK/Canada opted-out by default)",
       "signalAsked": "linkedin",
       "changedAt": "2024-09-18",
-      "notes": "Controversially turned on for all users by default in Sept 2024 without notification. Regulator pressure caused EU/UK/Swiss/HK/Canada rollback. Setting: 'Data for Generative AI Improvement'."
+      "notes": "Controversially turned on for all users by default in Sept 2024 without notification. Regulator pressure caused EU/UK/Swiss/HK/Canada rollback. Setting: 'Data for Generative AI Improvement'.",
+      "walkthrough": {
+        "targetSetting": "Data for Generative AI Improvement",
+        "steps": [
+          "Go to linkedin.com/mypreferences/d/settings/data-for-generative-ai (direct link)",
+          "Find 'Use my data for training content creation AI models'",
+          "Toggle OFF"
+        ],
+        "verification": "Toggle flips to grey. LinkedIn saves instantly — no confirm.",
+        "tierOverrides": "EU/UK/Swiss/HK/Canada accounts are already opted-out — regulator pushback forced rollback. This is only needed in US/APAC/LatAm regions."
+      }
     },
     "reddit": {
       "displayName": "Reddit",
@@ -129,7 +195,19 @@
       "aiModels": ["Google (sold)", "OpenAI (sold)", "Anthropic (via deals)"],
       "region": "global",
       "signalAsked": "reddit",
-      "notes": "Reddit signed ~$60M/year deals with Google and OpenAI. No user toggle. Only CCPA/GDPR request via DPO email works. Deleting posts doesn't retroactively remove from training sets already licensed."
+      "notes": "Reddit signed ~$60M/year deals with Google and OpenAI. No user toggle. Only CCPA/GDPR request via DPO email works. Deleting posts doesn't retroactively remove from training sets already licensed.",
+      "walkthrough": {
+        "targetSetting": "Privacy question form (DPO request)",
+        "steps": [
+          "Open reddithelp.com/contact/privacy-question",
+          "Select 'I want to submit a privacy request'",
+          "Request type: 'Objection to processing' (GDPR) or 'Do Not Sell/Share' (CCPA)",
+          "Specify: 'I object to my content being licensed to or used by third-party AI companies for model training'",
+          "Enter your Reddit username and email. Submit."
+        ],
+        "verification": "Reddit responds via email within 30-45 days. Approval is discretionary for non-EU/CA users.",
+        "tierOverrides": "This only affects FUTURE licensing cycles. Your posts are already in training sets Reddit has sold — that data is not coming back out."
+      }
     },
     "twitter-x": {
       "displayName": "Twitter/X (Grok)",
@@ -143,7 +221,18 @@
       "aiModels": ["Grok"],
       "region": "global",
       "signalAsked": "twitter",
-      "notes": "xAI Grok trained on tweets. Toggle: 'Data sharing with xAI' → off. Retroactive: only affects future training cycles — past Grok versions already trained."
+      "notes": "xAI Grok trained on tweets. Toggle: 'Data sharing with xAI' → off. Retroactive: only affects future training cycles — past Grok versions already trained.",
+      "walkthrough": {
+        "targetSetting": "Allow your posts as well as your interactions, inputs, and results with Grok to be used for training and fine-tuning",
+        "steps": [
+          "Open x.com/settings/grok (direct link) OR Settings → Privacy and safety → Grok",
+          "Find 'Allow your posts as well as your interactions, inputs, and results with Grok to be used for training and fine-tuning'",
+          "Toggle OFF",
+          "Also check 'Share data with xAI' under Privacy → Data sharing → uncheck"
+        ],
+        "verification": "Toggle shows grey/off. Change saves immediately.",
+        "tierOverrides": null
+      }
     },
     "stack-overflow": {
       "displayName": "Stack Overflow",
@@ -157,7 +246,18 @@
       "aiModels": ["Prosus (OpenAI deal)", "Google", "various"],
       "region": "global",
       "signalAsked": "stackoverflow",
-      "notes": "SO announced 2024 partnership with OpenAI. Posts licensed under CC-BY-SA — community pushback around retroactive use. Only GDPR/CCPA request works."
+      "notes": "SO announced 2024 partnership with OpenAI. Posts licensed under CC-BY-SA — community pushback around retroactive use. Only GDPR/CCPA request works.",
+      "walkthrough": {
+        "targetSetting": "GDPR/CCPA data subject request",
+        "steps": [
+          "Email privacy@stackoverflow.com (not a form — direct email)",
+          "Subject: 'GDPR Article 21 objection — AI training data processing' (or 'CCPA Do Not Sell' for California)",
+          "Body: include your username, email, and statement objecting to processing of your content for AI model training by Prosus partners, OpenAI, Google, or similar",
+          "Attach: screenshot of your profile for identity verification"
+        ],
+        "verification": "Response within 30 days (GDPR) or 45 days (CCPA). Stack Overflow may push back — content is CC-BY-SA licensed, so argument for retroactive removal is weak.",
+        "tierOverrides": "This is largely symbolic — CC-BY-SA content is already freely scrape-able by anyone. Future licensing deals CAN be objected to."
+      }
     },
     "tumblr": {
       "displayName": "Tumblr",
@@ -171,7 +271,18 @@
       "aiModels": ["OpenAI (sold)", "Midjourney (sold)"],
       "region": "global",
       "signalAsked": "tumblr",
-      "notes": "Automattic licensed Tumblr+WordPress.com content to OpenAI and Midjourney in 2024. Per-blog opt-out: Settings → 'Prevent third-party sharing'."
+      "notes": "Automattic licensed Tumblr+WordPress.com content to OpenAI and Midjourney in 2024. Per-blog opt-out: Settings → 'Prevent third-party sharing'.",
+      "walkthrough": {
+        "targetSetting": "Prevent third-party sharing",
+        "steps": [
+          "Open Tumblr → click gear icon next to your blog name in sidebar",
+          "Scroll to 'Visibility'",
+          "Toggle ON: 'Prevent third-party sharing'",
+          "Repeat for EACH blog you own (not a global setting)"
+        ],
+        "verification": "Toggle shows on/blue state per blog. Save is automatic.",
+        "tierOverrides": "Only affects future licensing. Your posts already sold to OpenAI/Midjourney in 2024 remain in their training data."
+      }
     },
     "medium": {
       "displayName": "Medium",
@@ -185,7 +296,8 @@
       "aiModels": [],
       "region": "global",
       "signalAsked": "medium",
-      "notes": "Medium explicitly blocks AI crawlers (GPTBot, ClaudeBot, etc.) in robots.txt. Public policy against selling content to AI training. Safe as of 2026-04."
+      "notes": "Medium explicitly blocks AI crawlers (GPTBot, ClaudeBot, etc.) in robots.txt. Public policy against selling content to AI training. Safe as of 2026-04.",
+      "walkthrough": null
     },
     "quora": {
       "displayName": "Quora (Poe)",
@@ -199,7 +311,18 @@
       "aiModels": ["Poe internal"],
       "region": "global",
       "signalAsked": "quora",
-      "notes": "Quora runs Poe AI platform. Public answers used for training by default. Privacy settings let you opt out."
+      "notes": "Quora runs Poe AI platform. Public answers used for training by default. Privacy settings let you opt out.",
+      "walkthrough": {
+        "targetSetting": "Allow use of content for LLM training",
+        "steps": [
+          "Open quora.com/settings/privacy",
+          "Scroll to 'Large language models (LLMs)'",
+          "Uncheck 'Allow large language models to be trained on my content'",
+          "Click Save"
+        ],
+        "verification": "Checkbox shows unchecked. Confirmation banner appears.",
+        "tierOverrides": null
+      }
     },
     "facebook-instagram": {
       "displayName": "Facebook / Instagram (Meta posts)",
@@ -213,7 +336,19 @@
       "aiModels": ["Llama", "Meta AI"],
       "region": "global (EU/UK different)",
       "signalAsked": "facebook",
-      "notes": "Same objection form as Meta AI. Public posts automatically used. EU users had temporary block (ICO/DPC pressure); rolled back for training later with improved opt-out. Messages in WhatsApp/Messenger have separate policy."
+      "notes": "Same objection form as Meta AI. Public posts automatically used. EU users had temporary block (ICO/DPC pressure); rolled back for training later with improved opt-out. Messages in WhatsApp/Messenger have separate policy.",
+      "walkthrough": {
+        "targetSetting": "Right to Object — AI training",
+        "steps": [
+          "Same form as Meta AI: facebook.com/help/contact/1638046109699208",
+          "Specify you want to object to use of your Facebook AND Instagram posts/photos/comments for AI model training",
+          "Include all account email addresses (if multiple)",
+          "For EU/UK: cite GDPR Article 21 (right to object)",
+          "Submit"
+        ],
+        "verification": "Case reference email within 24-72 hours. Decision within 30-90 days.",
+        "tierOverrides": "EU/UK/Swiss/EEA users: approval is effectively automatic under GDPR. Everywhere else: discretionary."
+      }
     },
     "pinterest": {
       "displayName": "Pinterest",
@@ -227,7 +362,17 @@
       "aiModels": ["Pinterest internal (visual search / recommendations)"],
       "region": "global",
       "signalAsked": "pinterest",
-      "notes": "Less controversial — Pinterest trains recommendation models on activity. Training toggle in privacy settings. No known external licensing."
+      "notes": "Less controversial — Pinterest trains recommendation models on activity. Training toggle in privacy settings. No known external licensing.",
+      "walkthrough": {
+        "targetSetting": "Use your data to improve new features and content",
+        "steps": [
+          "Open pinterest.com/settings/privacy-data/",
+          "Find 'Use your data to improve new features and content'",
+          "Toggle OFF"
+        ],
+        "verification": "Toggle shows grey/off",
+        "tierOverrides": null
+      }
     },
 
     "grammarly": {
@@ -242,7 +387,18 @@
       "aiModels": ["Grammarly internal"],
       "region": "global",
       "signalAsked": "grammarly",
-      "notes": "Product Improvement toggle (what they call 'Text Improvement Sharing'). Off means your writing isn't used to improve Grammarly's models. Business tier opted-out by default."
+      "notes": "Product Improvement toggle (what they call 'Text Improvement Sharing'). Off means your writing isn't used to improve Grammarly's models. Business tier opted-out by default.",
+      "walkthrough": {
+        "targetSetting": "Text Improvement Sharing",
+        "steps": [
+          "Sign in at account.grammarly.com",
+          "Click Account → Privacy",
+          "Find 'Product Improvement' / 'Text Improvement Sharing'",
+          "Toggle OFF"
+        ],
+        "verification": "Toggle shows grey/off. Save is automatic.",
+        "tierOverrides": "Grammarly Business/Enterprise is already opted-out by default — individual plans need this step."
+      }
     },
     "notion-ai": {
       "displayName": "Notion AI",
@@ -256,7 +412,8 @@
       "aiModels": [],
       "region": "global",
       "signalAsked": "notion",
-      "notes": "Notion AI does NOT train on user workspace content. Uses OpenAI/Anthropic APIs with enterprise privacy agreements (data not used for model training by those providers either)."
+      "notes": "Notion AI does NOT train on user workspace content. Uses OpenAI/Anthropic APIs with enterprise privacy agreements (data not used for model training by those providers either).",
+      "walkthrough": null
     },
     "otter-ai": {
       "displayName": "Otter AI",
@@ -270,7 +427,18 @@
       "aiModels": ["Otter internal"],
       "region": "global",
       "signalAsked": "otter",
-      "notes": "Meeting audio + transcripts used for ASR model training by default. Business plans opted-out. All participants are recorded regardless of individual consent to Otter."
+      "notes": "Meeting audio + transcripts used for ASR model training by default. Business plans opted-out. All participants are recorded regardless of individual consent to Otter.",
+      "walkthrough": {
+        "targetSetting": "Contribute to improving speech recognition",
+        "steps": [
+          "Sign in at otter.ai",
+          "Settings → Account → Privacy",
+          "Uncheck 'Contribute to improving speech recognition'",
+          "Also uncheck 'Share meeting content for model improvements' if present"
+        ],
+        "verification": "Checkboxes show unchecked. Save is automatic.",
+        "tierOverrides": "Otter Business/Enterprise users are already opted-out — only Free/Pro individual plans need this."
+      }
     },
     "zoom": {
       "displayName": "Zoom",
@@ -284,7 +452,8 @@
       "aiModels": ["Zoom AI Companion"],
       "region": "global",
       "signalAsked": "zoom",
-      "notes": "After 2023 backlash, Zoom clarified: customer content (audio, video, chat, transcripts) NOT used for third-party model training. AI Companion uses call metadata only. Verify current ToS."
+      "notes": "After 2023 backlash, Zoom clarified: customer content (audio, video, chat, transcripts) NOT used for third-party model training. AI Companion uses call metadata only. Verify current ToS.",
+      "walkthrough": null
     },
     "slack": {
       "displayName": "Slack",
@@ -298,7 +467,18 @@
       "aiModels": ["Slack AI (internal)", "Slack ML features"],
       "region": "global",
       "signalAsked": "slack",
-      "notes": "Slack uses customer data for ML (search, channel recommendations). Opt-out is enterprise admin via email to feedback@slack.com. Individuals cannot opt out on shared workspaces."
+      "notes": "Slack uses customer data for ML (search, channel recommendations). Opt-out is enterprise admin via email to feedback@slack.com. Individuals cannot opt out on shared workspaces.",
+      "walkthrough": {
+        "targetSetting": "Global model training opt-out (admin-only)",
+        "steps": [
+          "This is NOT a user-level setting — only workspace owner/admin can opt out",
+          "If you ARE the admin: email feedback@slack.com with subject 'Global model training opt-out for [workspace-name]'",
+          "If you are NOT the admin: contact your workspace admin and ask them to submit",
+          "Include workspace URL + admin's email on record"
+        ],
+        "verification": "Slack sends workspace-wide confirmation within 30 days.",
+        "tierOverrides": "Slack Enterprise Grid customers have contractual opt-out — check your Data Processing Addendum. Free/Pro/Business+ plans need this email request."
+      }
     },
     "gmail-google-workspace": {
       "displayName": "Gmail / Google Workspace (Gemini integration)",
@@ -312,7 +492,19 @@
       "aiModels": ["Gemini"],
       "region": "global",
       "signalAsked": "gmail",
-      "notes": "Google says Gmail content NOT used for ads and NOT for Gemini training on consumer accounts. But metadata IS used for features. Workspace plans have stronger guarantees via Data Processing Amendments."
+      "notes": "Google says Gmail content NOT used for ads and NOT for Gemini training on consumer accounts. But metadata IS used for features. Workspace plans have stronger guarantees via Data Processing Amendments.",
+      "walkthrough": {
+        "targetSetting": "Smart features and personalization",
+        "steps": [
+          "Open myaccount.google.com/data-and-privacy",
+          "Scroll to 'Smart features and personalization'",
+          "Click and UNCHECK 'Smart features in Gmail, Chat, Meet'",
+          "Also uncheck 'Smart features in other Google products' if present",
+          "Click Save to persist the changes"
+        ],
+        "verification": "Features list shows as disabled. Gmail behavior changes (no more Smart Compose suggestions).",
+        "tierOverrides": "Workspace Business/Enterprise: data handling governed by your Data Processing Amendment — check admin console for model training settings."
+      }
     },
     "microsoft-365": {
       "displayName": "Microsoft 365 / Outlook (Copilot)",
@@ -326,7 +518,8 @@
       "aiModels": ["Copilot for 365"],
       "region": "global",
       "signalAsked": "outlook",
-      "notes": "M365 Copilot (paid) has enterprise data protection — content NOT used for training. Free outlook.com users may have different terms. Always verify on Microsoft privacy dashboard."
+      "notes": "M365 Copilot (paid) has enterprise data protection — content NOT used for training. Free outlook.com users may have different terms. Always verify on Microsoft privacy dashboard.",
+      "walkthrough": null
     },
 
     "github-copilot": {
@@ -341,7 +534,17 @@
       "aiModels": ["Copilot (OpenAI Codex-based)"],
       "region": "global",
       "signalAsked": "copilot-code",
-      "notes": "Individual accounts have 'Allow GitHub to use my code snippets for product improvements' toggle. Business/Enterprise opted-out by default. Private repo contents never used for training (only public)."
+      "notes": "Individual accounts have 'Allow GitHub to use my code snippets for product improvements' toggle. Business/Enterprise opted-out by default. Private repo contents never used for training (only public).",
+      "walkthrough": {
+        "targetSetting": "Allow GitHub to use my code snippets for product improvements",
+        "steps": [
+          "Open github.com/settings/copilot",
+          "Scroll to 'Allow GitHub to use my code snippets for product improvements'",
+          "Toggle OFF"
+        ],
+        "verification": "Toggle shows grey/off. No confirm needed.",
+        "tierOverrides": "Copilot Business/Enterprise users are already opted-out. Private repos are NEVER used for training regardless of toggle state."
+      }
     },
     "cursor-ai": {
       "displayName": "Cursor",
@@ -355,7 +558,17 @@
       "aiModels": ["GPT-4", "Claude", "Cursor-small"],
       "region": "global",
       "signalAsked": "cursor",
-      "notes": "'Privacy Mode' toggle disables sending data to training. Paid users can enable by default."
+      "notes": "'Privacy Mode' toggle disables sending data to training. Paid users can enable by default.",
+      "walkthrough": {
+        "targetSetting": "Privacy Mode",
+        "steps": [
+          "Option A (web): Open cursor.com/settings, find 'Privacy Mode', toggle ON",
+          "Option B (app): Cursor app → Settings (Ctrl/Cmd+,) → search 'privacy' → enable 'Privacy Mode'",
+          "Restart Cursor for the change to take full effect"
+        ],
+        "verification": "Status bar shows 'Privacy Mode' indicator. Prompts/code no longer sent for training.",
+        "tierOverrides": "Pro users can set Privacy Mode as default in team settings."
+      }
     },
 
     "adobe-creative-cloud": {
@@ -370,7 +583,17 @@
       "aiModels": ["Adobe Firefly"],
       "region": "global",
       "signalAsked": "adobe",
-      "notes": "'Content Analysis' toggle covers machine-learning training on your files. 2024 backlash led Adobe to clarify: Firefly is NOT trained on customer content, only on licensed Adobe Stock. Toggle controls other product-improvement uses."
+      "notes": "'Content Analysis' toggle covers machine-learning training on your files. 2024 backlash led Adobe to clarify: Firefly is NOT trained on customer content, only on licensed Adobe Stock. Toggle controls other product-improvement uses.",
+      "walkthrough": {
+        "targetSetting": "Content analysis",
+        "steps": [
+          "Sign in at account.adobe.com/privacy",
+          "Scroll to 'Content analysis'",
+          "Toggle OFF 'Allow my content to be analyzed by Adobe to improve our products and services'"
+        ],
+        "verification": "Toggle shows grey/off. Adobe saves instantly.",
+        "tierOverrides": "Adobe Stock contributors: separate contract — Stock content IS used for Firefly. Opting out of content analysis doesn't affect Stock licensing."
+      }
     },
     "canva": {
       "displayName": "Canva",
@@ -384,7 +607,17 @@
       "aiModels": ["Canva AI (Magic Studio)"],
       "region": "global",
       "signalAsked": "canva",
-      "notes": "'Use my content to improve Canva AI features' toggle. Separate from Canva's partnership with Getty for licensed training imagery."
+      "notes": "'Use my content to improve Canva AI features' toggle. Separate from Canva's partnership with Getty for licensed training imagery.",
+      "walkthrough": {
+        "targetSetting": "Use my content to improve Canva AI features",
+        "steps": [
+          "Open canva.com/settings/privacy",
+          "Find 'Use my content to improve Canva AI features'",
+          "Toggle OFF"
+        ],
+        "verification": "Toggle shows grey/off",
+        "tierOverrides": null
+      }
     },
     "deviantart": {
       "displayName": "DeviantArt",
@@ -398,7 +631,18 @@
       "aiModels": ["DreamUp (DeviantArt's own)"],
       "region": "global",
       "signalAsked": "deviantart",
-      "notes": "'Protect your deviations from AI scrapers' toggle. Adds noai meta tag but effectiveness depends on scraper cooperation. DeviantArt's own DreamUp AI previously used artist work by default (controversial; changed)."
+      "notes": "'Protect your deviations from AI scrapers' toggle. Adds noai meta tag but effectiveness depends on scraper cooperation. DeviantArt's own DreamUp AI previously used artist work by default (controversial; changed).",
+      "walkthrough": {
+        "targetSetting": "Protect your deviations from AI scrapers",
+        "steps": [
+          "Sign in at deviantart.com/settings/privacy",
+          "Find 'Protect your deviations from AI scrapers'",
+          "Toggle ON (yes — ON means protected, opposite of most toggles)",
+          "Also enable 'Opt out of DreamUp training' if present"
+        ],
+        "verification": "Toggle shows on/blue. New uploads get noai meta tag automatically.",
+        "tierOverrides": "Effectiveness depends on scraper honor — adds noai meta tag but cannot prevent bad actors. Good as a public signal/legal protection."
+      }
     },
     "shutterstock": {
       "displayName": "Shutterstock",
@@ -412,7 +656,19 @@
       "aiModels": ["OpenAI (DALL-E training)", "Meta", "Shutterstock.AI"],
       "region": "global",
       "signalAsked": "shutterstock",
-      "notes": "Shutterstock licensed content to OpenAI, Meta, and others for model training. Contributors receive royalty but cannot unilaterally withdraw from the deal."
+      "notes": "Shutterstock licensed content to OpenAI, Meta, and others for model training. Contributors receive royalty but cannot unilaterally withdraw from the deal.",
+      "walkthrough": {
+        "targetSetting": "Contributor agreement — opt-out request",
+        "steps": [
+          "Open support.shutterstock.com/s/contactsupport",
+          "Category: 'Contributor / Account' → 'Other'",
+          "Subject: 'Request to opt out of AI training data licensing'",
+          "State: you want your portfolio excluded from future AI training licensing agreements (OpenAI, Meta, Shutterstock.AI, etc.)",
+          "Understand: you'll LOSE the AI royalty revenue stream. Submit."
+        ],
+        "verification": "Shutterstock responds within 30 days. May require amended contributor agreement.",
+        "tierOverrides": "This affects FUTURE licensing. Past training data (DALL-E, Meta models) already includes your work — cannot be retroactively removed."
+      }
     },
     "figma": {
       "displayName": "Figma",
@@ -426,7 +682,18 @@
       "aiModels": ["Figma AI"],
       "region": "global",
       "signalAsked": "figma",
-      "notes": "Team admin toggle: 'Allow content training'. Individual users can opt out in account settings. Organization-level controls for enterprise."
+      "notes": "Team admin toggle: 'Allow content training'. Individual users can opt out in account settings. Organization-level controls for enterprise.",
+      "walkthrough": {
+        "targetSetting": "Allow content training",
+        "steps": [
+          "For individual accounts: figma.com → profile icon → Settings → Privacy",
+          "Find 'AI features' → uncheck 'Allow content training'",
+          "For team admins: Team → Settings → Privacy → 'Content for AI training' → disable",
+          "For Enterprise: Org admin console → Privacy & Data → 'AI training' toggle"
+        ],
+        "verification": "Toggle shows unchecked/off. Team-level change applies to all members.",
+        "tierOverrides": "Enterprise tier: org-level toggle overrides individual user settings. Pro/Team: team admin setting trumps individual."
+      }
     },
     "artstation": {
       "displayName": "ArtStation",
@@ -440,7 +707,8 @@
       "aiModels": [],
       "region": "global",
       "signalAsked": "artstation",
-      "notes": "After 2022 artist protests, ArtStation changed policy: no content used for AI training. 'NoAI' tag added automatically to portfolios. Safest major creative platform."
+      "notes": "After 2022 artist protests, ArtStation changed policy: no content used for AI training. 'NoAI' tag added automatically to portfolios. Safest major creative platform.",
+      "walkthrough": null
     }
   }
 }

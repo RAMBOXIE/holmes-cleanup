@@ -23,17 +23,18 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const SUBCOMMANDS = {
-  scan:       'scan-demo.mjs',
-  'ai-scan':  'ai-scan.mjs',
-  'opt-out':  'opt-out.mjs',
-  verify:     'verify.mjs',
-  cleanup:    'vanish.mjs',
-  wizard:     'wizard-demo.mjs',
-  'b1-live':  'b1-live.mjs',
-  'b1-demo':  'b1-demo.mjs',
-  queue:      'queue-cli.mjs',
-  report:     'generate-proof-report.mjs',
-  dashboard:  'build-dashboard-data.mjs',
+  scan:         'scan-demo.mjs',
+  'ai-scan':    'ai-scan.mjs',
+  'opt-out':    'opt-out.mjs',
+  'ai-opt-out': 'ai-opt-out.mjs',
+  verify:       'verify.mjs',
+  cleanup:      'vanish.mjs',
+  wizard:       'wizard-demo.mjs',
+  'b1-live':    'b1-live.mjs',
+  'b1-demo':    'b1-demo.mjs',
+  queue:        'queue-cli.mjs',
+  report:       'generate-proof-report.mjs',
+  dashboard:    'build-dashboard-data.mjs',
   'dashboard:watch': 'dashboard-watch.mjs'
 };
 
@@ -49,6 +50,9 @@ Commands:
 
   ai-scan     Check which LLM companies train on your data (30 platforms)
               Example: vanish ai-scan --linkedin --twitter --chatgpt
+
+  ai-opt-out  Browser-assisted AI training opt-out (26 platforms with walkthroughs)
+              Example: vanish ai-opt-out --chatgpt --linkedin --cursor
 
   opt-out     Browser-assisted opt-out for 58 supported brokers
               Example: vanish opt-out --broker spokeo --email you@example.com

@@ -5,6 +5,22 @@ All notable changes to Vanish will be documented here. Format follows [Keep a Ch
 ## [Unreleased]
 
 ### Added
+- **🎯 AI Training Opt-Out** (`scripts/ai-opt-out.mjs`, new subcommand `vanish ai-opt-out`):
+  - Browser-assisted opt-out for 26 of the 30 AI platforms (4 are already safe by default)
+  - Each platform has a `walkthrough` entry in `ai-platforms-catalog.json` (upgraded to schema v2):
+    - `targetSetting` — exact UI string users search for (e.g., "Improve the model for everyone")
+    - `steps[]` — step-by-step instructions (e.g., "Click profile → Settings → Data controls → toggle OFF")
+    - `verification` — what success looks like ("toggle shows grey/off")
+    - `tierOverrides` — when the opt-out isn't needed (e.g., "ChatGPT Team/Enterprise already opted-out")
+  - Opens each platform's settings URL in your browser, prints the walkthrough, waits for your confirmation
+  - `--clipboard` flag copies the exact toggle name to clipboard so you can Ctrl/Cmd+F it on the page
+  - Records HMAC-signed audit trail + 60-day re-verify followUp (AI platforms silently reset settings after policy updates)
+  - Follow-up entries use `kind: 'ai-platform'` to distinguish from broker opt-outs — shared queue, different reverify cadence
+  - Three input modes: explicit flags (`--chatgpt --linkedin`), CSV (`--use chatgpt,linkedin`), or `--all` (every non-safe platform)
+  - `--no-open` test mode skips browser open and auto-confirms (used in CI)
+- 13 new tests (`tests/ai-opt-out.test.mjs`) — walkthrough integrity, safe-platform handling, CLI batching, state persistence. Total test count: 129 → 142
+- Catalog `version` bumped 1 → 2 (walkthrough schema)
+
 - **🤖 AI Training Exposure Scanner** (`src/ai-scanner/`, new subcommand `vanish ai-scan`):
   - New catalog: 30 major LLM platforms across 6 categories (chat / content / productivity / creative / email / dev)
   - Classifies each as `exposed` (opted-in by default), `licensed` (data sold to AI companies), `safe` (opted-out by default), `action-needed` (policy unclear), or `not-applicable` (you don't use it)

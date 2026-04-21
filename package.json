@@ -54,7 +54,7 @@
     "dashboard:build-data": "node scripts/build-dashboard-data.mjs",
     "dashboard:watch": "node scripts/dashboard-watch.mjs",
     "report:proof": "node scripts/generate-proof-report.mjs",
-    "test": "node tests/vanish.test.mjs && node tests/b1-queue.test.mjs && node tests/quick-presets-report.test.mjs && node tests/wizard-engine.test.mjs && node tests/real-loop.test.mjs && node tests/secret-store.test.mjs && node tests/queue-hardening.test.mjs && node tests/audit-signature.test.mjs && node tests/official-endpoint-compliance.test.mjs && node tests/live-broker-factory.test.mjs && node tests/live-e2e-echo.test.mjs && node tests/catalog-registry.test.mjs && node tests/scan-scoring.test.mjs && node tests/scan-engine.test.mjs && node tests/scan-wizard-integration.test.mjs && node tests/opt-out.test.mjs && node tests/verify.test.mjs && node tests/share-card.test.mjs && node tests/ai-scan.test.mjs",
+    "test": "node tests/vanish.test.mjs && node tests/b1-queue.test.mjs && node tests/quick-presets-report.test.mjs && node tests/wizard-engine.test.mjs && node tests/real-loop.test.mjs && node tests/secret-store.test.mjs && node tests/queue-hardening.test.mjs && node tests/audit-signature.test.mjs && node tests/official-endpoint-compliance.test.mjs && node tests/live-broker-factory.test.mjs && node tests/live-e2e-echo.test.mjs && node tests/catalog-registry.test.mjs && node tests/scan-scoring.test.mjs && node tests/scan-engine.test.mjs && node tests/scan-wizard-integration.test.mjs && node tests/opt-out.test.mjs && node tests/verify.test.mjs && node tests/share-card.test.mjs && node tests/ai-scan.test.mjs && node tests/ai-opt-out.test.mjs",
     "test:b1": "node tests/b1-queue.test.mjs && node tests/real-loop.test.mjs"
   },
   "files": [
