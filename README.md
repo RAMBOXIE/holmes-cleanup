@@ -236,6 +236,61 @@ All data manually verified April 2026. Catalog at [`src/ai-scanner/ai-platforms-
 - **Platforms reset settings after policy updates.** LinkedIn toggled millions of users back ON in Sept 2024. 60-day re-verify catches this before another training cycle.
 - **Legal leverage.** The HMAC-signed audit trail is admissible evidence of your opt-out request (relevant for GDPR Article 21 objections, CCPA "Do Not Sell" disputes).
 
+### Advanced AI-era checks (beyond scan / opt-out)
+
+Two deeper AI-privacy tools for power users — both unique to Vanish:
+
+#### 🧠 `vanish llm-memory-check` — is your personal data already memorized?
+
+Modern LLMs don't just "might use" your data — if you've been scraped into pre-training sets, they already **remember you verbatim**. Researchers have shown GPT can complete sentences containing real people's phone numbers and emails.
+
+```bash
+# Minimum: just your name
+vanish llm-memory-check --name "John Doe"
+
+# Full probe with all identifiers
+OPENAI_API_KEY=sk-... ANTHROPIC_API_KEY=sk-ant-... \
+  vanish llm-memory-check --name "John Doe" \
+    --email john@example.com --phone "+1-555-123-4567" \
+    --workplace "Acme Corp"
+```
+
+How it works: Vanish sends 15 stalker-style probe prompts to each configured LLM ("What's X's phone number?", "Complete: X's email is...") and checks if responses contain your verbatim identifiers. Output is a **leak rate** per model (0-100%) + which identifier types leaked.
+
+```
+🧠 LLM Memorization Test Results
+
+OpenAI (gpt-4o-mini)
+  [████░░░░░░░░░░░░░░░░] 3/15 probes leaked (20%) — ⚠️ moderate
+  Leaked types: workplace, city
+
+Anthropic (claude-3-5-haiku)
+  [░░░░░░░░░░░░░░░░░░░░] 0/15 probes leaked (0%) — ✅ safe
+```
+
+Uses **your own API keys** (env vars) — Vanish doesn't proxy. Cost: ~\$0.01/scan. `--dry-run` mode runs without API keys for testing.
+
+A zero leak rate doesn't prove you're safe (paraphrased knowledge slips through). A positive leak rate is damning evidence your data was scraped.
+
+#### 🧹 `vanish clean-ai-history` — where does your AI history actually live?
+
+Every AI tool you use caches conversations somewhere. Some are local (Cursor's workspace cache), some are cloud-only (ChatGPT web), some are both. Wiping "everything" requires knowing every location.
+
+```bash
+vanish clean-ai-history --cursor --vscode-copilot --chatgpt
+vanish clean-ai-history --all                       # full wipe audit
+vanish clean-ai-history --all --local-only          # just files on disk
+```
+
+For each tool, Vanish:
+1. Resolves the cache paths for your OS (Windows/macOS/Linux)
+2. Stats what actually exists + approximate size
+3. Prints the exact shell command to delete it (**you copy-paste — Vanish never runs rm on your files**)
+4. For cloud/web tools: opens settings + prints delete walkthrough
+5. Records HMAC-signed audit trail when you confirm you ran the command
+
+Covers 9 tools: Cursor · VS Code + Copilot · Claude Desktop · ChatGPT Desktop · ChatGPT web · Claude web · Gemini · Perplexity · Grammarly. Matches Vanish's safety philosophy from face-scan: we don't handle destructive actions, we show you exactly what to run.
+
 ---
 
 ## 👤 Face-Search Exposure Protection
@@ -362,8 +417,10 @@ All data verified April 2026. Catalog at [`src/face-scanner/face-services-catalo
 ### 🤖 AI training protection (unique to Vanish)
 
 - **AI Exposure Scanner** — classify 30 LLM platforms as exposed / licensed / safe / action-needed in one command. No personal data transmitted
-- **AI Opt-Out Walkthroughs** — browser-assisted guided opt-out for 26 platforms with exact UI string, step-by-step instructions, tier overrides (e.g. "Team plan already safe — skip"), and 60-day re-verify
-- **Signed audit of AI opt-outs** — HMAC-SHA256 receipts admissible as GDPR/CCPA evidence
+- **AI Opt-Out Walkthroughs** — browser-assisted guided opt-out for 26 platforms with exact UI string, step-by-step instructions, tier overrides, and 60-day re-verify
+- **LLM Memorization Check** — probe GPT-4o-mini and Claude 3.5 Haiku with 15 stalker-style prompts to detect if they leak your email/phone/address verbatim. First open-source tool in this space
+- **AI History Cleanup Guide** — locate + delete conversation caches across 9 AI tools (Cursor, VS Code Copilot, ChatGPT Desktop, Claude Desktop, + 5 web services). Cross-platform paths, copy-paste commands
+- **Signed audit of AI opt-outs + history deletions** — HMAC-SHA256 receipts admissible as GDPR/CCPA evidence
 
 ### 👤 Face-search protection (unique to Vanish)
 
@@ -384,7 +441,7 @@ All data verified April 2026. Catalog at [`src/face-scanner/face-services-catalo
 - **Persistent Queues** — retry (exponential backoff) / manual-review / dead-letter with SHA-256 dedupe
 - **Local Dashboard** — static HTML, watches queue state, zero backend
 - **Safety Gates** — manual trigger only, triple-confirm for high-risk, export-before-delete, compliance snapshot
-- **163 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- **217 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 ---
 
@@ -525,7 +582,7 @@ vanish dashboard data/queue-state.json
 # Proof report (audit trail in Markdown)
 vanish report ./path/to/execution-result.json
 
-# All 163 tests (109 broker + 20 ai-scan + 13 ai-opt-out + 21 face-scan)
+# All 217 tests (109 broker + 20 ai-scan + 13 ai-opt-out + 21 face-scan + 30 llm-memory-check + 24 clean-ai-history)
 npm test
 ```
 
@@ -550,6 +607,12 @@ src/
 │   ├── face-services-catalog.json  # PimEyes, FaceCheck, FindClone, Lenso, Yandex,
 │   │                                # Google Lens, TinEye, Clearview AI
 │   └── face-scan-engine.mjs    # Service directory + scan/opt-out plan builders
+├── llm-memory/                 # 🧠 LLM memorization probing (15 probes × 2 providers)
+│   ├── probe-catalog.json      # Stalker-style probe prompts
+│   └── memory-check-engine.mjs # OpenAI + Anthropic clients + leak detection
+├── ai-history/                 # 🧹 AI tool history discovery + deletion commands
+│   ├── history-catalog.json    # 9 tools × per-OS paths + web walkthroughs
+│   └── history-engine.mjs      # Path resolution + size reporting + filters
 ├── adapters/
 │   ├── registry.mjs            # Catalog-driven adapter registry
 │   └── brokers/
@@ -568,8 +631,9 @@ src/
     └── signature.mjs           # HMAC-SHA256 audit signing
 
 prompts/wizard/                 # 18 .md prompt templates per state
-scripts/                        # CLI entry points (scan, ai-scan, face-scan, opt-out, ai-opt-out, face-opt-out, verify, ...)
-tests/                          # 163 tests across 21 files
+scripts/                        # CLI entry points (scan, ai-scan, face-scan, llm-memory-check,
+                                #   opt-out, ai-opt-out, face-opt-out, clean-ai-history, verify, ...)
+tests/                          # 217 tests across 23 files
 web/                            # Static web app (Vite + vanilla JS, shares src/scanner)
 ```
 
@@ -584,13 +648,15 @@ web/                            # Static web app (Vite + vanilla JS, shares src/
 - ✅ **26 AI platforms with walkthrough opt-outs** — exact toggle names + tier overrides
 - ✅ **8 face-search services** cataloged (PimEyes, FaceCheck.ID, FindClone, Lenso, TinEye, Yandex, Google Lens, Clearview AI)
 - ✅ **8 face-search opt-out walkthroughs** including Clearview AI CCPA/GDPR request
+- ✅ **LLM memorization check** — probes GPT-4o-mini + Claude 3.5 Haiku via user's API keys, detects verbatim leaks of email/phone/workplace
+- ✅ **AI history cleanup guide** — 9 tools (Cursor, VS Code Copilot, ChatGPT/Claude Desktop, + 5 web) with per-OS paths and copy-paste delete commands
 - ✅ **Heuristic privacy scanner** (0-100 score, 5-factor confidence, per-broker risk)
 - ✅ **18-state wizard** with scan → handoff → cleanup flow
 - ✅ **30-day HTTP verify loop** for brokers, **60-day reverify** for AI platforms
 - ✅ **Static web app** at [ramboxie.github.io/vanish](https://ramboxie.github.io/vanish/) — zero-install, 100% client-side
 - ✅ **Share card** (1200×630 SVG) — privacy-preserving public boast
 - ✅ **Audit, queues, secret store hardened** (HMAC-SHA256, scrypt KDF, stale-lock detection)
-- ✅ **163 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- ✅ **217 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 **Next (P2, retention-focused)**:
 - 🔜 **Scan history** (`~/.vanish/history.jsonl` + `vanish history`) — show score drop 72 → 31 over time

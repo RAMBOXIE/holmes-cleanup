@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "lastVerified": "2026-04",
+  "description": "Catalog of AI tools + where their history/cache lives. Vanish does NOT auto-delete — it tells you where to find each location and gives you the exact command to run yourself. This avoids accidentally wiping important data.",
+  "categories": {
+    "local-app": "Desktop app or IDE with local cache files",
+    "web-ui": "Web-only service — deletion via account settings"
+  },
+  "tools": {
+    "cursor": {
+      "displayName": "Cursor",
+      "category": "local-app",
+      "signalAsked": "cursor",
+      "paths": {
+        "win32": [
+          "%APPDATA%\\Cursor\\User\\History",
+          "%APPDATA%\\Cursor\\User\\workspaceStorage",
+          "%APPDATA%\\Cursor\\logs"
+        ],
+        "darwin": [
+          "~/Library/Application Support/Cursor/User/History",
+          "~/Library/Application Support/Cursor/User/workspaceStorage",
+          "~/Library/Application Support/Cursor/logs"
+        ],
+        "linux": [
+          "~/.config/Cursor/User/History",
+          "~/.config/Cursor/User/workspaceStorage",
+          "~/.config/Cursor/logs"
+        ]
+      },
+      "deleteCommands": {
+        "win32": "Remove-Item -Recurse -Force \"$env:APPDATA\\Cursor\\User\\History\"; Remove-Item -Recurse -Force \"$env:APPDATA\\Cursor\\logs\"",
+        "darwin": "rm -rf ~/Library/Application\\ Support/Cursor/User/History ~/Library/Application\\ Support/Cursor/logs",
+        "linux": "rm -rf ~/.config/Cursor/User/History ~/.config/Cursor/logs"
+      },
+      "preCheck": [
+        "Close Cursor before running deletion commands",
+        "Export important conversations first: Cursor → Settings → Export conversations",
+        "workspaceStorage contains project-specific AI context — delete with care"
+      ],
+      "notes": "Cursor stores AI chat history + code context + completion cache locally. These paths cover local-only data. Cloud-synced account data requires separate deletion at cursor.com/settings."
+    },
+    "vscode-copilot": {
+      "displayName": "VS Code + GitHub Copilot (cache)",
+      "category": "local-app",
+      "signalAsked": "vscode-copilot",
+      "paths": {
+        "win32": [
+          "%APPDATA%\\Code\\logs",
+          "%APPDATA%\\Code\\User\\workspaceStorage",
+          "%USERPROFILE%\\.vscode\\extensions\\github.copilot-*"
+        ],
+        "darwin": [
+          "~/Library/Application Support/Code/logs",
+          "~/Library/Application Support/Code/User/workspaceStorage",
+          "~/.vscode/extensions/github.copilot-*"
+        ],
+        "linux": [
+          "~/.config/Code/logs",
+          "~/.config/Code/User/workspaceStorage",
+          "~/.vscode/extensions/github.copilot-*"
+        ]
+      },
+      "deleteCommands": {
+        "win32": "Remove-Item -Recurse -Force \"$env:APPDATA\\Code\\logs\"",
+        "darwin": "rm -rf ~/Library/Application\\ Support/Code/logs",
+        "linux": "rm -rf ~/.config/Code/logs"
+      },
+      "preCheck": [
+        "Close VS Code before running deletion",
+        "Do NOT delete 'extensions' folder unless you want to re-install everything",
+        "workspaceStorage contains per-project AI completion telemetry — deleting wipes it for all projects"
+      ],
+      "notes": "Copilot logs its queries to local telemetry before sending to GitHub. Deletion wipes the local logs but doesn't affect GitHub's server-side telemetry (opt-out that separately via github.com/settings/copilot)."
+    },
+    "claude-desktop": {
+      "displayName": "Claude Desktop (app)",
+      "category": "local-app",
+      "signalAsked": "claude-desktop",
+      "paths": {
+        "win32": [
+          "%APPDATA%\\Claude\\logs",
+          "%APPDATA%\\Claude\\IndexedDB",
+          "%APPDATA%\\Claude\\Local Storage"
+        ],
+        "darwin": [
+          "~/Library/Application Support/Claude/logs",
+          "~/Library/Application Support/Claude/IndexedDB",
+          "~/Library/Application Support/Claude/Local Storage"
+        ],
+        "linux": [
+          "~/.config/Claude/logs",
+          "~/.config/Claude/IndexedDB",
+          "~/.config/Claude/Local Storage"
+        ]
+      },
+      "deleteCommands": {
+        "win32": "Remove-Item -Recurse -Force \"$env:APPDATA\\Claude\\logs\"",
+        "darwin": "rm -rf ~/Library/Application\\ Support/Claude/logs",
+        "linux": "rm -rf ~/.config/Claude/logs"
+      },
+      "preCheck": [
+        "Close Claude Desktop app before deletion",
+        "IndexedDB / Local Storage contain auth tokens — deleting will sign you out",
+        "Conversation history itself lives on Anthropic's servers — delete via claude.ai/chat settings"
+      ],
+      "notes": "Claude Desktop caches conversation drafts + auth state locally. Actual conversation history is server-side — use claude.ai settings for that."
+    },
+    "chatgpt-desktop": {
+      "displayName": "ChatGPT Desktop (app)",
+      "category": "local-app",
+      "signalAsked": "chatgpt-desktop",
+      "paths": {
+        "win32": [
+          "%APPDATA%\\ChatGPT\\logs",
+          "%APPDATA%\\ChatGPT\\Local Storage"
+        ],
+        "darwin": [
+          "~/Library/Application Support/com.openai.chat/logs",
+          "~/Library/Application Support/com.openai.chat/IndexedDB"
+        ],
+        "linux": [
+          "~/.config/ChatGPT/logs"
+        ]
+      },
+      "deleteCommands": {
+        "win32": "Remove-Item -Recurse -Force \"$env:APPDATA\\ChatGPT\\logs\"",
+        "darwin": "rm -rf ~/Library/Application\\ Support/com.openai.chat/logs",
+        "linux": "rm -rf ~/.config/ChatGPT/logs"
+      },
+      "preCheck": [
+        "Close ChatGPT Desktop first",
+        "Conversations themselves are server-side — use chatgpt.com settings for that"
+      ],
+      "notes": "ChatGPT Desktop caches local session + logs. Your actual conversations live in OpenAI's servers."
+    },
+    "chatgpt-web": {
+      "displayName": "ChatGPT (web)",
+      "category": "web-ui",
+      "signalAsked": "chatgpt",
+      "url": "https://chatgpt.com/#settings/DataControls",
+      "walkthrough": [
+        "Open chatgpt.com and sign in",
+        "Click your profile (bottom-left) → Settings → Data controls",
+        "Click 'Export data' — save the .zip backup somewhere safe",
+        "Then: 'Delete all chats' (wipes conversation history but keeps account) OR 'Delete account' (wipes everything)",
+        "Confirm in the modal"
+      ],
+      "verification": "Sidebar becomes empty; confirmation email arrives within 30 min. Account deletion processes over 30 days.",
+      "notes": "If you only want to hide past chats from training but keep them visible: Settings → Data Controls → 'Improve the model for everyone' → OFF (covered by `vanish ai-opt-out --chatgpt`)."
+    },
+    "claude-web": {
+      "displayName": "Claude (web)",
+      "category": "web-ui",
+      "signalAsked": "claude",
+      "url": "https://claude.ai/settings/account",
+      "walkthrough": [
+        "Open claude.ai and sign in",
+        "Click your profile (top-right) → Settings → Account",
+        "Scroll to 'Delete account' (or select individual conversations → delete)",
+        "Confirm deletion in modal"
+      ],
+      "verification": "Conversations disappear from sidebar; account deletion processes within 30 days.",
+      "notes": "Anthropic doesn't train on consumer chat by default, so this is purely about removing YOUR copy of the conversation — not training data."
+    },
+    "gemini-activity": {
+      "displayName": "Google Gemini (Activity)",
+      "category": "web-ui",
+      "signalAsked": "gemini",
+      "url": "https://myactivity.google.com/product/gemini",
+      "walkthrough": [
+        "Open myactivity.google.com/product/gemini",
+        "Click 'Delete' at the top",
+        "Choose 'All time' to delete everything, OR 'Last day/week/month' for partial",
+        "Confirm"
+      ],
+      "verification": "'Your data' log shows no recent activity. Deletion is immediate but may take 24h to propagate.",
+      "notes": "Also set auto-delete: click the 'Auto-delete activity older than' dropdown → 3 months (shortest). Turning off 'Gemini Apps Activity' also stops future retention."
+    },
+    "perplexity": {
+      "displayName": "Perplexity",
+      "category": "web-ui",
+      "signalAsked": "perplexity",
+      "url": "https://www.perplexity.ai/settings/account",
+      "walkthrough": [
+        "Open perplexity.ai and sign in",
+        "Click your avatar → Settings → Account",
+        "Scroll to 'Threads' → click 'Delete all threads' (or delete individually from sidebar)",
+        "Also toggle 'AI Data Retention' OFF under Privacy if not already"
+      ],
+      "verification": "Library becomes empty. Account data deletion processes per their retention policy.",
+      "notes": "Pro users have different retention settings — check if you're Pro. Also covered by `vanish ai-opt-out --perplexity` for the training toggle."
+    },
+    "grammarly": {
+      "displayName": "Grammarly",
+      "category": "web-ui",
+      "signalAsked": "grammarly",
+      "url": "https://account.grammarly.com/customer/subscription",
+      "walkthrough": [
+        "Sign in at account.grammarly.com",
+        "Settings → Privacy → scroll to 'Document history'",
+        "Click 'Delete my documents' — this wipes all drafts/edits you've made via Grammarly",
+        "Separately, go to 'Subscription' → 'Delete account' if you want full removal"
+      ],
+      "verification": "Document list becomes empty in dashboard.",
+      "notes": "Grammarly retains your writing samples for model improvement by default. Separate from history deletion: `vanish ai-opt-out --grammarly` toggles the training setting."
+    }
+  }
+}

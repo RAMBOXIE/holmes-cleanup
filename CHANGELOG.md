@@ -5,6 +5,34 @@ All notable changes to Vanish will be documented here. Format follows [Keep a Ch
 ## [Unreleased]
 
 ### Added
+- **🧠 LLM Memorization Check** (`src/llm-memory/`, new subcommand `vanish llm-memory-check`):
+  - Tests whether major LLMs (GPT-4o-mini, Claude 3.5 Haiku) output your personal identifiers verbatim when probed with 15 stalker-style prompts
+  - Each probe is a realistic doxxing query ("What's X's phone number?", "Complete: X's email is..."), targeting email / phone / address / city / workplace leaks
+  - Engine (`memory-check-engine.mjs`) ships with `detectLeaks()` that handles phone formatting variants, case-insensitive email matching, and skips too-short tokens that cause false positives
+  - Two real providers: OpenAI + Anthropic (bring-your-own-API-key via `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` env vars)
+  - `--dry-run` mode uses mock provider so CI and curious users can run without API keys
+  - Report shows per-provider leak rate (0-100%) + which leak types triggered + rating (safe/low/moderate/high)
+  - `--verbose` flag includes per-probe response excerpts
+  - `--json` for machine-readable output
+  - Privacy-preserving by design: the report echoes your name (for identification) but NOT your email/phone/address — so the scan result itself doesn't become a leak vector
+  - Cost: ~\$0.01/scan in API fees (gpt-4o-mini + claude-3-5-haiku are cheap)
+  - This is the FIRST open-source tool to check LLM memorization of arbitrary individuals — research labs do this but don't ship a tool
+- 30 new tests (`tests/llm-memory-check.test.mjs`) — probe catalog, renderProbe templating, detectLeaks fuzzy phone matching, provider creation, end-to-end mock runs, CLI integration. Total: 163 → 193
+
+- **🧹 AI History Cleanup Guide** (`src/ai-history/`, new subcommand `vanish clean-ai-history`):
+  - Catalog of 9 AI tools with documented cache paths per OS (Windows/macOS/Linux) and web-UI walkthroughs
+  - Local-app targets: Cursor, VS Code + GitHub Copilot cache, Claude Desktop, ChatGPT Desktop
+  - Web-UI targets: ChatGPT web, Claude web, Google Gemini/Activity, Perplexity, Grammarly
+  - **Does NOT auto-delete** (by design) — instead, for each tool:
+    - Discovers which cache paths actually exist on your OS
+    - Reports approximate size per path
+    - Prints the exact PowerShell/bash command you can copy-paste to delete
+    - For web-UI tools: opens the settings page + prints 3-5 step walkthrough
+  - Records HMAC-signed audit trail on user confirmation of deletion
+  - `--local-only` / `--web-only` filters; `--all` for full wipe audit
+  - Philosophy: destructive shell commands belong in your shell under your control, not hidden behind a tool. Vanish shows you where to look and exactly what to type.
+- 24 new tests (`tests/clean-ai-history.test.mjs`) — catalog integrity, cross-platform path expansion (`%APPDATA%`, `~/`), byte formatting, filter logic, CLI integration on Windows/macOS/Linux paths. Total: 193 → 217
+
 - **👤 Face-Search Scanner + Opt-Out** (`src/face-scanner/`, new subcommands `vanish face-scan` + `vanish face-opt-out`):
   - New catalog: 8 face-recognition services (PimEyes, FaceCheck.ID, FindClone, Lenso, TinEye, Yandex Images, Google Lens, Clearview AI)
   - Each service has: category (face-search / reverse-image / face-database), accessModel (free / freemium / paid / restricted), jurisdiction, pricing, knownFor description
