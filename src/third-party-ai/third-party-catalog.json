@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "lastVerified": "2026-04",
+  "description": "Catalog of AI tools that THIRD PARTIES use on you — your employer, doctor, HR, recruiter, interviewer. You're the data, not the user. This catalog documents what each tool does, who controls it, and what legal rights you have to object.",
+  "contexts": {
+    "workplace": "Tools your employer/colleagues may deploy on meetings, chat, email",
+    "hr-recruiting": "Tools HR / recruiters use to analyze applications, interviews, performance",
+    "medical": "Tools healthcare providers use on patient encounters",
+    "customer-service": "Tools companies use on YOUR support calls"
+  },
+  "jurisdictions": {
+    "EU": "GDPR Article 22 + Article 21 (object to automated decision-making + profiling)",
+    "US-federal": "Limited — FTC guidance + ADA for AI in hiring",
+    "US-state-IL": "Illinois AI Video Interview Act (ADVID) — must consent to AI in interviews",
+    "US-state-CA": "CCPA + AB-331 (automated decision tools in employment)",
+    "US-state-NY": "NYC Local Law 144 — bias audit requirement for AEDTs",
+    "HIPAA": "US Federal — covered AI must be a Business Associate + HIPAA-compliant"
+  },
+  "tools": {
+    "zoom-ai-companion": {
+      "displayName": "Zoom AI Companion",
+      "context": "workplace",
+      "vendor": "Zoom Video Communications",
+      "dataCollected": ["audio", "video", "transcripts", "screen-shares", "chat-messages"],
+      "whoDeploys": "Any meeting host (requires their plan, applies to all participants)",
+      "notification": "Zoom shows a banner when AI is active — but many users miss it or meetings are scheduled before you join",
+      "defaultBehavior": "Host can enable without asking participants; participants see a notification",
+      "optOut": "Can LEAVE the meeting. Cannot opt out while staying. Must be explicit to host.",
+      "signalAsked": "zoom",
+      "notes": "Zoom clarified 2023 that customer content is NOT used for third-party model training. AI Companion summaries stay within the customer account. Still: meeting transcripts are stored + searchable.",
+      "objectionTemplate": "workplace-meeting"
+    },
+    "otter-ai": {
+      "displayName": "Otter.ai",
+      "context": "workplace",
+      "vendor": "Otter.ai Inc.",
+      "dataCollected": ["audio", "transcripts", "speaker-identification"],
+      "whoDeploys": "Auto-joining bot — ANY Otter user can add it to a calendar invite",
+      "notification": "Bot joins meeting as 'OtterPilot' — shows as participant",
+      "defaultBehavior": "Training is opt-in by default (good); transcripts shared with inviter's team by default",
+      "optOut": "Must ASK to remove bot. If you refuse recording, inviter must disable or everyone must leave.",
+      "signalAsked": "otter",
+      "notes": "Otter also has `vanish ai-opt-out --otter` for your own Otter account's training toggle. This entry is for meetings OTHERS have Otter in.",
+      "objectionTemplate": "workplace-meeting"
+    },
+    "fireflies-ai": {
+      "displayName": "Fireflies.ai",
+      "context": "workplace",
+      "vendor": "Fireflies Inc.",
+      "dataCollected": ["audio", "video", "transcripts", "sentiment-analysis"],
+      "whoDeploys": "Auto-joining meeting bot (similar to Otter)",
+      "notification": "Bot appears as 'Fred' or similar named participant",
+      "defaultBehavior": "Records by default; participants see bot but may not realize it's AI",
+      "optOut": "Must ask host to kick the bot or decline meeting",
+      "signalAsked": "fireflies",
+      "notes": "Fireflies has enterprise + free tiers. Sales-focused: transcripts get scored for 'buying signals' etc.",
+      "objectionTemplate": "workplace-meeting"
+    },
+    "fathom": {
+      "displayName": "Fathom",
+      "context": "workplace",
+      "vendor": "Fathom Video Inc.",
+      "dataCollected": ["audio", "video", "transcripts"],
+      "whoDeploys": "Zoom extension — any Zoom user with Fathom can enable",
+      "notification": "Zoom shows recording indicator; Fathom logo in the bot",
+      "defaultBehavior": "Records when host enables; transcripts become searchable library",
+      "optOut": "Leave the meeting or ask host to disable",
+      "signalAsked": "fathom",
+      "notes": "Fathom pitches 'free forever' tier to individuals — common in startups.",
+      "objectionTemplate": "workplace-meeting"
+    },
+    "gong": {
+      "displayName": "Gong",
+      "context": "workplace",
+      "vendor": "Gong.io",
+      "dataCollected": ["audio", "transcripts", "sentiment", "talk-time-ratios", "keyword-tracking"],
+      "whoDeploys": "Enterprise sales orgs — typically auto-records ALL external-facing calls",
+      "notification": "Disclosure varies by company — many sales reps don't disclose unless asked",
+      "defaultBehavior": "Company-wide recording policy; employees often don't know what's captured",
+      "optOut": "Strongest when you're the CUSTOMER side — you can refuse and the sales rep must accommodate",
+      "signalAsked": "gong",
+      "notes": "If you're a buyer/customer on a sales call: the sales org is likely recording via Gong/Chorus. You have the right to refuse per your jurisdiction (2-party consent states in US). In EU under GDPR, silence is NOT consent.",
+      "objectionTemplate": "sales-call-recording"
+    },
+    "chorus-zoominfo": {
+      "displayName": "Chorus (ZoomInfo)",
+      "context": "workplace",
+      "vendor": "ZoomInfo",
+      "dataCollected": ["audio", "transcripts", "competitive-intelligence"],
+      "whoDeploys": "Enterprise sales orgs",
+      "notification": "Same as Gong — varies",
+      "defaultBehavior": "Similar to Gong but with ZoomInfo data integration (pulls public data on your company)",
+      "optOut": "As customer: refuse recording. As employee: company policy usually mandatory.",
+      "signalAsked": "chorus",
+      "objectionTemplate": "sales-call-recording"
+    },
+    "read-ai": {
+      "displayName": "Read.ai",
+      "context": "workplace",
+      "vendor": "Read AI Inc.",
+      "dataCollected": ["audio", "video", "facial-expressions", "engagement-scores"],
+      "whoDeploys": "Auto-joining meeting bot; also Zoom/Gmail extensions",
+      "notification": "Bot joins named 'Read'; sends summary emails after",
+      "defaultBehavior": "Records by default; analyzes 'engagement' including facial expressions — more invasive than audio-only tools",
+      "optOut": "Ask host to remove. Disable camera to limit facial-analysis input.",
+      "signalAsked": "read",
+      "notes": "Read.ai's facial-expression scoring is particularly controversial — implies scoring your 'engagement' without consent.",
+      "objectionTemplate": "workplace-meeting"
+    },
+    "microsoft-teams-copilot": {
+      "displayName": "Microsoft Teams Copilot",
+      "context": "workplace",
+      "vendor": "Microsoft",
+      "dataCollected": ["audio", "transcripts", "chat", "shared-files"],
+      "whoDeploys": "Enterprise admins; per-meeting host can toggle",
+      "notification": "Teams shows 'AI summary enabled' banner",
+      "defaultBehavior": "Enterprise-controlled — typically disabled by default in E3/E5 licenses; admins roll out selectively",
+      "optOut": "Leave meeting. Can request admin-level exclusion but implementation varies.",
+      "signalAsked": "teams-copilot",
+      "notes": "M365 Copilot enterprise data protection means the content is NOT used for model training — but IS stored within your org's tenant + admin-readable.",
+      "objectionTemplate": "workplace-meeting"
+    },
+    "hirevue": {
+      "displayName": "HireVue",
+      "context": "hr-recruiting",
+      "vendor": "HireVue",
+      "dataCollected": ["video-interview", "voice", "previously-facial-expressions (discontinued 2021)"],
+      "whoDeploys": "Employers for pre-interview screening",
+      "notification": "Candidate sees a recording consent screen",
+      "defaultBehavior": "Mandatory participation for roles using it — refusing may exclude you from the job",
+      "optOut": "Request live human interview instead (explicit accommodation request). Some jurisdictions require it.",
+      "signalAsked": "hirevue",
+      "notes": "HireVue discontinued face-analysis in 2021 after civil-rights criticism — still uses voice + response content. IL requires disclosure (AI Video Interview Act). NYC Local Law 144 requires annual bias audits.",
+      "objectionTemplate": "ai-interview"
+    },
+    "pymetrics-harver": {
+      "displayName": "Pymetrics / Harver",
+      "context": "hr-recruiting",
+      "vendor": "Harver (acquired Pymetrics in 2022)",
+      "dataCollected": ["gamified-assessment-responses", "reaction-times", "personality-inferences"],
+      "whoDeploys": "Employers for candidate screening",
+      "notification": "Candidate completes 'games' — AI inference not usually disclosed",
+      "defaultBehavior": "Mandatory if employer uses it",
+      "optOut": "Request alternative assessment (accommodation). Jurisdictions with ADA/disability law may require.",
+      "signalAsked": "pymetrics",
+      "notes": "Pymetrics's personality-from-games approach has been criticized as pseudo-scientific. Candidates can request human-only evaluation.",
+      "objectionTemplate": "ai-interview"
+    },
+    "abridge": {
+      "displayName": "Abridge",
+      "context": "medical",
+      "vendor": "Abridge AI Inc.",
+      "dataCollected": ["doctor-patient-conversation-audio", "transcripts", "medical-summaries"],
+      "whoDeploys": "Hospitals, clinics, individual providers",
+      "notification": "Patient usually informed verbally; consent forms vary by state",
+      "defaultBehavior": "Many providers enable by default; patient must explicitly object",
+      "optOut": "Right to decline under HIPAA + state law. Provider must accommodate human-only note-taking.",
+      "signalAsked": "abridge",
+      "notes": "Abridge is HIPAA-compliant Business Associate. Still: the conversation is analyzed by AI, audio may be retained for model improvement (check their BAA).",
+      "objectionTemplate": "medical-ai"
+    },
+    "nuance-dax": {
+      "displayName": "Nuance DAX (Microsoft)",
+      "context": "medical",
+      "vendor": "Nuance Communications (Microsoft subsidiary)",
+      "dataCollected": ["doctor-patient-audio", "ambient-room-audio"],
+      "whoDeploys": "Large health systems (Mayo, Northwestern, Providence, etc.)",
+      "notification": "Varies by health system; often buried in intake paperwork",
+      "defaultBehavior": "Clinic-wide rollouts — patient usually auto-opted-in",
+      "optOut": "Explicit request. Providers must offer alternative. HIPAA complaint possible if denied.",
+      "signalAsked": "nuance",
+      "notes": "DAX captures AMBIENT audio during your visit — your voice, the doctor's, and anyone else in the room.",
+      "objectionTemplate": "medical-ai"
+    },
+    "suki-ai": {
+      "displayName": "Suki AI",
+      "context": "medical",
+      "vendor": "Suki AI",
+      "dataCollected": ["doctor-patient-audio", "transcripts"],
+      "whoDeploys": "Medical practices + health systems",
+      "notification": "Varies",
+      "defaultBehavior": "Opt-in typically required but implementation inconsistent",
+      "optOut": "Request human-only note-taking; HIPAA protection",
+      "signalAsked": "suki",
+      "objectionTemplate": "medical-ai"
+    }
+  },
+  "objectionTemplates": {
+    "workplace-meeting": {
+      "displayName": "Workplace meeting AI objection",
+      "template": "To: [meeting organizer]\n\nSubject: Request to disable AI recording/analysis in our meeting(s)\n\nHi [name],\n\nI'm writing to formally request that AI-based transcription, recording, or analysis tools be disabled during meetings I attend. This includes tools such as {{toolNames}}.\n\nMy reasons:\n1. I have not consented to my voice, likeness, or communication content being processed by third-party AI systems beyond the meeting itself.\n2. {{jurisdictionClause}}\n3. AI summaries risk misrepresenting my contributions — I prefer direct communication on the record.\n\nI'm happy to participate in meetings that do NOT use AI tools. For meetings where the tool is enabled, please let me know in advance so I can decide whether to attend.\n\nThank you,\n[Your name]"
+    },
+    "sales-call-recording": {
+      "displayName": "Sales call recording objection (as customer)",
+      "template": "To: [sales contact]\n\nSubject: Recording consent for our upcoming call\n\nHi [name],\n\nBefore our call on [date], please confirm whether your team uses call-recording or AI-analysis tools (e.g., Gong, Chorus, ZoomInfo, Fathom) on external-facing sales conversations.\n\nIf so, I do NOT consent to recording or AI processing of my participation. {{jurisdictionClause}}\n\nIf recording is required by your company policy, please arrange for a call where it's disabled — otherwise I'll need to decline.\n\nThank you,\n[Your name]"
+    },
+    "ai-interview": {
+      "displayName": "AI-based interview objection",
+      "template": "To: [recruiter / hiring manager]\n\nSubject: Request for human-conducted interview (not AI-mediated)\n\nHi [name],\n\nI understand the {{companyName}} interview process includes an AI-assisted step using {{toolNames}}. I'm writing to formally request an alternative: a live interview conducted by human interviewers only.\n\n{{jurisdictionClause}}\n\nI'm a strong candidate and would appreciate being evaluated by people rather than algorithmic inference. Please let me know if an alternative path is available.\n\nThank you,\n[Your name]"
+    },
+    "medical-ai": {
+      "displayName": "Medical AI recording objection",
+      "template": "To: [provider / clinic]\n\nSubject: Request to decline AI transcription during my visits\n\nHi [provider/clinic],\n\nI'm writing to decline use of {{toolNames}} (or any similar AI-based recording/transcription tool) during my medical visits.\n\nUnder HIPAA and my rights as a patient, I prefer that my conversations with my healthcare provider NOT be processed by AI tools, including but not limited to:\n- Audio recording or transcription\n- Retention of my voice or clinical conversations\n- Third-party AI analysis, even under a BAA\n\n{{jurisdictionClause}}\n\nPlease note this preference in my patient record and ensure it's honored across all my visits. I am happy to discuss alternative documentation methods (manual note-taking) with my provider.\n\nThank you,\n[Your name]"
+    }
+  }
+}

@@ -272,6 +272,49 @@ Uses **your own API keys** (env vars) — Vanish doesn't proxy. Cost: ~\$0.01/sc
 
 A zero leak rate doesn't prove you're safe (paraphrased knowledge slips through). A positive leak rate is damning evidence your data was scraped.
 
+#### 📚 `vanish dataset-check` — is your content already in Common Crawl / LAION / Pile?
+
+Even if you opted out of every platform, your content may be frozen in **training datasets that have already shipped**. Common Crawl alone is the backbone of GPT-3/4, Llama, Claude, and Gemini.
+
+```bash
+# Real Common Crawl query (actual HTTP call to CDX Index Server)
+vanish dataset-check --url https://your-site.com --common-crawl
+
+# All 8 datasets (Common Crawl + walkthroughs for the rest)
+vanish dataset-check --url https://your-site.com --all
+
+# Research mode — no network, just walkthroughs
+vanish dataset-check --walkthrough-only --all
+```
+
+For Common Crawl: Vanish queries the real CDX Index Server across the 5 most recent monthly snapshots and returns per-snapshot hits for your URL.
+
+For LAION (images), The Pile, C4, WebText, RedPajama, Dolma, FineWeb: walkthroughs with exact URLs (`wimbd.apps.allenai.org`, `haveibeentrained.com`, `c4-search.apps.allenai.org`), opt-out instructions (mostly `CCBot robots.txt`), and caveats ("existing distributions cannot be retroactively filtered").
+
+#### ⚖️ `vanish third-party-ai` — AI that OTHER people use on you
+
+Your data gets fed to AI not just by you, but by your employer, doctor, recruiter, and sales contacts — often without explicit consent. Zoom AI Companion, Otter, Fireflies, Gong, HireVue, Abridge, Nuance DAX.
+
+```bash
+# Workplace meeting AI objection (EU law)
+vanish third-party-ai --context workplace --jurisdiction EU
+
+# AI interview accommodation (Illinois AI Video Interview Act)
+vanish third-party-ai --hirevue --jurisdiction IL --company "Acme Corp"
+
+# Medical AI decline (HIPAA)
+vanish third-party-ai --abridge --nuance --jurisdiction HIPAA
+```
+
+Generates jurisdiction-aware objection letter templates citing:
+- **GDPR Article 21/22** (EU) — right to object to processing + automated decisions
+- **CCPA / AB-331** (California) — automated decision tool rights in employment
+- **Illinois AI Video Interview Act** — mandatory disclosure for AI interviews
+- **NYC Local Law 144** — bias audit requirement for AEDTs
+- **HIPAA 45 CFR §164.506** — right to restrict AI processing of PHI
+
+Covers 13 tools across workplace / HR / medical. `--output letters.txt` writes them to a file you can email directly.
+
 #### 🧹 `vanish clean-ai-history` — where does your AI history actually live?
 
 Every AI tool you use caches conversations somewhere. Some are local (Cursor's workspace cache), some are cloud-only (ChatGPT web), some are both. Wiping "everything" requires knowing every location.
@@ -420,6 +463,8 @@ All data verified April 2026. Catalog at [`src/face-scanner/face-services-catalo
 - **AI Opt-Out Walkthroughs** — browser-assisted guided opt-out for 26 platforms with exact UI string, step-by-step instructions, tier overrides, and 60-day re-verify
 - **LLM Memorization Check** — probe GPT-4o-mini and Claude 3.5 Haiku with 15 stalker-style prompts to detect if they leak your email/phone/address verbatim. First open-source tool in this space
 - **AI History Cleanup Guide** — locate + delete conversation caches across 9 AI tools (Cursor, VS Code Copilot, ChatGPT Desktop, Claude Desktop, + 5 web services). Cross-platform paths, copy-paste commands
+- **Training Dataset Membership Check** — real Common Crawl CDX query + walkthroughs for LAION / The Pile / C4 / WebText / RedPajama / Dolma / FineWeb
+- **Third-Party AI Exposure** — catalog of 13 AI tools OTHER people use on you (Zoom AI, Otter, Fireflies, Gong, HireVue, Abridge, Nuance DAX) + jurisdiction-aware objection letter generator (GDPR / CCPA / Illinois AIVIA / NYC Local Law 144 / HIPAA)
 - **Signed audit of AI opt-outs + history deletions** — HMAC-SHA256 receipts admissible as GDPR/CCPA evidence
 
 ### 👤 Face-search protection (unique to Vanish)
@@ -441,7 +486,7 @@ All data verified April 2026. Catalog at [`src/face-scanner/face-services-catalo
 - **Persistent Queues** — retry (exponential backoff) / manual-review / dead-letter with SHA-256 dedupe
 - **Local Dashboard** — static HTML, watches queue state, zero backend
 - **Safety Gates** — manual trigger only, triple-confirm for high-risk, export-before-delete, compliance snapshot
-- **217 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- **262 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 ---
 
@@ -582,7 +627,7 @@ vanish dashboard data/queue-state.json
 # Proof report (audit trail in Markdown)
 vanish report ./path/to/execution-result.json
 
-# All 217 tests (109 broker + 20 ai-scan + 13 ai-opt-out + 21 face-scan + 30 llm-memory-check + 24 clean-ai-history)
+# All 262 tests (109 broker + 20 ai-scan + 13 ai-opt-out + 21 face-scan + 30 llm-memory-check + 24 clean-ai-history + 20 dataset-check + 25 third-party-ai)
 npm test
 ```
 
@@ -613,6 +658,12 @@ src/
 ├── ai-history/                 # 🧹 AI tool history discovery + deletion commands
 │   ├── history-catalog.json    # 9 tools × per-OS paths + web walkthroughs
 │   └── history-engine.mjs      # Path resolution + size reporting + filters
+├── dataset-check/              # 📚 Training dataset membership
+│   ├── datasets-catalog.json   # 8 datasets: CC, LAION, Pile, C4, WebText, RedPajama, Dolma, FineWeb
+│   └── dataset-check-engine.mjs # Real Common Crawl CDX API query + mock fetch injection for tests
+├── third-party-ai/             # ⚖️ AI tools others use on you + objection letter generator
+│   ├── third-party-catalog.json # 13 tools (workplace/HR/medical) + 4 letter templates
+│   └── third-party-engine.mjs  # Context grouping + jurisdiction clause selection + letter render
 ├── adapters/
 │   ├── registry.mjs            # Catalog-driven adapter registry
 │   └── brokers/
@@ -632,8 +683,9 @@ src/
 
 prompts/wizard/                 # 18 .md prompt templates per state
 scripts/                        # CLI entry points (scan, ai-scan, face-scan, llm-memory-check,
-                                #   opt-out, ai-opt-out, face-opt-out, clean-ai-history, verify, ...)
-tests/                          # 217 tests across 23 files
+                                #   dataset-check, third-party-ai, opt-out, ai-opt-out,
+                                #   face-opt-out, clean-ai-history, verify, ...)
+tests/                          # 262 tests across 25 files
 web/                            # Static web app (Vite + vanilla JS, shares src/scanner)
 ```
 
@@ -650,13 +702,15 @@ web/                            # Static web app (Vite + vanilla JS, shares src/
 - ✅ **8 face-search opt-out walkthroughs** including Clearview AI CCPA/GDPR request
 - ✅ **LLM memorization check** — probes GPT-4o-mini + Claude 3.5 Haiku via user's API keys, detects verbatim leaks of email/phone/workplace
 - ✅ **AI history cleanup guide** — 9 tools (Cursor, VS Code Copilot, ChatGPT/Claude Desktop, + 5 web) with per-OS paths and copy-paste delete commands
+- ✅ **Training dataset membership check** — real Common Crawl CDX query + walkthroughs for LAION/Pile/C4/WebText/RedPajama/Dolma/FineWeb
+- ✅ **Third-party AI exposure** — 13 tools (Zoom AI/Otter/Fireflies/Gong/HireVue/Abridge/Nuance/...) with jurisdiction-aware objection letter generator (GDPR/CCPA/HIPAA/...)
 - ✅ **Heuristic privacy scanner** (0-100 score, 5-factor confidence, per-broker risk)
 - ✅ **18-state wizard** with scan → handoff → cleanup flow
 - ✅ **30-day HTTP verify loop** for brokers, **60-day reverify** for AI platforms
 - ✅ **Static web app** at [ramboxie.github.io/vanish](https://ramboxie.github.io/vanish/) — zero-install, 100% client-side
 - ✅ **Share card** (1200×630 SVG) — privacy-preserving public boast
 - ✅ **Audit, queues, secret store hardened** (HMAC-SHA256, scrypt KDF, stale-lock detection)
-- ✅ **217 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- ✅ **262 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 **Next (P2, retention-focused)**:
 - 🔜 **Scan history** (`~/.vanish/history.jsonl` + `vanish history`) — show score drop 72 → 31 over time

@@ -5,6 +5,24 @@ All notable changes to Vanish will be documented here. Format follows [Keep a Ch
 ## [Unreleased]
 
 ### Added
+- **📚 Training Dataset Membership Check** (`src/dataset-check/`, new subcommand `vanish dataset-check`):
+  - Checks whether your content appears in 8 major public AI training datasets: Common Crawl, LAION-5B (via Have I Been Trained), The Pile, C4, OpenAI WebText, RedPajama, Dolma, FineWeb
+  - **Active query** for Common Crawl — real HTTP call against the CDX Index Server across the 5 most recent monthly snapshots, returns per-snapshot hit count + digests
+  - Walkthroughs for the other 7 datasets (no public query API) — each with: what's in the dataset, how to check manually (e.g., `wimbd.apps.allenai.org` for Dolma, `c4-search.apps.allenai.org` for C4, `haveibeentrained.com` for LAION), opt-out steps where possible (mostly `robots.txt + CCBot`)
+  - Classification: low / moderate / high / critical based on Common Crawl hit count
+  - `--walkthrough-only` mode skips network entirely; `--json` for machine-readable output
+  - First open-source tool that actively queries training dataset indexes (vs only providing docs)
+- 20 new tests (`tests/dataset-check.test.mjs`) — catalog integrity, key resolution, mock fetch for Common Crawl CDX, fallback snapshot list, classification thresholds, CLI smoke
+
+- **⚖️ Third-Party AI Exposure** (`src/third-party-ai/`, new subcommand `vanish third-party-ai`):
+  - Catalog of 13 AI tools that OTHER people use on your data (you're the subject, not the user): Zoom AI Companion · Otter · Fireflies · Fathom · Gong · Chorus/ZoomInfo · Read.ai (facial analysis) · Teams Copilot · HireVue · Pymetrics/Harver · Abridge · Nuance DAX · Suki AI
+  - Grouped by context: workplace / hr-recruiting / medical
+  - **Jurisdiction-aware objection letter generator** — pick `--jurisdiction EU|CA|IL|NY|HIPAA` to get a legally-cited objection letter per context (GDPR Article 21, CCPA AB-331, Illinois AI Video Interview Act, NYC Local Law 144, HIPAA 45 CFR)
+  - 4 letter templates: workplace-meeting, sales-call-recording (customer side), ai-interview (accommodation request), medical-ai (HIPAA decline)
+  - `--output <path>` writes assembled letters to a file; `--json` for programmatic use
+  - Designed to put vendors + deployers on notice — often enough to trigger accommodation without litigation
+- 25 new tests (`tests/third-party-ai.test.mjs`) — catalog + template references, jurisdiction clause selection, letter rendering with substitutions, context grouping, CLI integration
+
 - **🧠 LLM Memorization Check** (`src/llm-memory/`, new subcommand `vanish llm-memory-check`):
   - Tests whether major LLMs (GPT-4o-mini, Claude 3.5 Haiku) output your personal identifiers verbatim when probed with 15 stalker-style prompts
   - Each probe is a realistic doxxing query ("What's X's phone number?", "Complete: X's email is..."), targeting email / phone / address / city / workplace leaks

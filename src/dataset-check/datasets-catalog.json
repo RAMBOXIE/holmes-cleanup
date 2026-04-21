@@ -1,0 +1,251 @@
+{
+  "version": 1,
+  "lastVerified": "2026-04",
+  "description": "Catalog of major public AI training datasets + how to check if your content is in them. Some support direct query (Common Crawl CDX); others require manual walkthroughs or third-party services (Have I Been Trained).",
+  "datasets": {
+    "common-crawl": {
+      "displayName": "Common Crawl",
+      "shortName": "CC",
+      "curator": "Common Crawl Foundation (nonprofit)",
+      "contentType": "web-pages",
+      "size": "~400 TB / ~10+ TB per monthly snapshot",
+      "url": "https://commoncrawl.org/",
+      "queryMethod": "cdx-api",
+      "queryUrl": "https://index.commoncrawl.org/",
+      "optOutMethod": "robots.txt + domain blocklist",
+      "usedBy": ["GPT-3", "GPT-4 (partial)", "Llama", "Claude", "Gemini", "C4", "FineWeb", "RedPajama"],
+      "signalAsked": "common-crawl",
+      "notes": "The single most important public dataset. Backbone of almost every modern LLM. CDX API lets you query if a specific URL was crawled and when. Opt-out: block CCBot in robots.txt, but this only stops FUTURE crawls.",
+      "howToCheck": {
+        "automated": true,
+        "apiEndpoint": "https://index.commoncrawl.org/CC-MAIN-{snapshot}-index?url={url}&output=json",
+        "description": "HTTP GET with url + snapshot parameters returns JSON records of every crawled version"
+      },
+      "optOutWalkthrough": {
+        "steps": [
+          "Edit your site's robots.txt (or configure via CMS)",
+          "Add these lines:\n    User-agent: CCBot\n    Disallow: /",
+          "Deploy. Future Common Crawl runs will skip your site.",
+          "Request removal of existing snapshots: email support@commoncrawl.org with your domain"
+        ],
+        "verification": "After next monthly crawl, query CDX API — your URLs should not appear in new snapshots. Existing snapshots cannot be retroactively removed from downloaded copies already in circulation.",
+        "caveat": "Common Crawl is a nonprofit archive. Removing from it doesn't remove from the many copies mirrored across research institutions and already in LLM training sets."
+      }
+    },
+    "have-i-been-trained": {
+      "displayName": "LAION (via Have I Been Trained)",
+      "shortName": "LAION",
+      "curator": "LAION e.V. (German research nonprofit)",
+      "contentType": "image-text-pairs",
+      "size": "LAION-5B: 5.85 billion image-text pairs",
+      "url": "https://haveibeentrained.com/",
+      "queryMethod": "web-ui",
+      "optOutMethod": "do-not-train registry",
+      "usedBy": ["Stable Diffusion", "DALL-E 2 (partial)", "Midjourney (partial)", "Ideogram"],
+      "signalAsked": "laion",
+      "notes": "LAION-5B is the public image-text dataset used to train the major open image models. Have I Been Trained (by Spawning AI) provides a search UI + opt-out registry. Major commercial image models (Stable Diffusion XL, etc.) honor the HIBT opt-out list.",
+      "howToCheck": {
+        "automated": false,
+        "description": "Web UI search: upload photos or search by URL to find matches in LAION-5B"
+      },
+      "checkWalkthrough": {
+        "steps": [
+          "Open haveibeentrained.com",
+          "Upload a photo OR paste the URL of an image you want to check",
+          "Results show: match confidence + which LAION subset + original source URL",
+          "For bulk search: create account and use batch upload (free)"
+        ],
+        "verification": "Match list shows found/not-found per image."
+      },
+      "optOutWalkthrough": {
+        "steps": [
+          "Open haveibeentrained.com → 'Opt Out' section",
+          "Upload images you want excluded (up to 50 per batch)",
+          "Register your account / claim ownership",
+          "Opt-out registry is honored by SD 3, Stable Audio, Adobe Firefly + growing list of image models"
+        ],
+        "verification": "Registry confirmation email. Note: images already in training sets for older models (SD 1.5, SD 2.1, DALL-E 2) cannot be removed retroactively."
+      }
+    },
+    "the-pile": {
+      "displayName": "The Pile",
+      "shortName": "Pile",
+      "curator": "EleutherAI",
+      "contentType": "mixed-text (22 sources)",
+      "size": "~825 GB",
+      "url": "https://pile.eleuther.ai/",
+      "queryMethod": "local-download-only",
+      "optOutMethod": "none (archival)",
+      "usedBy": ["GPT-J", "GPT-NeoX", "Pythia", "many research models"],
+      "signalAsked": "pile",
+      "notes": "Includes PubMed, ArXiv, Github, Stack Exchange, Common Crawl subset, Reddit (via Pushshift), Wikipedia, books, etc. Your Reddit posts pre-2022 are almost certainly in there via the Pushshift subset. No opt-out mechanism — it's a frozen dataset.",
+      "howToCheck": {
+        "automated": false,
+        "description": "No public query API. To check: download the relevant subset (e.g., Pushshift Reddit dump ~200 GB) and grep for your username. Research-only feasibility."
+      },
+      "checkWalkthrough": {
+        "steps": [
+          "If you posted on Reddit, Stack Exchange, PubMed, ArXiv, or GitHub before 2022 — assume you're in it",
+          "No URL query: dataset is downloadable only from pile.eleuther.ai",
+          "The Pile hosting was suspended in 2024 due to DMCA complaints but widely mirrored",
+          "Practical check: search the source platform (Reddit username on pushshift.io archive) — if present on source, likely in Pile"
+        ],
+        "verification": null
+      },
+      "optOutWalkthrough": null
+    },
+    "c4": {
+      "displayName": "C4 (Colossal Clean Crawled Corpus)",
+      "shortName": "C4",
+      "curator": "Google (T5 team)",
+      "contentType": "cleaned-web-pages",
+      "size": "~750 GB (cleaned subset of Common Crawl)",
+      "url": "https://www.tensorflow.org/datasets/catalog/c4",
+      "queryMethod": "c4-search-tool",
+      "optOutMethod": "upstream-opt-out-from-common-crawl",
+      "usedBy": ["T5", "Flan-T5", "PaLM (partial)", "many Google models"],
+      "signalAsked": "c4",
+      "notes": "Derived from Common Crawl with filtering. Opt-out from Common Crawl (see above) propagates to future C4 versions. Washington Post + Allen AI published a C4 search tool in 2023 letting you query domain inclusion.",
+      "howToCheck": {
+        "automated": false,
+        "description": "C4 Search tool by Allen AI: https://c4-search.apps.allenai.org/"
+      },
+      "checkWalkthrough": {
+        "steps": [
+          "Open c4-search.apps.allenai.org",
+          "Enter your domain (e.g., yourwebsite.com)",
+          "Search returns: how many tokens from your domain are in C4 + sample pages",
+          "Results rank domains by token count — see where you rank"
+        ],
+        "verification": "Domain-level results with token count + sample snippets."
+      },
+      "optOutWalkthrough": {
+        "steps": [
+          "Block CCBot in robots.txt (same as Common Crawl opt-out)",
+          "C4 is derived from Common Crawl — upstream opt-out propagates",
+          "No direct path to remove from existing C4 copies"
+        ],
+        "verification": "Next C4 build after your robots.txt change won't include your new content.",
+        "caveat": "Existing C4 (2019 + 2023) remains in every model trained on it. Cannot be retroactively removed."
+      }
+    },
+    "openai-webtext": {
+      "displayName": "OpenAI WebText (Reddit outlinks)",
+      "shortName": "WebText",
+      "curator": "OpenAI",
+      "contentType": "web-pages-linked-from-reddit",
+      "size": "~40 GB (8 million documents)",
+      "url": "https://github.com/openai/gpt-2/blob/master/model_card.md",
+      "queryMethod": "not-public",
+      "optOutMethod": "none",
+      "usedBy": ["GPT-2", "GPT-3 (partial)"],
+      "signalAsked": "webtext",
+      "notes": "Originally 8M documents linked from Reddit submissions with ≥3 karma, pre-2017. Not publicly released. OpenWebText (EleutherAI's open replication) is public. If your site was linked from popular Reddit posts 2015-2017, you're in one or both.",
+      "howToCheck": {
+        "automated": false,
+        "description": "Not directly queryable. Heuristic: if your site has pages that went viral on Reddit pre-2017, likely included."
+      },
+      "checkWalkthrough": {
+        "steps": [
+          "Check if any of your URLs had Reddit submissions with ≥3 karma before Nov 2017",
+          "Use camas.github.io/reddit-search or pushshift.io to search Reddit history",
+          "If found: you're in WebText (OpenAI proprietary) + likely OpenWebText (public replication)"
+        ],
+        "verification": null
+      },
+      "optOutWalkthrough": null
+    },
+    "redpajama": {
+      "displayName": "RedPajama",
+      "shortName": "RedPajama",
+      "curator": "Together AI",
+      "contentType": "mixed-text (replication of Llama training)",
+      "size": "1.2T tokens (v1) / 30T tokens (v2)",
+      "url": "https://www.together.ai/blog/redpajama",
+      "queryMethod": "not-public",
+      "optOutMethod": "upstream-opt-out-from-common-crawl",
+      "usedBy": ["Open-source Llama replications", "RedPajama-INCITE"],
+      "signalAsked": "redpajama",
+      "notes": "Recreation of Llama's training data using only public sources. Mostly Common Crawl + GitHub + Wikipedia + Books3. Robots.txt opt-out from Common Crawl blocks future RedPajama builds.",
+      "howToCheck": {
+        "automated": false,
+        "description": "No search tool. Check sources individually (Common Crawl + GitHub + Wikipedia)."
+      },
+      "checkWalkthrough": {
+        "steps": [
+          "Inherits from Common Crawl — check CC presence first",
+          "Also check GitHub public commits, Wikipedia edits (attributable), Books3 (removed post-DMCA)",
+          "RedPajama v2 expanded to 30T tokens — more likely to include lower-traffic sites"
+        ],
+        "verification": null
+      },
+      "optOutWalkthrough": null
+    },
+    "dolma": {
+      "displayName": "Dolma",
+      "shortName": "Dolma",
+      "curator": "Allen AI (AI2)",
+      "contentType": "mixed-text",
+      "size": "3T tokens (v1.7)",
+      "url": "https://allenai.org/dolma",
+      "queryMethod": "dolma-search-api",
+      "optOutMethod": "upstream-opt-out-from-common-crawl",
+      "usedBy": ["OLMo", "OLMo-2", "Tulu"],
+      "signalAsked": "dolma",
+      "notes": "AI2's open 3T-token corpus. Powers OLMo (open-source LLM). Heavy Common Crawl dependency + GitHub + Wikipedia + peS2o (Semantic Scholar papers). One of the most transparent datasets in existence.",
+      "howToCheck": {
+        "automated": false,
+        "description": "AI2 Dolma has a WIMBD (What's In My Big Data) search tool."
+      },
+      "checkWalkthrough": {
+        "steps": [
+          "Open wimbd.apps.allenai.org",
+          "Search for your domain, name, or text snippet",
+          "Tool shows frequency + sample contexts across multiple datasets (Dolma, C4, RedPajama, Pile)"
+        ],
+        "verification": "Count + sample context shown per dataset."
+      },
+      "optOutWalkthrough": {
+        "steps": [
+          "Block CCBot in robots.txt",
+          "For GitHub data: make repos private or delete (GitHub honors removal)",
+          "For Semantic Scholar: request removal via email"
+        ],
+        "verification": "Future Dolma builds won't include newly blocked content."
+      }
+    },
+    "fineweb": {
+      "displayName": "FineWeb",
+      "shortName": "FineWeb",
+      "curator": "HuggingFace",
+      "contentType": "cleaned-web-pages",
+      "size": "15T tokens (FineWeb-Edu: 1.3T)",
+      "url": "https://huggingface.co/datasets/HuggingFaceFW/fineweb",
+      "queryMethod": "hf-datasets",
+      "optOutMethod": "upstream-opt-out-from-common-crawl",
+      "usedBy": ["Many HuggingFace-hosted open models", "Research training runs"],
+      "signalAsked": "fineweb",
+      "notes": "HuggingFace's highly-filtered Common Crawl derivative (2024). The cleanest large-scale open dataset. Widely adopted for new open-source model training.",
+      "howToCheck": {
+        "automated": false,
+        "description": "Can be searched via HuggingFace datasets API (technical)."
+      },
+      "checkWalkthrough": {
+        "steps": [
+          "Install huggingface-cli + datasets library",
+          "Load FineWeb as streaming dataset and grep for your domain",
+          "Only practical for researchers — most users should assume inclusion if site is in Common Crawl"
+        ],
+        "verification": null
+      },
+      "optOutWalkthrough": {
+        "steps": [
+          "Block CCBot in robots.txt",
+          "Future FineWeb builds will exclude your site"
+        ],
+        "verification": null,
+        "caveat": "Existing FineWeb distributions cannot be retroactively filtered."
+      }
+    }
+  }
+}

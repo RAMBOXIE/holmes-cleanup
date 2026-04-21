@@ -27,6 +27,8 @@ const SUBCOMMANDS = {
   'ai-scan':           'ai-scan.mjs',
   'face-scan':         'face-scan.mjs',
   'llm-memory-check':  'llm-memory-check.mjs',
+  'dataset-check':     'dataset-check.mjs',
+  'third-party-ai':    'third-party-ai.mjs',
   'opt-out':           'opt-out.mjs',
   'ai-opt-out':        'ai-opt-out.mjs',
   'face-opt-out':      'face-opt-out.mjs',
@@ -69,6 +71,12 @@ Commands:
 
   clean-ai-history  Discover where AI tools store your history + exact delete commands
               Example: vanish clean-ai-history --cursor --chatgpt --claude
+
+  dataset-check   Check if your content is in Common Crawl / LAION / Pile / C4 / etc.
+              Example: vanish dataset-check --url https://your-site.com --all
+
+  third-party-ai  Generate objection letters for AI tools OTHERS use on you
+              Example: vanish third-party-ai --zoom --otter --jurisdiction EU
 
   opt-out     Browser-assisted opt-out for 58 supported brokers
               Example: vanish opt-out --broker spokeo --email you@example.com
