@@ -53,6 +53,24 @@ test('every service has an optOutWalkthrough', () => {
   }
 });
 
+test('at least 4 face services have sources citing official policy / regulatory URLs', () => {
+  const withSources = Object.entries(catalog.services)
+    .filter(([, s]) => Array.isArray(s.sources) && s.sources.length > 0);
+  assert.ok(withSources.length >= 4,
+    `Expected >=4 face services with sources, got ${withSources.length}`);
+});
+
+test('every face service source entry has url + label + verifiedAt', () => {
+  for (const [key, s] of Object.entries(catalog.services)) {
+    if (!s.sources) continue;
+    for (const src of s.sources) {
+      assert.ok(/^https?:\/\//.test(src.url), `${key}.sources has non-URL: ${src.url}`);
+      assert.ok(typeof src.label === 'string' && src.label.length > 0, `${key}.sources missing label`);
+      assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(src.verifiedAt), `${key}.sources invalid verifiedAt: ${src.verifiedAt}`);
+    }
+  }
+});
+
 test('clearview is restricted-access with null scanWalkthrough', () => {
   const cv = catalog.services['clearview-ai'];
   assert.equal(cv.accessModel, 'restricted');

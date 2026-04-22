@@ -42,6 +42,26 @@ test('opted-in platforms all have opt-out URLs', () => {
   }
 });
 
+test('at least 8 AI platforms have sources citing official policy URLs', () => {
+  // Traceability: we source-cite our claims so users can verify them.
+  // Start with top-traffic platforms; PRs welcome for the rest.
+  const withSources = Object.entries(catalog.platforms)
+    .filter(([, p]) => Array.isArray(p.sources) && p.sources.length > 0);
+  assert.ok(withSources.length >= 8,
+    `Expected >=8 platforms with sources, got ${withSources.length}`);
+});
+
+test('every AI platform source entry has url + label + verifiedAt', () => {
+  for (const [key, p] of Object.entries(catalog.platforms)) {
+    if (!p.sources) continue;
+    for (const s of p.sources) {
+      assert.ok(/^https?:\/\//.test(s.url), `${key}.sources has non-URL: ${s.url}`);
+      assert.ok(typeof s.label === 'string' && s.label.length > 0, `${key}.sources missing label`);
+      assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(s.verifiedAt), `${key}.sources invalid verifiedAt: ${s.verifiedAt}`);
+    }
+  }
+});
+
 // ─── Engine ───────────────────────────────────────────────────
 
 test('runAiScan classifies opted-in as exposed', () => {

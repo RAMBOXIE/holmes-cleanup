@@ -24,7 +24,22 @@ const args = parseArgs(process.argv.slice(2));
 
 if (args.help) {
   process.stdout.write(`
-Usage: node scripts/scan-demo.mjs [options]
+vanish scan — heuristic privacy-exposure triage across 210 data brokers.
+
+What this is (and isn't):
+  ✓ A LOCAL scoring model that estimates your exposure — zero HTTP calls,
+    zero third-party services. Runs in milliseconds.
+  ✓ A priority list for where to focus opt-out effort first.
+  ✗ NOT a real-time lookup against broker databases. For confirmed
+    presence, Google dork the broker's domain with your name, or run
+    \`vanish opt-out --broker <name>\` and inspect the actual profile.
+
+The "score" is a weighted heuristic on 5 factors (data-type coverage,
+category risk, jurisdiction match, broker reach, opt-out complexity).
+It's useful for prioritization. It is NOT a confirmed enumeration of
+brokers who have your data.
+
+Usage: vanish scan [options]
 
 Options:
   --name "Full Name"       Person's full name (required)
@@ -42,8 +57,13 @@ Options:
   --no-color               Disable ANSI colors in banner
   --help                   Show this help
 
-The share card is ANONYMOUS: it contains your aggregate privacy score and
-category stats only, never your name, email, or phone. Safe to post publicly.
+Capability note:
+  210 brokers are in the triage catalog (this command — heuristic scoring)
+  58 brokers have a documented opt-out walkthrough (vanish opt-out)
+  8 brokers have a live HTTP submission adapter (vanish b1-live — experimental)
+
+The share card is ANONYMOUS: aggregate privacy score and category stats
+only — never your name, email, or phone. Safe to post publicly.
 `);
   process.exit(0);
 }

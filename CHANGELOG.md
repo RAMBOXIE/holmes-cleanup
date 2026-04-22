@@ -4,7 +4,45 @@ All notable changes to Vanish will be documented here. Format follows [Keep a Ch
 
 ## [Unreleased]
 
+### Fixed
+- **`vanish verify` now handles every follow-up kind** (not just brokers): new
+  dispatcher in `src/verifier/followup-kinds.mjs` routes broker entries to the
+  existing HTTP liveness check and AI-platform / face-service entries to an
+  interactive "did you re-check the toggle / re-upload?" reminder flow. One-shot
+  kinds (ai-history-local, ai-history-web, takedown-*) are explicitly skipped
+  with a note. Previous behavior: AI/face follow-ups recorded audit entries
+  but had no re-verify loop. Adds `--kind <csv>` filter and `--assume
+  clean|still` for scripting. 12 new tests.
+- **`vanish opt-out` help text no longer hardcodes "8 brokers"**: the help
+  output now enumerates the 58 brokers with `optOutFlow` dynamically from the
+  catalog, and clarifies the capability tiers in a footer (210 triage catalog
+  / 58 walkthrough / 8 live-adapter).
+- **`vanish b1-live` explicitly marked EXPERIMENTAL** with header warning
+  + dedicated `--help`: captchas block real submissions; use `vanish opt-out`
+  for real opt-outs. Added a runtime stderr warning when `--live` is set.
+- **`vanish scan` help reframes wording**: it's a heuristic triage / priority-
+  ordering tool (local scoring, zero HTTP), explicitly NOT a real-time broker
+  lookup. Clarifies the 210/58/8 capability tiers in help output.
+
 ### Added
+- **📚 Catalog source citations** (data-quality improvement):
+  - AI platforms catalog: added `sources` field to top 8 platforms (ChatGPT,
+    Claude, Gemini, LinkedIn, Reddit, Twitter/X, GitHub Copilot, Cursor) —
+    each source entry has `url`, `label`, `verifiedAt`. Cites primary source
+    (vendor's own privacy policy) + secondary regulatory reference where
+    relevant (UK ICO on LinkedIn AI, Reuters on Reddit-Google deal)
+  - Face-services catalog: added `sources` for PimEyes, FaceCheck.ID,
+    FindClone, Clearview AI — including regulator actions (BfDI Germany
+    on PimEyes, UK ICO £7.5M fine on Clearview, ACLU v. Clearview BIPA
+    settlement)
+  - 4 new tests enforce schema: URL format, label presence, ISO date.
+    Rollout is incremental; PRs welcome to add sources for remaining entries
+- **🎯 "Capability matrix" section** in README hero: explicit table showing
+  for each of the 12 subcommands: coverage count, method (local /
+  walkthrough / automated), and reliability. Aims to eliminate the
+  "210 brokers → 210 automated" misread that privacy tools often suffer
+  from. Triage vs walkthrough vs live-adapter is now the primary framing
+
 - **🌐 Web App v2 — Tabbed Multi-Threat UI** (`web/`):
   - Hero rebuilt with 3 tabs: 🏢 Data Brokers · 🤖 AI Training · 👤 Face Search
   - **Broker tab**: existing identity-form scan (unchanged, 210 brokers)

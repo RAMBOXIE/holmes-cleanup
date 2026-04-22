@@ -46,6 +46,35 @@ npx github:RAMBOXIE/vanish face-opt-out --pimeyes --clearview
 
 ---
 
+## 🎯 Capability matrix — what actually works
+
+Vanish deliberately draws sharp lines between what's **triaged** (scored),
+**walkthrough** (you execute with guidance), and **automated** (Vanish submits).
+Most privacy tools blur these. We don't.
+
+| Capability | Coverage | Method | Reliability |
+|-----------|---------|--------|-------------|
+| **Broker exposure triage** (`vanish scan`) | 210 brokers | Local heuristic scoring, zero HTTP | 100% (it's a local model — no network dependency) |
+| **Broker opt-out walkthrough** (`vanish opt-out`) | **58 brokers** | Opens browser + pre-fills clipboard; you solve captcha | High — you're the one submitting, so broker ToS / captcha / email verify all work |
+| **Broker live HTTP submission** (`vanish b1-live`) | 8 brokers | Programmatic POST to configured endpoint | ⚠️ **Experimental** — captchas block real submissions. Infrastructure test only (runs against postman-echo by default) |
+| **AI training exposure scan** (`vanish ai-scan`) | 30 platforms | Local classification from catalog | 100% (local) |
+| **AI opt-out walkthrough** (`vanish ai-opt-out`) | 26 platforms | Browser-assisted + exact toggle name | High — you click the toggle |
+| **Face-search audit** (`vanish face-scan`) | 8 services | Opens each service's own search page | You run the search — Vanish never handles your photo |
+| **Face-search opt-out** (`vanish face-opt-out`) | 8 services | Form guidance + CCPA/GDPR citations | High — you submit; Vanish records audit |
+| **LLM memorization probe** (`vanish llm-memory-check`) | 2 providers (OpenAI, Anthropic) | User's own API key | Depends on model + your identity |
+| **Training-dataset membership** (`vanish dataset-check`) | 8 datasets | Common Crawl CDX = live query; others = walkthrough | CC is automated + accurate; rest need you to visit |
+| **Third-party AI objection letters** (`vanish third-party-ai`) | 13 tools, 4 letter templates | Jurisdiction-cited letter generator | Legal templates — you send |
+| **AI history cleanup** (`vanish clean-ai-history`) | 9 tools (4 local + 5 web) | Prints paths + commands; you copy-paste | Safer than auto-delete |
+| **NCII / leak takedown** (`vanish takedown`) | 12 leak sites + StopNCII + Google intimate-imagery | DMCA + legal letter drafting | You send the letters; audit is HMAC-signed evidence |
+| **Re-verify any of the above** (`vanish verify`) | All kinds | HTTP liveness for brokers, manual reminder for AI/face | Automated for brokers, reminder for the rest |
+
+**Core philosophy**: Vanish does not submit destructive actions on your behalf.
+We open the right page, show you exactly what to click, and record an
+HMAC-signed audit of what you confirmed. You're the one legally submitting,
+so captchas, IP bans, and account-verification loops all work correctly.
+
+---
+
 ## Quick Start
 
 **Zero-install — one line from any terminal:**
@@ -570,7 +599,7 @@ Vanish stores **nothing** sensitive:
 - **Persistent Queues** — retry (exponential backoff) / manual-review / dead-letter with SHA-256 dedupe
 - **Local Dashboard** — static HTML, watches queue state, zero backend
 - **Safety Gates** — manual trigger only, triple-confirm for high-risk, export-before-delete, compliance snapshot
-- **299 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- **315 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 ### 🛡️ NCII / leak content takedown (unique to Vanish)
 
@@ -747,7 +776,7 @@ vanish dashboard data/queue-state.json
 # Proof report (audit trail in Markdown)
 vanish report ./path/to/execution-result.json
 
-# All 299 tests (109 broker + 19 share-card + 20 ai-scan + 13 ai-opt-out + 21 face-scan + 30 llm-memory-check + 24 clean-ai-history + 20 dataset-check + 25 third-party-ai + 31 takedown — where 109 broker tests include all non-share-card broker-side coverage)
+# All 315 tests (109 broker + 19 share-card + 22 ai-scan + 13 ai-opt-out + 23 face-scan + 30 llm-memory-check + 24 clean-ai-history + 20 dataset-check + 25 third-party-ai + 31 takedown + 26 verify incl. kind dispatch)
 npm test
 ```
 
@@ -809,7 +838,7 @@ prompts/wizard/                 # 18 .md prompt templates per state
 scripts/                        # CLI entry points (scan, ai-scan, face-scan, llm-memory-check,
                                 #   dataset-check, third-party-ai, opt-out, ai-opt-out,
                                 #   face-opt-out, clean-ai-history, takedown, verify, ...)
-tests/                          # 299 tests across 26 files
+tests/                          # 315 tests across 26 files
 web/                            # Static web app v2 (Vite + vanilla JS) — 3 tabs: broker scan,
                                 #   AI training checkbox grid, face-search directory. Shares
                                 #   src/scanner + src/ai-scanner + src/face-scanner catalogs.
@@ -838,7 +867,7 @@ web/                            # Static web app v2 (Vite + vanilla JS) — 3 ta
 - ✅ **Static web app v2** at [ramboxie.github.io/vanish](https://ramboxie.github.io/vanish/) — zero-install, 100% client-side, now with 3 tabs (broker / AI training / face search)
 - ✅ **Triple-threat share card (v2)** — 1200×630 SVG with 3 columns (broker + AI + face), auto-upgrades when user scans multiple threats in the same session
 - ✅ **Audit, queues, secret store hardened** (HMAC-SHA256, scrypt KDF, stale-lock detection)
-- ✅ **299 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- ✅ **315 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 **Next (P2, retention-focused)**:
 - 🔜 **Scan history** (`~/.vanish/history.jsonl` + `vanish history`) — show score drop 72 → 31 over time

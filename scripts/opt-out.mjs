@@ -75,7 +75,7 @@ async function runBrokerOptOut(brokerName, input, opts) {
   const brokerEntry = catalog.brokers[brokerName];
   if (!brokerEntry) throw new Error(`Unknown broker: ${brokerName}`);
   if (!brokerEntry.optOutFlow) {
-    throw new Error(`Broker ${brokerName} has no optOutFlow defined. Only these 8 brokers currently support browser-assisted opt-out: spokeo, thatsthem, peekyou, addresses, cocofinder, checkpeople, familytreenow, usphonebook.`);
+    throw new Error(`Broker ${brokerName} has no optOutFlow defined. Run \`vanish opt-out --help\` to see the full list of ${58} supported brokers, or file an issue to request coverage.`);
   }
 
   const flow = brokerEntry.optOutFlow;
@@ -169,16 +169,26 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
 
   if (args.help || args['--help']) {
+    // Enumerate brokers that have optOutFlow — canonical source of truth
+    const supported = Object.entries(catalog.brokers)
+      .filter(([, v]) => v.optOutFlow)
+      .map(([k]) => k);
+
     process.stdout.write(`
-Browser-assisted opt-out for 8 live-capable data brokers.
+Browser-assisted opt-out for ${supported.length} data brokers.
+
+What this does:
+  1. Opens each broker's opt-out page in your browser
+  2. Pre-fills form data from your CLI flags into the clipboard
+  3. You solve captcha + click submit (Vanish does NOT auto-submit)
+  4. Records an HMAC-signed audit trail + 30-day re-verify follow-up
 
 Usage:
   vanish opt-out --broker <name> --email <email> [options]
 
 Required:
-  --broker <name>        Broker key(s), comma-separated (spokeo, thatsthem, peekyou,
-                         addresses, cocofinder, checkpeople, familytreenow, usphonebook)
-  --email <email>        Your email address for verification
+  --broker <name>        Broker key(s), comma-separated — e.g. spokeo,beenverified
+  --email <email>        Your email address (for broker verification emails)
 
 Optional:
   --full-name "..."      Your full name
@@ -192,6 +202,24 @@ Optional:
   --state-file <path>    Queue state file (default: data/queue-state.json)
   --no-open              Test mode: don't open browser, auto-confirm (for scripting)
   --help                 This message
+
+Supported brokers (${supported.length}):
+${(() => {
+  // Chunk into lines of ~80 cols for readability
+  const lines = [];
+  let line = '  ';
+  for (const k of supported.sort()) {
+    if ((line + k + ', ').length > 78) { lines.push(line.replace(/, $/, '')); line = '  '; }
+    line += k + ', ';
+  }
+  if (line.trim()) lines.push(line.replace(/, $/, ''));
+  return lines.join('\n');
+})()}
+
+Capability note:
+  210 brokers are in the scan catalog (heuristic exposure triage)
+  ${supported.length} brokers have a documented opt-out walkthrough (this command)
+  8 brokers have a live HTTP submission adapter (see \`vanish b1-live\` — experimental)
 
 Example:
   vanish opt-out --broker spokeo,peekyou --email you@example.com --full-name "John Doe"

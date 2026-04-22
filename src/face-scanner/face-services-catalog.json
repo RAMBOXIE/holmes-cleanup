@@ -25,6 +25,11 @@
       "estimatedSeconds": 180,
       "signalAsked": "pimeyes",
       "notes": "Opt-out form is FREE (one-time) but approval is discretionary and can take 30-60 days. PROtect is the paid continuous-monitoring subscription. Investigated by multiple EU DPAs for GDPR violations.",
+      "sources": [
+        { "url": "https://pimeyes.com/en/privacy-policy", "label": "PimEyes Privacy Policy", "verifiedAt": "2026-04-15" },
+        { "url": "https://pimeyes.com/en/opt-out-form", "label": "PimEyes Opt-Out Form", "verifiedAt": "2026-04-15" },
+        { "url": "https://www.bfdi.bund.de/EN/Home/home_node.html", "label": "German DPA (BfDI) — PimEyes investigation (2022-2024)", "verifiedAt": "2026-04-15" }
+      ],
       "scanWalkthrough": {
         "steps": [
           "Open pimeyes.com",
@@ -63,6 +68,10 @@
       "estimatedSeconds": 120,
       "signalAsked": "facecheck",
       "notes": "FaceCheck markets heavily to romance-scam detection / dating-app verification. Quality is lower than PimEyes but still sufficient for doxxing.",
+      "sources": [
+        { "url": "https://facecheck.id/privacy", "label": "FaceCheck.ID Privacy Policy", "verifiedAt": "2026-04-15" },
+        { "url": "https://facecheck.id/optout", "label": "FaceCheck.ID Opt-Out", "verifiedAt": "2026-04-15" }
+      ],
       "scanWalkthrough": {
         "steps": [
           "Open facecheck.id",
@@ -98,6 +107,10 @@
       "estimatedSeconds": 120,
       "signalAsked": "findclone",
       "notes": "Pay-per-search model. No free tier. Has been used by journalists to identify Russian soldiers in Ukraine (BBC, Bellingcat investigations). Also a stalking tool in domestic abuse cases.",
+      "sources": [
+        { "url": "https://findclone.ru/policy", "label": "FindClone Privacy Policy (Russian)", "verifiedAt": "2026-04-15" },
+        { "url": "https://www.bellingcat.com/resources/how-tos/2022/04/30/using-facial-recognition-to-identify-russian-soldiers/", "label": "Bellingcat — Using FindClone in Ukraine war investigations", "verifiedAt": "2026-04-15" }
+      ],
       "scanWalkthrough": {
         "steps": [
           "Open findclone.ru (interface is in Russian — use browser auto-translate)",
@@ -270,6 +283,11 @@
       "estimatedSeconds": 0,
       "signalAsked": "clearview",
       "notes": "You can't scan yourself in Clearview — it's LE-only. But you CAN request removal under CCPA (California), GDPR (EU), or similar rights. Clearview is LEGALLY REQUIRED to delete your data upon request in many jurisdictions.",
+      "sources": [
+        { "url": "https://www.clearview.ai/privacy/requests", "label": "Clearview AI — Privacy Requests Portal", "verifiedAt": "2026-04-15" },
+        { "url": "https://www.aclu.org/cases/aclu-v-clearview-ai", "label": "ACLU v. Clearview AI (Illinois BIPA settlement, 2022)", "verifiedAt": "2026-04-15" },
+        { "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2022/05/ico-fines-facial-recognition-database-company-clearview-ai-inc/", "label": "UK ICO — £7.5M fine against Clearview (2022)", "verifiedAt": "2026-04-15" }
+      ],
       "scanWalkthrough": null,
       "optOutWalkthrough": {
         "targetSetting": "CCPA / GDPR deletion request",

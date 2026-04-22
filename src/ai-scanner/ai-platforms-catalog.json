@@ -30,6 +30,10 @@
       "region": "global",
       "signalAsked": "chatgpt",
       "notes": "Setting: \"Improve the model for everyone\" → toggle OFF. Team/Enterprise plans are opted-out by default. API usage is not used for training.",
+      "sources": [
+        { "url": "https://openai.com/policies/row-privacy-policy/", "label": "OpenAI Privacy Policy", "verifiedAt": "2026-04-15" },
+        { "url": "https://help.openai.com/en/articles/7730893-data-controls-faq", "label": "OpenAI Data Controls FAQ", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": {
         "targetSetting": "Improve the model for everyone",
         "steps": [
@@ -54,6 +58,10 @@
       "region": "global",
       "signalAsked": "claude",
       "notes": "Claude does NOT train on consumer chat data by default. Explicit opt-in required. Safest major chat platform for privacy.",
+      "sources": [
+        { "url": "https://www.anthropic.com/legal/privacy", "label": "Anthropic Privacy Policy", "verifiedAt": "2026-04-15" },
+        { "url": "https://support.anthropic.com/en/articles/8325621", "label": "Anthropic — How we use your data", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": null
     },
     "google-gemini": {
@@ -69,6 +77,10 @@
       "region": "global",
       "signalAsked": "gemini",
       "notes": "Gemini App Activity toggle at myactivity.google.com. Workspace Business/Enterprise have different rules — check admin console. Human reviewers see sampled chats.",
+      "sources": [
+        { "url": "https://support.google.com/gemini/answer/13594961", "label": "Google — Your data in Gemini Apps", "verifiedAt": "2026-04-15" },
+        { "url": "https://support.google.com/accounts/answer/14261189", "label": "Google Workspace Gemini data policy", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": {
         "targetSetting": "Gemini Apps Activity",
         "steps": [
@@ -172,6 +184,10 @@
       "signalAsked": "linkedin",
       "changedAt": "2024-09-18",
       "notes": "Controversially turned on for all users by default in Sept 2024 without notification. Regulator pressure caused EU/UK/Swiss/HK/Canada rollback. Setting: 'Data for Generative AI Improvement'.",
+      "sources": [
+        { "url": "https://www.linkedin.com/help/linkedin/answer/a5538339", "label": "LinkedIn — Generative AI Data Processing", "verifiedAt": "2026-04-15" },
+        { "url": "https://www.ico.org.uk/about-the-ico/media-centre/news-and-blogs/2024/09/ico-statement-linkedin-ai-training/", "label": "UK ICO statement (LinkedIn AI rollout, Sept 2024)", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": {
         "targetSetting": "Data for Generative AI Improvement",
         "steps": [
@@ -196,6 +212,10 @@
       "region": "global",
       "signalAsked": "reddit",
       "notes": "Reddit signed ~$60M/year deals with Google and OpenAI. No user toggle. Only CCPA/GDPR request via DPO email works. Deleting posts doesn't retroactively remove from training sets already licensed.",
+      "sources": [
+        { "url": "https://redditinc.com/policies/privacy-policy", "label": "Reddit Privacy Policy", "verifiedAt": "2026-04-15" },
+        { "url": "https://www.reuters.com/technology/reddit-signs-ai-content-licensing-deal-with-google-sources-say-2024-02-22/", "label": "Reuters — Reddit-Google ~$60M AI licensing deal (Feb 2024)", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": {
         "targetSetting": "Privacy question form (DPO request)",
         "steps": [
@@ -222,6 +242,10 @@
       "region": "global",
       "signalAsked": "twitter",
       "notes": "xAI Grok trained on tweets. Toggle: 'Data sharing with xAI' → off. Retroactive: only affects future training cycles — past Grok versions already trained.",
+      "sources": [
+        { "url": "https://privacy.x.com/en/help/grok-and-x-ai-privacy", "label": "X — Grok & xAI Privacy FAQ", "verifiedAt": "2026-04-15" },
+        { "url": "https://help.x.com/en/safety-and-security/x-privacy-controls", "label": "X — Privacy Controls", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": {
         "targetSetting": "Allow your posts as well as your interactions, inputs, and results with Grok to be used for training and fine-tuning",
         "steps": [
@@ -535,6 +559,10 @@
       "region": "global",
       "signalAsked": "copilot-code",
       "notes": "Individual accounts have 'Allow GitHub to use my code snippets for product improvements' toggle. Business/Enterprise opted-out by default. Private repo contents never used for training (only public).",
+      "sources": [
+        { "url": "https://docs.github.com/en/copilot/managing-copilot/managing-copilot-as-an-individual-subscriber/managing-your-github-copilot-subscription/managing-copilot-policies-as-an-individual-subscriber", "label": "GitHub Copilot — individual data policies", "verifiedAt": "2026-04-15" },
+        { "url": "https://docs.github.com/en/copilot/copilot-business/about-github-copilot-business", "label": "GitHub Copilot Business — data handling", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": {
         "targetSetting": "Allow GitHub to use my code snippets for product improvements",
         "steps": [
@@ -559,6 +587,10 @@
       "region": "global",
       "signalAsked": "cursor",
       "notes": "'Privacy Mode' toggle disables sending data to training. Paid users can enable by default.",
+      "sources": [
+        { "url": "https://www.cursor.com/security", "label": "Cursor — Security & Privacy", "verifiedAt": "2026-04-15" },
+        { "url": "https://docs.cursor.com/account/privacy-mode", "label": "Cursor Docs — Privacy Mode", "verifiedAt": "2026-04-15" }
+      ],
       "walkthrough": {
         "targetSetting": "Privacy Mode",
         "steps": [
