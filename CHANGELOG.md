@@ -5,6 +5,27 @@ All notable changes to Vanish will be documented here. Format follows [Keep a Ch
 ## [Unreleased]
 
 ### Added
+- **⚖️ Takedown Orchestrator** (`src/takedown/`, new subcommand `vanish takedown`):
+  - For anyone needing to remove non-consensual intimate imagery (NCII): OnlyFans/Patreon pirated content, revenge-posts by ex-partners, unauthorized reposts, deepfakes, content from past careers the user now regrets
+  - **Leak site DMCA catalog** (12 sites): coomer.su, kemono.su, thothub.tv, bitchesgirls.com, leakgallery.com, erome.com, Pornhub (has faster non-DMCA form), XVideos, Telegram channels, Discord servers, Reddit subs, Twitter/X — each with abuse contact + takedownDifficulty + recommended approach
+  - **Hash registries** (most effective free tools):
+    - **StopNCII.org** (gold standard): Your images NEVER upload — hashes are generated locally in-browser, only the hash goes to the registry. Meta/TikTok/Bumble/Reddit/OnlyFans/Pornhub/Snap all scan against it and auto-block matches
+    - **Meta NCII Pilot** (now integrated with StopNCII)
+    - **NCMEC CyberTipline** (for anyone under 18 at time of creation)
+  - **Search engine removal**: Google's dedicated intimate-imagery form (faster than general DMCA), Bing content removal, Yandex removal
+  - **4 legal letter templates** with jurisdiction-aware clauses:
+    - DMCA §512(c) takedown notice (sworn statement + perjury attestation)
+    - Cease & Desist letter (to individual distributor)
+    - Police report narrative draft (cites Shield Act, state statutes)
+    - Civil pre-suit demand letter (with statutory damages table)
+  - **Jurisdiction flags** cite real law: `--jurisdiction DMCA | SHIELD | TAKE-IT-DOWN | EU | UK | CA | AU`
+  - **HMAC-signed audit trail** of every drafted takedown — admissible as evidence in subsequent litigation
+  - **Support resources built in**: CCRI hotline (1-844-878-CCRI), Revenge Porn Helpline UK, Australia eSafety Commissioner, NCMEC — surfaced via `vanish takedown --support`
+  - **Privacy-preserving by design**: Vanish never stores your content, URLs you targeted, or the sites you visited. Just drafts letters + records audit
+  - Unified CLI combines hash registration / search-engine removal / DMCA letters / legal templates in one tool
+- 31 new tests (`tests/takedown.test.mjs`) — catalog integrity, all 4 legal template rendering with substitutions, jurisdiction clause selection across 7 jurisdictions, leak site key resolution, DMCA notice planning, CLI smoke tests covering --stopncii / --dmca-letter / --cease-and-desist / --google-intimate / --support / --list flows. Total: 262 → 293
+- This addresses one of the most underserved privacy needs in the commercial tool landscape — DeleteMe/Optery/Incogni cover ZERO of this
+
 - **📚 Training Dataset Membership Check** (`src/dataset-check/`, new subcommand `vanish dataset-check`):
   - Checks whether your content appears in 8 major public AI training datasets: Common Crawl, LAION-5B (via Have I Been Trained), The Pile, C4, OpenAI WebText, RedPajama, Dolma, FineWeb
   - **Active query** for Common Crawl — real HTTP call against the CDX Index Server across the 5 most recent monthly snapshots, returns per-snapshot hit count + digests

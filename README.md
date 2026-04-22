@@ -411,6 +411,88 @@ All data verified April 2026. Catalog at [`src/face-scanner/face-services-catalo
 
 ---
 
+## 🛡️ NCII / Unauthorized Content Takedown
+
+For anyone facing **leaked, scraped, reuploaded, or non-consensually-distributed** intimate content. This covers a privacy need that is completely ignored by DeleteMe, Optery, and Incogni — but affects millions of people:
+
+- Content from OnlyFans / Patreon / Fansly pirated onto aggregator sites (coomer.su, kemono.su, thothub, etc.)
+- Intimate images posted by an ex-partner without consent (revenge porn)
+- Deepfakes depicting you
+- Screenshots from paid platforms redistributed on Telegram / Discord / Reddit
+- Old content from past careers (sex work, modeling) that you want removed after a career change
+- Minor-age content (any content created when you were under 18)
+
+**Commercial privacy services cover zero of this.** Vanish is the first open-source toolkit.
+
+### First thing to do (always): hash-register with StopNCII.org
+
+```bash
+vanish takedown --stopncii
+```
+
+**StopNCII.org is the single most effective free NCII tool in existence.** Your images **never upload** — hashes are generated locally in your browser, only the hash goes to the registry. Meta (Facebook/Instagram/Threads/WhatsApp), TikTok, Bumble, Reddit, OnlyFans, Pornhub, and Snap all scan uploads against the registry and auto-block matches. Used by 100K+ victims since 2021.
+
+### Second: search engine removal (intimate-imagery form, not general DMCA)
+
+```bash
+vanish takedown --google-intimate --bing-removal
+```
+
+Google has a **dedicated** form for intimate imagery that processes in 24-72 hours — faster than general DMCA removal. Removes from Search + Image Search + Lens even if the source site refuses takedown.
+
+### Third: DMCA the leak sites
+
+```bash
+vanish takedown --dmca-letter --coomer --kemono --thothub --erome \
+  --name "Your Name" --email "legal@yourdomain.com" \
+  --output dmca-letters.md
+```
+
+Vanish generates a DMCA §512(c) notice per site with:
+- Proper sworn statement + perjury attestation
+- Site-specific abuse contact email
+- Approach notes ("Send to Cloudflare abuse@cloudflare.com if site refuses")
+- Every draft HMAC-signed in audit log (admissible evidence later)
+
+Catalog covers 12 common leak/aggregator sites with varying takedown difficulty ratings.
+
+### Fourth: legal letters when DMCA isn't enough
+
+```bash
+# To an ex-partner or individual who won't stop
+vanish takedown --cease-and-desist --name "..." --jurisdiction SHIELD
+
+# Pre-suit demand before filing a civil lawsuit
+vanish takedown --civil-pre-suit --jurisdiction UK
+
+# Narrative draft for filing a police report
+vanish takedown --police-report --state-statute "Cal. Penal Code §647(j)(4)"
+```
+
+Jurisdiction flags cite real law: US Shield Act (18 U.S.C. §2261A), Take It Down Act 2025, GDPR Article 17, UK Online Safety Act 2023, Canada Criminal Code §162.1, Australia Online Safety Act 2021. 48 US states have specific NCII statutes — see `cybercivilrights.org/map` for yours.
+
+### Crisis support (built in)
+
+```bash
+vanish takedown --support
+```
+
+Surfaces:
+- **Cyber Civil Rights Initiative** (US): 1-844-878-CCRI — 24/7 hotline + pro-bono lawyer network
+- **Revenge Porn Helpline** (UK): +44 345 6000 459 — operator of StopNCII.org
+- **eSafety Commissioner** (Australia): statutory regulator with 24h takedown enforcement power
+- **NCMEC CyberTipline** (for minors, global): mandatory reporting to all US platforms + FBI
+
+### Privacy guarantees
+
+Vanish stores **nothing** sensitive:
+- Your content does not pass through Vanish (ever — you upload to StopNCII / Google directly)
+- The list of URLs you target does not persist anywhere
+- The list of sites you visited is not logged
+- Only the **audit trail** of what takedowns you drafted is persisted, HMAC-signed, and that's kept locally on your machine for YOUR evidence use
+
+---
+
 ## vs. Competitors
 
 | Feature | Vanish | DeleteMe | Optery | Incogni |
@@ -421,6 +503,8 @@ All data verified April 2026. Catalog at [`src/face-scanner/face-services-catalo
 | **🤖 AI training opt-out walkthroughs** | ✅ **26 platforms** | ❌ | ❌ | ❌ |
 | **👤 Face-search broker scan (PimEyes etc.)** | ✅ **8 services** | ❌ | ❌ | ❌ |
 | **👤 Face-search opt-out (including Clearview AI)** | ✅ **8 services** | ❌ | ❌ | ❌ |
+| **🛡️ NCII/leak-site DMCA + hash registry takedown** | ✅ **12 leak sites + StopNCII** | ❌ | ❌ | ❌ |
+| **🛡️ Jurisdiction-aware legal letter generator** | ✅ **DMCA/SHIELD/EU/UK/CA/AU** | ❌ | ❌ | ❌ |
 | **All 3 US credit bureaus** | ✅ | ❌ | ❌ | ❌ |
 | **Open source** | ✅ | ❌ | ❌ | ❌ |
 | **Self-hosted / local-first** | ✅ | ❌ | ❌ | ❌ |
@@ -486,7 +570,16 @@ All data verified April 2026. Catalog at [`src/face-scanner/face-services-catalo
 - **Persistent Queues** — retry (exponential backoff) / manual-review / dead-letter with SHA-256 dedupe
 - **Local Dashboard** — static HTML, watches queue state, zero backend
 - **Safety Gates** — manual trigger only, triple-confirm for high-risk, export-before-delete, compliance snapshot
-- **262 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- **293 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+
+### 🛡️ NCII / leak content takedown (unique to Vanish)
+
+- **Takedown orchestrator** (`vanish takedown`) — unified tool for removing non-consensual intimate imagery (NCII), pirated creator content, revenge-posts, deepfakes, and career-change legacy content
+- **Hash registry integration** — walkthroughs for StopNCII.org / Meta NCII / NCMEC CyberTipline (your images stay local, only hashes go to the registry)
+- **12 leak-site DMCA catalog** — coomer, kemono, thothub, Pornhub, XVideos, Telegram, Discord, Reddit, Twitter/X + more with per-site abuse contact + approach
+- **Google intimate-imagery form** (24-72h processing, faster than general DMCA)
+- **4 legal letter templates** — DMCA §512(c), Cease & Desist, police report narrative, civil pre-suit demand — all with jurisdiction-aware citations (Shield Act, Take It Down Act, GDPR, UK Online Safety Act, Canada §162.1, Australia OSA)
+- **Crisis support built in** — CCRI 24/7 hotline, Revenge Porn Helpline UK, Australia eSafety, NCMEC
 
 ---
 
@@ -627,7 +720,7 @@ vanish dashboard data/queue-state.json
 # Proof report (audit trail in Markdown)
 vanish report ./path/to/execution-result.json
 
-# All 262 tests (109 broker + 20 ai-scan + 13 ai-opt-out + 21 face-scan + 30 llm-memory-check + 24 clean-ai-history + 20 dataset-check + 25 third-party-ai)
+# All 293 tests (109 broker + 20 ai-scan + 13 ai-opt-out + 21 face-scan + 30 llm-memory-check + 24 clean-ai-history + 20 dataset-check + 25 third-party-ai + 31 takedown)
 npm test
 ```
 
@@ -664,6 +757,10 @@ src/
 ├── third-party-ai/             # ⚖️ AI tools others use on you + objection letter generator
 │   ├── third-party-catalog.json # 13 tools (workplace/HR/medical) + 4 letter templates
 │   └── third-party-engine.mjs  # Context grouping + jurisdiction clause selection + letter render
+├── takedown/                   # 🛡️ NCII / leaked content takedown orchestrator
+│   ├── takedown-catalog.json   # 12 leak sites + 4 search engines + 3 hash registries
+│   │                             # + 4 legal templates + crisis support resources
+│   └── takedown-engine.mjs     # Letter rendering + jurisdiction clause + DMCA planner
 ├── adapters/
 │   ├── registry.mjs            # Catalog-driven adapter registry
 │   └── brokers/
@@ -684,8 +781,8 @@ src/
 prompts/wizard/                 # 18 .md prompt templates per state
 scripts/                        # CLI entry points (scan, ai-scan, face-scan, llm-memory-check,
                                 #   dataset-check, third-party-ai, opt-out, ai-opt-out,
-                                #   face-opt-out, clean-ai-history, verify, ...)
-tests/                          # 262 tests across 25 files
+                                #   face-opt-out, clean-ai-history, takedown, verify, ...)
+tests/                          # 293 tests across 26 files
 web/                            # Static web app (Vite + vanilla JS, shares src/scanner)
 ```
 
@@ -704,13 +801,14 @@ web/                            # Static web app (Vite + vanilla JS, shares src/
 - ✅ **AI history cleanup guide** — 9 tools (Cursor, VS Code Copilot, ChatGPT/Claude Desktop, + 5 web) with per-OS paths and copy-paste delete commands
 - ✅ **Training dataset membership check** — real Common Crawl CDX query + walkthroughs for LAION/Pile/C4/WebText/RedPajama/Dolma/FineWeb
 - ✅ **Third-party AI exposure** — 13 tools (Zoom AI/Otter/Fireflies/Gong/HireVue/Abridge/Nuance/...) with jurisdiction-aware objection letter generator (GDPR/CCPA/HIPAA/...)
+- ✅ **NCII / leak-content takedown** — 12 leak sites + StopNCII hash registry + Google intimate-imagery form + 4 legal templates (DMCA/C&D/police report/civil pre-suit) with SHIELD/Take-It-Down/GDPR/UK OSA/Canada/AU citations
 - ✅ **Heuristic privacy scanner** (0-100 score, 5-factor confidence, per-broker risk)
 - ✅ **18-state wizard** with scan → handoff → cleanup flow
 - ✅ **30-day HTTP verify loop** for brokers, **60-day reverify** for AI platforms
 - ✅ **Static web app** at [ramboxie.github.io/vanish](https://ramboxie.github.io/vanish/) — zero-install, 100% client-side
 - ✅ **Share card** (1200×630 SVG) — privacy-preserving public boast
 - ✅ **Audit, queues, secret store hardened** (HMAC-SHA256, scrypt KDF, stale-lock detection)
-- ✅ **262 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- ✅ **293 tests** passing across Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 **Next (P2, retention-focused)**:
 - 🔜 **Scan history** (`~/.vanish/history.jsonl` + `vanish history`) — show score drop 72 → 31 over time

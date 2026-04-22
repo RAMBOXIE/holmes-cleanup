@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "lastVerified": "2026-04",
+  "description": "Catalog for removing non-consensual intimate imagery (NCII) and unauthorized redistribution of content you own. Covers: leak-site DMCA notices, search engine intimate-imagery removal, hash registries (StopNCII.org, Meta NCII, NCMEC), platform abuse forms, and jurisdiction-aware legal letter templates. Vanish never stores your content, URLs, or site-list. You run the takedowns yourself — we provide the catalog + templates + audit signing.",
+  "important": "This catalog addresses a sensitive privacy need. The terminology is deliberately neutral. You are the owner of content you created, the subject of imagery you did not consent to, or a victim of unauthorized redistribution — we do not judge why you need takedown support.",
+  "contexts": {
+    "leak-site": "Sites hosting unauthorized reuploads of content (pirated OF, scraped galleries, etc.)",
+    "search-engine": "Google / Bing / Yandex — removes the INDEX even if source remains",
+    "hash-registry": "StopNCII.org and similar services — platforms scan hashes + block automatically",
+    "platform-report": "Direct abuse forms on Reddit / Twitter / Discord / TikTok / Instagram / Telegram",
+    "legal": "Letter templates for civil / criminal / cease-and-desist action",
+    "support": "Crisis hotlines + non-profit legal aid + trauma-informed resources"
+  },
+  "jurisdictions": {
+    "US-federal-DMCA": "17 U.S.C. §512(c) — takedown notice requires sworn statement of copyright ownership and good-faith belief of infringement",
+    "US-federal-SHIELD": "Shield Act / 18 U.S.C. §2261A — civil + criminal remedy for non-consensual distribution of intimate imagery",
+    "US-federal-Take-It-Down": "Take It Down Act (2025, pending full implementation) — requires 48h removal of NCII including AI-generated",
+    "US-state-revenge-porn": "48 US states have specific NCII laws. Check Cyber Civil Rights Initiative map at cybercivilrights.org",
+    "EU-GDPR": "GDPR Article 17 — right to erasure, especially strong for unlawfully processed data",
+    "UK-Online-Safety-Act": "UK Online Safety Act 2023 — platforms must remove NCII (including deepfakes since 2024 amendment)",
+    "CA-Criminal-Code": "Canada Criminal Code §162.1 — non-consensual distribution of intimate images is a criminal offence",
+    "AU-Online-Safety-Act": "Australia Online Safety Act 2021 — eSafety Commissioner can order removal within 24h"
+  },
+  "leakSites": {
+    "coomer": {
+      "displayName": "coomer.su / coomer.party",
+      "category": "aggregator",
+      "abuseContact": "DMCA via coomer.su/dmca (varies by mirror)",
+      "notes": "Reposts paid subscription content from OnlyFans/Fansly/Patreon. Frequently changes domain due to takedowns. Multiple mirror sites.",
+      "takedownDifficulty": "hard",
+      "approach": "DMCA to host + Cloudflare + registrar. Cloudflare (abuse@cloudflare.com) often effective for identifying upstream host.",
+      "signalAsked": "coomer"
+    },
+    "kemono": {
+      "displayName": "kemono.su / kemono.party",
+      "category": "aggregator",
+      "abuseContact": "contact via kemono.su/contact",
+      "notes": "Sister site to coomer.party, focused on Patreon/Fanbox/similar creator platforms. Same DMCA approach.",
+      "takedownDifficulty": "hard",
+      "approach": "DMCA via their form + escalate to Cloudflare if they host.",
+      "signalAsked": "kemono"
+    },
+    "thothub": {
+      "displayName": "thothub.tv",
+      "category": "aggregator",
+      "abuseContact": "dmca@thothub.tv",
+      "notes": "Aggregator of scraped creator content. Responds to valid DMCA notices with proof of ownership.",
+      "takedownDifficulty": "medium",
+      "approach": "DMCA email with: specific URLs + proof of content ownership (OF payout receipt, bank statement, or platform creator dashboard screenshot).",
+      "signalAsked": "thothub"
+    },
+    "bitchesgirls": {
+      "displayName": "bitchesgirls.com",
+      "category": "aggregator",
+      "abuseContact": "admin@bitchesgirls.com",
+      "notes": "Long-running leak site. Slow DMCA response — escalate to hosting provider and search engines simultaneously.",
+      "takedownDifficulty": "hard",
+      "approach": "Parallel DMCA to site + WebHostingAbuse database lookup + Google de-indexing request.",
+      "signalAsked": "bitchesgirls"
+    },
+    "leakgallery": {
+      "displayName": "leakgallery.com",
+      "category": "aggregator",
+      "abuseContact": "abuse@leakgallery.com",
+      "notes": "Another aggregator. DMCA compliance varies.",
+      "takedownDifficulty": "hard",
+      "approach": "DMCA + Cloudflare abuse report + de-indexing.",
+      "signalAsked": "leakgallery"
+    },
+    "erome": {
+      "displayName": "erome.com",
+      "category": "user-upload",
+      "abuseContact": "abuse@erome.com",
+      "notes": "User-upload adult platform. Responds to DMCA but reuploads are common — hash-based blocking via StopNCII works better long-term.",
+      "takedownDifficulty": "medium",
+      "approach": "DMCA for current URLs + StopNCII hash registration for automatic blocking of future uploads.",
+      "signalAsked": "erome"
+    },
+    "pornhub": {
+      "displayName": "Pornhub",
+      "category": "mainstream-platform",
+      "abuseContact": "https://www.pornhub.com/content-removal or dmca@pornhub.com",
+      "notes": "After 2020 reforms, Pornhub requires verified uploaders + has StopNCII hash blocking + responsive DMCA. Also accepts 'content removal requests' without DMCA formality if you're the subject.",
+      "takedownDifficulty": "easy-to-medium",
+      "approach": "Content Removal Request form (faster than DMCA for subjects of the content).",
+      "signalAsked": "pornhub"
+    },
+    "xvideos": {
+      "displayName": "XVideos",
+      "category": "mainstream-platform",
+      "abuseContact": "https://info.xvideos.com/contact",
+      "notes": "Responds to DMCA. Has NCII-specific removal form.",
+      "takedownDifficulty": "medium",
+      "approach": "Use their NCII form (not general DMCA) for intimate content you're the subject of.",
+      "signalAsked": "xvideos"
+    },
+    "telegram-channels": {
+      "displayName": "Telegram (leak channels)",
+      "category": "messaging-platform",
+      "abuseContact": "abuse@telegram.org",
+      "notes": "Telegram hosts thousands of NCII channels. Enforcement historically weak but improved post-2023 EU pressure. Report via in-app 'Report Spam' → 'Report as CSAM/NCII' (for 'Child Sexual Abuse Material or Non-Consensual Intimate Imagery').",
+      "takedownDifficulty": "hard",
+      "approach": "Report individual channels via in-app + email abuse@telegram.org. Escalate to eSafety Commissioner (AU) or Ofcom (UK) if hosted there.",
+      "signalAsked": "telegram"
+    },
+    "discord-servers": {
+      "displayName": "Discord (leak servers)",
+      "category": "messaging-platform",
+      "abuseContact": "https://dis.gd/request",
+      "notes": "Discord's Trust & Safety team responds to NCII reports. Use the specific 'Non-consensual intimate imagery' category in the request form.",
+      "takedownDifficulty": "medium",
+      "approach": "Report server to dis.gd/request with 'NCII' category. Provide the server invite link + messages URL if possible.",
+      "signalAsked": "discord-leak"
+    },
+    "reddit-subreddits": {
+      "displayName": "Reddit (NCII subs)",
+      "category": "forum",
+      "abuseContact": "https://www.reddit.com/report",
+      "notes": "Reddit has NCII-specific reporting. Subreddits hosting leaked content can be reported + banned.",
+      "takedownDifficulty": "medium",
+      "approach": "Report individual posts + the subreddit itself. Reddit's legal at legal-notices@reddit.com for DMCA.",
+      "signalAsked": "reddit-leak"
+    },
+    "twitter-x": {
+      "displayName": "Twitter / X (NCII posts)",
+      "category": "social-media",
+      "abuseContact": "https://help.twitter.com/forms/private_information",
+      "notes": "X has a dedicated NCII report form. Faster than general DMCA for subjects of content.",
+      "takedownDifficulty": "medium",
+      "approach": "'Report — Private information or media' form. Attach government ID if requested.",
+      "signalAsked": "twitter-leak"
+    }
+  },
+  "searchEngines": {
+    "google-intimate": {
+      "displayName": "Google — Remove explicit or intimate personal imagery",
+      "url": "https://support.google.com/websearch/answer/6302812",
+      "approach": "dedicated-form",
+      "notes": "Google's DEDICATED form for intimate-imagery removal — faster than general removal. Works even if source site refuses takedown. Request removes image from Google Search + Image Search + Lens.",
+      "jurisdictionNotes": "Works globally. Google complies within 24-72 hours for verified NCII.",
+      "walkthrough": [
+        "Open support.google.com/websearch/answer/6302812",
+        "Scroll to 'Ready to request removal?' → click the link",
+        "Sign in to your Google account",
+        "Select 'Request removal of explicit or intimate personal imagery'",
+        "Enter the Google Search URLs showing the content (one per request)",
+        "Upload 1-2 photos of yourself for identity verification",
+        "Submit. Google emails you a case reference within 1 hour."
+      ]
+    },
+    "google-results-about-you": {
+      "displayName": "Google — Results about you (general personal info)",
+      "url": "https://myactivity.google.com/results-about-you",
+      "approach": "ongoing-monitoring",
+      "notes": "Complementary to the intimate-imagery form. Monitors for your name/email/phone appearing in ANY results — notifies you of new matches.",
+      "walkthrough": [
+        "Open myactivity.google.com/results-about-you",
+        "Set up with your full name + any aliases, address, phone, email",
+        "Google scans its index + alerts you when matches appear",
+        "You review + approve removal requests one-click"
+      ]
+    },
+    "bing-removal": {
+      "displayName": "Bing / Microsoft — Content removal",
+      "url": "https://www.bing.com/webmaster/tools/content-removal",
+      "approach": "form",
+      "notes": "Microsoft covers Bing + integrated searches. Similar to Google's form.",
+      "walkthrough": [
+        "Open bing.com/webmaster/tools/content-removal",
+        "Select 'Personal information' → 'Intimate/explicit imagery'",
+        "Provide URL(s) + identity verification",
+        "Microsoft processes within 72 hours"
+      ]
+    },
+    "yandex-removal": {
+      "displayName": "Yandex — Content removal",
+      "url": "https://yandex.com/support/search/troubleshooting/delete-snippet.html",
+      "approach": "form",
+      "notes": "Yandex is slower and jurisdiction is Russian (weak enforcement for non-Russian subjects). But it does have a form.",
+      "walkthrough": [
+        "Open yandex.com/support/search/troubleshooting/delete-snippet.html",
+        "Submit URLs with identity verification",
+        "Specify 'intimate imagery' as category",
+        "Response 2-4 weeks"
+      ]
+    }
+  },
+  "hashRegistries": {
+    "stopncii": {
+      "displayName": "StopNCII.org",
+      "url": "https://stopncii.org/",
+      "operator": "Revenge Porn Helpline (UK) + Meta + TikTok + Bumble + Reddit",
+      "approach": "local-hash-generation",
+      "notes": "The GOLD STANDARD free NCII tool. You generate hashes of your images LOCALLY (the images never leave your device), upload only the hashes. Participating platforms (Meta, TikTok, Bumble, Reddit, OnlyFans, Pornhub, Snap) scan uploads against the hash registry and auto-block matches. Used by 100K+ victims since 2021.",
+      "privacyNote": "Your actual images never upload — only cryptographic hashes. This is the safest + most effective tool.",
+      "jurisdiction": "Global",
+      "walkthrough": [
+        "Open stopncii.org on a trusted device",
+        "Click 'Get Started' → review privacy info",
+        "Upload intimate images/videos (processed locally in your browser — they do not leave your device)",
+        "StopNCII generates a hash (like a fingerprint) for each",
+        "Only the hashes are uploaded to the registry",
+        "Participating platforms auto-block matching uploads going forward",
+        "You receive a case reference and can request deletion of the hash anytime"
+      ],
+      "caveat": "Only works on PARTICIPATING platforms (Meta/TikTok/Bumble/Reddit/OnlyFans/Pornhub/Snap). Does not cover aggregator sites like coomer/thothub (which need individual DMCA)."
+    },
+    "meta-ncii": {
+      "displayName": "Meta NCII Pilot / Not Without My Consent",
+      "url": "https://stopncii.org/",
+      "operator": "Meta (integrated with StopNCII.org)",
+      "notes": "Meta's NCII system is now folded into StopNCII.org as of 2022. Submitting via StopNCII automatically covers Facebook + Instagram + Threads + WhatsApp.",
+      "approach": "via-stopncii"
+    },
+    "ncmec-cybertipline": {
+      "displayName": "NCMEC CyberTipline (for minors)",
+      "url": "https://report.cybertip.org/",
+      "operator": "National Center for Missing & Exploited Children (US, partners internationally)",
+      "approach": "report-for-minors",
+      "notes": "If the content involves anyone under 18 at the time of creation, use CyberTipline — it has mandatory reporting obligations for all US tech platforms and direct law enforcement escalation.",
+      "jurisdiction": "Global (US-based with international partners via INHOPE)",
+      "walkthrough": [
+        "Open report.cybertip.org",
+        "File a CyberTipline report — free and anonymous option available",
+        "Include URLs of the material + approximate age/date info",
+        "NCMEC forwards to ALL affected platforms + FBI + relevant law enforcement globally",
+        "You receive a case number for follow-up"
+      ]
+    }
+  },
+  "legalTemplates": {
+    "dmca-takedown": {
+      "displayName": "DMCA §512(c) takedown notice",
+      "purpose": "Request removal of copyrighted content from hosts that respond to DMCA",
+      "jurisdictionScope": "US law — widely honored globally by hosts/CDNs",
+      "template": "To: {{recipientEmail}}\n\nSubject: DMCA Takedown Notice — 17 U.S.C. §512(c)\n\nTo whom it may concern,\n\nI am the copyright owner of certain content that is being infringed on your platform without my authorization. I am submitting this notice pursuant to the Digital Millennium Copyright Act, 17 U.S.C. §512(c).\n\n1. IDENTIFICATION OF COPYRIGHTED WORK\nI own the copyright to intimate imagery of myself, which I created. Proof of ownership available upon request (content creator dashboard, payout records, etc.).\n\n2. IDENTIFICATION OF INFRINGING MATERIAL\nThe following URLs on your platform host unauthorized copies of my copyrighted work:\n\n{{infringingUrls}}\n\n3. CONTACT INFORMATION\nName: {{yourName}}\nEmail: {{yourEmail}}\n{{additionalContact}}\n\n4. GOOD-FAITH STATEMENT\nI have a good-faith belief that the use of the material described above is not authorized by the copyright owner, its agent, or the law.\n\n5. ACCURACY STATEMENT\nI swear, under penalty of perjury, that the information in this notice is accurate and that I am the copyright owner or am authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.\n\nPlease remove the infringing material within a commercially reasonable time as required by §512(c)(1)(C). Failure to comply may result in a formal DMCA subpoena (§512(h)) and/or copyright infringement litigation (§501).\n\nSigned electronically,\n{{yourName}}\n{{today}}"
+    },
+    "cease-and-desist": {
+      "displayName": "Cease & Desist letter",
+      "purpose": "Notify an individual (ex-partner, redistributor) to stop",
+      "jurisdictionScope": "Generic — adaptable to any jurisdiction",
+      "template": "To: {{recipientName}}\n\nSubject: Cease and Desist — Unauthorized Distribution of Intimate Imagery\n\n{{recipientName}},\n\nThis letter is a formal demand that you immediately CEASE AND DESIST all distribution, posting, sharing, or reposting of intimate imagery depicting me.\n\nYour conduct constitutes:\n1. Copyright infringement under 17 U.S.C. §501 (I own the copyright to imagery of myself that I created)\n2. {{jurisdictionClause}}\n3. Potential civil liability under state revenge-porn / non-consensual-distribution statutes\n\nYou are required to:\n- Delete all copies in your possession\n- Remove all copies you have posted, shared, or forwarded\n- Provide written confirmation of deletion within 72 hours of receiving this notice\n- Cease any and all further contact regarding me\n\nIf you fail to comply, I reserve the right to pursue all available civil and criminal remedies, including but not limited to injunctive relief, monetary damages, and referral to law enforcement.\n\nThis letter is being sent {{deliveryMethod}} for evidence purposes.\n\n{{yourName}}\n{{today}}"
+    },
+    "police-report": {
+      "displayName": "Police report narrative draft",
+      "purpose": "Draft language for filing a police report (NCII + revenge-porn laws)",
+      "jurisdictionScope": "US federal + state — adaptable",
+      "template": "INCIDENT REPORT DRAFT — NON-CONSENSUAL DISTRIBUTION OF INTIMATE IMAGERY\n\nReporting person: {{yourName}}\nDate of report: {{today}}\n\nINCIDENT SUMMARY\nOn or about {{incidentDate}}, intimate imagery depicting me was distributed without my consent via the following channels:\n\n{{channelsList}}\n\nThe distribution was not authorized by me at any time. I am the subject and, in creating the imagery, the copyright owner of the material.\n\nSUSPECT (IF KNOWN)\n{{suspectInfo}}\n\nAPPLICABLE LAWS\nThis conduct may constitute a violation of:\n- Federal: 18 U.S.C. §2261A (stalking) and/or Shield Act provisions\n- State: {{stateStatute}}\n- Take It Down Act (if the content is AI-generated/deepfake)\n\nEVIDENCE PRESERVED\nI have preserved screenshots, URLs, timestamps, and audit logs of takedown requests I have filed. These are HMAC-signed via Vanish privacy toolkit and available upon request to investigators.\n\nREQUESTED ACTION\nI request that law enforcement:\n1. Open an investigation\n2. Issue preservation letters to platforms hosting the content\n3. Subpoena user data for attribution if the suspect is unknown\n4. Refer the matter to the {{federalAgency}} if criminal thresholds are met\n\nContact information for follow-up:\n{{yourContactInfo}}"
+    },
+    "civil-pre-suit": {
+      "displayName": "Civil pre-suit demand letter",
+      "purpose": "Put a platform or individual on formal notice before filing a lawsuit",
+      "jurisdictionScope": "US — requires modification for other jurisdictions",
+      "template": "To: {{recipientName}}\n\nSubject: PRE-SUIT DEMAND — Civil Claims for Non-Consensual Distribution of Intimate Imagery\n\n{{recipientName}},\n\nThis letter serves as formal pre-suit notice of my intent to file civil claims against you for the non-consensual distribution of intimate imagery of me.\n\nCLAIMS\n1. Public disclosure of private facts (common law tort)\n2. Intentional infliction of emotional distress\n3. Copyright infringement (17 U.S.C. §501)\n4. Violation of {{stateStatute}} (civil NCII remedy, typically $10,000-$150,000 statutory damages)\n5. {{jurisdictionClause}}\n\nDAMAGES SOUGHT\n- Compensatory damages for emotional distress, lost income, and reputational harm\n- Statutory damages per jurisdiction\n- Punitive damages\n- Attorneys' fees and costs\n- Injunctive relief (permanent prohibition on further distribution)\n\nEVIDENCE\nI have preserved:\n- Screenshots with timestamps of the unauthorized distribution\n- HMAC-signed audit logs of takedown notices I have filed\n- Copyright registration (if applicable)\n- Witness statements\n\nSETTLEMENT OPPORTUNITY\nI am willing to discuss settlement prior to filing suit. To open settlement discussions, you must:\n1. Confirm complete removal of all copies within 7 days\n2. Provide a sworn affidavit of non-redistribution\n3. Propose a settlement offer addressing the claims above\n\nIf I do not receive a substantive response within 14 days of your receipt of this letter, I will proceed with filing.\n\nRespectfully,\n{{yourName}}\n{{today}}"
+    }
+  },
+  "support": {
+    "ccri-hotline": {
+      "displayName": "Cyber Civil Rights Initiative (US)",
+      "url": "https://cybercivilrights.org/ccri-crisis-helpline/",
+      "type": "crisis-hotline",
+      "contact": "1-844-878-CCRI (2274)",
+      "description": "24/7 crisis hotline for NCII victims. Free legal and emotional support. Can connect you to pro-bono lawyers.",
+      "countries": ["US"]
+    },
+    "revenge-porn-helpline-uk": {
+      "displayName": "Revenge Porn Helpline (UK)",
+      "url": "https://revengepornhelpline.org.uk/",
+      "type": "crisis-hotline",
+      "contact": "+44 345 6000 459",
+      "description": "UK's national helpline. Operator of StopNCII.org. Free, confidential, specialized support.",
+      "countries": ["UK", "EU"]
+    },
+    "esafety-commissioner-au": {
+      "displayName": "eSafety Commissioner (Australia)",
+      "url": "https://www.esafety.gov.au/report/image-based-abuse",
+      "type": "regulator",
+      "description": "Statutory regulator with takedown enforcement power. Can order platforms to remove within 24 hours.",
+      "countries": ["AU"]
+    },
+    "thorn-safer": {
+      "displayName": "Thorn / Safer (for minors)",
+      "url": "https://www.thorn.org/",
+      "type": "specialized-ngo",
+      "description": "Focused on preventing child sexual abuse material. Works with NCMEC + major platforms.",
+      "countries": ["Global"]
+    }
+  }
+}

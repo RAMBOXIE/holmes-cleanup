@@ -33,6 +33,7 @@ const SUBCOMMANDS = {
   'ai-opt-out':        'ai-opt-out.mjs',
   'face-opt-out':      'face-opt-out.mjs',
   'clean-ai-history':  'clean-ai-history.mjs',
+  takedown:            'takedown.mjs',
   verify:              'verify.mjs',
   cleanup:             'vanish.mjs',
   wizard:              'wizard-demo.mjs',
@@ -77,6 +78,10 @@ Commands:
 
   third-party-ai  Generate objection letters for AI tools OTHERS use on you
               Example: vanish third-party-ai --zoom --otter --jurisdiction EU
+
+  takedown    Remove leaked/NCII content — DMCA + StopNCII + Google intimate-imagery form
+              Example: vanish takedown --stopncii --google-intimate
+                       vanish takedown --dmca-letter --all-leak-sites --name "X"
 
   opt-out     Browser-assisted opt-out for 58 supported brokers
               Example: vanish opt-out --broker spokeo --email you@example.com
