@@ -6,7 +6,8 @@
     "workplace": "Tools your employer/colleagues may deploy on meetings, chat, email",
     "hr-recruiting": "Tools HR / recruiters use to analyze applications, interviews, performance",
     "medical": "Tools healthcare providers use on patient encounters",
-    "customer-service": "Tools companies use on YOUR support calls"
+    "customer-service": "Tools companies use on YOUR support calls",
+    "workforce-monitoring": "Employer-installed desktop agents that capture mouse/keyboard/screen telemetry, often feeding AI-agent training pipelines. Always-on (not meeting-specific)."
   },
   "jurisdictions": {
     "EU": "GDPR Article 22 + Article 21 (object to automated decision-making + profiling)",
@@ -14,7 +15,11 @@
     "US-state-IL": "Illinois AI Video Interview Act (ADVID) — must consent to AI in interviews",
     "US-state-CA": "CCPA + AB-331 (automated decision tools in employment)",
     "US-state-NY": "NYC Local Law 144 — bias audit requirement for AEDTs",
-    "HIPAA": "US Federal — covered AI must be a Business Associate + HIPAA-compliant"
+    "HIPAA": "US Federal — covered AI must be a Business Associate + HIPAA-compliant",
+    "US-state-NY-EMA": "NY Electronic Monitoring Act (2022) — requires written notice + acknowledgment before electronic monitoring begins",
+    "US-state-IL-BIPA": "Illinois Biometric Information Privacy Act — keystroke / mouse-movement patterns may qualify as 'biometric identifier' requiring informed written consent",
+    "DE-works-council": "Germany Betriebsverfassungsgesetz §87(1)(6) — monitoring tools require works council (Betriebsrat) co-determination",
+    "EU-GDPR-art88": "GDPR Article 88 — employment-context data processing must be limited by collective agreement and proportionality"
   },
   "tools": {
     "zoom-ai-companion": {
@@ -183,6 +188,271 @@
       "optOut": "Request human-only note-taking; HIPAA protection",
       "signalAsked": "suki",
       "objectionTemplate": "medical-ai"
+    },
+
+    "activtrak": {
+      "displayName": "ActivTrak",
+      "context": "workforce-monitoring",
+      "vendor": "ActivTrak Holdings, Inc.",
+      "dataCollected": ["keystrokes", "mouse-movement", "active-window-titles", "application-usage", "screenshots (configurable)", "productivity-score"],
+      "whoDeploys": "Employer IT — installed silently as a Windows/Mac service. No user-visible icon by default",
+      "notification": "Depends on employer policy. NY + DE + CT state law requires written notice; enforcement inconsistent",
+      "defaultBehavior": "Telemetry streamed to ActivTrak Cloud. In 2024+ tiers, data can feed 'Coach' AI recommendations + workflow-pattern models",
+      "optOut": "None for individual employee — employer controls deployment. Accommodation requires manager/HR/works-council escalation",
+      "signalAsked": "activtrak",
+      "installPaths": {
+        "win32": [
+          "%PROGRAMFILES%\\ActivTrak",
+          "%PROGRAMFILES(X86)%\\ActivTrak",
+          "%PROGRAMDATA%\\ActivTrak"
+        ],
+        "darwin": [
+          "/Applications/ActivTrak.app",
+          "/Library/LaunchDaemons/com.activtrak.agent.plist",
+          "/Library/Application Support/ActivTrak"
+        ],
+        "linux": []
+      },
+      "notes": "ActivTrak markets itself as 'workforce analytics' rather than surveillance. Paid tiers (since 2024) add 'Coach AI' — workflow-modeling features that qualify as AI-training use under GDPR Art 22 + IL BIPA (keystroke biometrics).",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://www.activtrak.com/privacy-policy/", "label": "ActivTrak Privacy Policy", "verifiedAt": "2026-04-15" },
+        { "url": "https://support.activtrak.com/hc/en-us/articles/360041046194", "label": "ActivTrak — What we collect", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "teramind": {
+      "displayName": "Teramind",
+      "context": "workforce-monitoring",
+      "vendor": "Teramind Inc.",
+      "dataCollected": ["keystrokes", "mouse", "screen-recording", "file-transfers", "email", "chat", "clipboard", "printer-activity", "USB-insertion"],
+      "whoDeploys": "Employer IT — 'stealth mode' installs hide the agent from process list + tray. Full endpoint visibility",
+      "notification": "Frequently deployed without worker notice despite most state laws requiring disclosure",
+      "defaultBehavior": "Recorded video sessions + behavioral-analytics stream. 'Teramind AI' (2024+) does anomaly detection + behavior modeling",
+      "optOut": "None for individuals. Opt-out requires employer-level configuration change or works-council intervention",
+      "signalAsked": "teramind",
+      "installPaths": {
+        "win32": [
+          "%PROGRAMFILES%\\Teramind",
+          "%PROGRAMFILES(X86)%\\Teramind",
+          "%WINDIR%\\System32\\tmcontroller.exe"
+        ],
+        "darwin": [
+          "/Applications/Teramind.app",
+          "/Library/LaunchDaemons/com.teramind.agent.plist"
+        ],
+        "linux": [
+          "/opt/teramind",
+          "/etc/teramind"
+        ]
+      },
+      "notes": "Teramind is the most-invasive tool in wide commercial use: full keylog + screen-record + file-transfer logging are standard features. Its 'anomaly detection' trains on your behavioral baseline — qualifies as AI-training use under GDPR Art 22 and likely BIPA in Illinois.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://www.teramind.co/privacy-policy", "label": "Teramind Privacy Policy", "verifiedAt": "2026-04-15" },
+        { "url": "https://www.teramind.co/blog/employee-monitoring-laws-by-state/", "label": "Teramind — US state monitoring laws overview", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "hubstaff": {
+      "displayName": "Hubstaff",
+      "context": "workforce-monitoring",
+      "vendor": "Hubstaff Corp",
+      "dataCollected": ["mouse-movement", "keystroke-frequency", "screenshots (interval-based)", "active-app", "URL", "location (mobile)"],
+      "whoDeploys": "Employer or contracting client (common in agency/freelance workflows)",
+      "notification": "User sees a tray icon + timer — more transparent than Teramind/Veriato, but AI-training use of captured data isn't usually disclosed",
+      "defaultBehavior": "Streams screenshots + activity to Hubstaff Cloud. 2024+ 'Activity AI' classifies productivity patterns",
+      "optOut": "Can pause the timer (but employer sees gap). Cannot fully opt-out while employed on that project",
+      "signalAsked": "hubstaff",
+      "installPaths": {
+        "win32": [
+          "%LOCALAPPDATA%\\Programs\\Hubstaff",
+          "%APPDATA%\\Hubstaff"
+        ],
+        "darwin": [
+          "/Applications/Hubstaff.app",
+          "~/Library/Application Support/Hubstaff"
+        ],
+        "linux": [
+          "~/.config/Hubstaff",
+          "/opt/Hubstaff"
+        ]
+      },
+      "notes": "Hubstaff is visible + relatively transparent compared to stealth tools — but the captured screenshots and activity data increasingly feed ML classifiers. Screenshot-interval data is arguably 'profiling' under GDPR Art 22.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://hubstaff.com/privacy", "label": "Hubstaff Privacy Policy", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "time-doctor": {
+      "displayName": "Time Doctor",
+      "context": "workforce-monitoring",
+      "vendor": "Time Doctor LLC",
+      "dataCollected": ["mouse", "keystroke-frequency", "screenshots", "active-app", "URL", "distraction-alerts"],
+      "whoDeploys": "Employer / agency / contracting platform",
+      "notification": "Tray icon visible. Similar to Hubstaff in transparency level",
+      "defaultBehavior": "Screenshots + activity logs uploaded. 'Silent' mode (hides tray icon) is a paid feature some employers enable",
+      "optOut": "Pause timer only. Silent-mode deployments have no user-visible way to pause",
+      "signalAsked": "time-doctor",
+      "installPaths": {
+        "win32": [
+          "%LOCALAPPDATA%\\Programs\\TimeDoctor 2",
+          "%APPDATA%\\TimeDoctor2"
+        ],
+        "darwin": [
+          "/Applications/TimeDoctor.app",
+          "~/Library/Application Support/TimeDoctor2"
+        ],
+        "linux": [
+          "~/.config/TimeDoctor2"
+        ]
+      },
+      "notes": "Silent-mode deployments sidestep the transparency that normally differentiates Time Doctor from Teramind. If your employer uses silent mode without disclosure, that's typically unlawful in NY + DE + CT + EU.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://www.timedoctor.com/privacy-policy.html", "label": "Time Doctor Privacy Policy", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "insightful": {
+      "displayName": "Insightful (formerly Workpuls)",
+      "context": "workforce-monitoring",
+      "vendor": "Insightful, Inc.",
+      "dataCollected": ["mouse", "keystroke-rate", "active-window-title", "application-category", "focus-time", "screenshots (paid tier)"],
+      "whoDeploys": "Employer IT",
+      "notification": "Variable — 'stealth install' is a documented feature",
+      "defaultBehavior": "Upload to Insightful Cloud. 'Productivity AI' scoring is standard",
+      "optOut": "None for individuals",
+      "signalAsked": "insightful",
+      "installPaths": {
+        "win32": [
+          "%APPDATA%\\Insightful",
+          "%PROGRAMFILES%\\Insightful",
+          "%PROGRAMFILES(X86)%\\Workpuls"
+        ],
+        "darwin": [
+          "/Applications/Insightful.app",
+          "~/Library/Application Support/Insightful"
+        ],
+        "linux": [
+          "~/.config/Insightful"
+        ]
+      },
+      "notes": "Insightful rebranded from Workpuls in 2022. Older installs may still use Workpuls paths. Stealth-install feature makes this one of the hardest to detect on endpoint without forensic tooling.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://www.insightful.io/privacy-policy", "label": "Insightful Privacy Policy", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "veriato": {
+      "displayName": "Veriato (formerly SpectorSoft)",
+      "context": "workforce-monitoring",
+      "vendor": "Veriato, Inc.",
+      "dataCollected": ["keystrokes", "screen-record", "email", "chat-im", "file-transfer", "web-browsing", "printer"],
+      "whoDeploys": "Employer IT / 'insider risk' teams",
+      "notification": "Almost always stealth — Veriato markets itself for insider-threat investigations where notification would defeat the purpose",
+      "defaultBehavior": "Continuous capture. 'Veriato AI' (since 2023) runs behavioral anomaly models on captured data",
+      "optOut": "None — by design, the agent is not user-discoverable in default config",
+      "signalAsked": "veriato",
+      "installPaths": {
+        "win32": [
+          "%PROGRAMFILES%\\Veriato",
+          "%PROGRAMFILES(X86)%\\Veriato",
+          "%WINDIR%\\System32\\vrtsvc.exe",
+          "%WINDIR%\\System32\\spectorv.exe"
+        ],
+        "darwin": [
+          "/Library/LaunchDaemons/com.veriato.agent.plist",
+          "/Library/Application Support/Veriato"
+        ],
+        "linux": []
+      },
+      "notes": "Historically marketed for 'insider threat'. BIPA exposure is significant in Illinois — multi-million-dollar class actions have been filed against employers using keystroke-biometric tools without explicit written consent.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://www.veriato.com/privacy", "label": "Veriato Privacy Statement", "verifiedAt": "2026-04-15" },
+        { "url": "https://www.jdsupra.com/legalnews/illinois-biometric-information-privacy-3451234/", "label": "JDSupra — BIPA class actions against keystroke-monitoring employers", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "interguard": {
+      "displayName": "InterGuard (Awareness Technologies)",
+      "context": "workforce-monitoring",
+      "vendor": "Awareness Technologies, Inc.",
+      "dataCollected": ["keystrokes", "screen-record", "email", "chat", "file-ops", "web-activity", "search-queries"],
+      "whoDeploys": "Employer IT",
+      "notification": "Typically stealth",
+      "defaultBehavior": "Full endpoint capture streamed to dashboard. 2024+ ML-based 'data-loss prevention' and behavioral scoring",
+      "optOut": "None — user generally cannot see or disable",
+      "signalAsked": "interguard",
+      "installPaths": {
+        "win32": [
+          "%PROGRAMFILES%\\InterGuard",
+          "%PROGRAMFILES(X86)%\\InterGuard",
+          "%PROGRAMFILES%\\Awareness Technologies",
+          "%WINDIR%\\System32\\igsvc.exe"
+        ],
+        "darwin": [
+          "/Library/Application Support/InterGuard"
+        ],
+        "linux": []
+      },
+      "notes": "Awareness Technologies markets 'SONAR' (their DLP + analytics product) and InterGuard as a unified endpoint offering. Installation often named with randomized prefixes to resist user detection — the paths above catch the default install; if your employer uses custom-branded deployment, paths may differ.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://www.interguardsoftware.com/privacy-policy/", "label": "InterGuard Privacy Policy", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "microsoft-viva-insights": {
+      "displayName": "Microsoft Viva Insights (M365 Productivity Analytics)",
+      "context": "workforce-monitoring",
+      "vendor": "Microsoft",
+      "dataCollected": ["email-metadata", "chat-metadata", "calendar-patterns", "focus-time-inference", "application-usage-via-M365-telemetry"],
+      "whoDeploys": "M365 tenant admin (not installed locally — it's cloud-side analytics on your Office telemetry)",
+      "notification": "Delivered as Outlook add-in + weekly digest email. Most employees don't realize the aggregate analytics feeds manager dashboards",
+      "defaultBehavior": "Manager/team-level dashboards include individual-level metrics in some tiers. Copilot for 365 can be configured to train on org tenant data",
+      "optOut": "Individual setting: Outlook → Viva → 'Privacy' → Disable personal insights. Does NOT disable aggregate-into-manager-dashboard collection",
+      "signalAsked": "viva-insights",
+      "installPaths": {
+        "win32": [
+          "%APPDATA%\\Microsoft\\AddIns\\Microsoft.Insights.Addin"
+        ],
+        "darwin": [
+          "~/Library/Containers/com.microsoft.Outlook/Data/Library/Application Support/Microsoft/Outlook/Insights"
+        ],
+        "linux": []
+      },
+      "notes": "Cloud-side primarily — local footprint is just the Outlook add-in. The actual concern is at the tenant level: M365 Copilot tenant admin settings control whether your email/chat becomes training data for your org's private Copilot model. 'Disable personal insights' does NOT disable tenant-level collection.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://learn.microsoft.com/en-us/viva/insights/personal/teams/privacy/overview", "label": "Microsoft Learn — Viva Insights privacy", "verifiedAt": "2026-04-15" },
+        { "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy", "label": "Microsoft — 365 Copilot privacy / tenant data handling", "verifiedAt": "2026-04-15" }
+      ]
+    },
+
+    "employer-internal": {
+      "displayName": "Employer-internal monitoring (unknown vendor)",
+      "context": "workforce-monitoring",
+      "vendor": "(your employer — closed-source internal build)",
+      "dataCollected": ["unknown — the 'Meta memo' case: custom tooling your employer refuses to disclose"],
+      "whoDeploys": "Employer IT + internal AI/ML teams training workflow-modeling agents",
+      "notification": "Typically none — internal tools don't have the disclosure obligations of third-party SaaS",
+      "defaultBehavior": "Captured data feeds an internal LLM-training pipeline (the Meta + Salesforce 'agentic-AI from workforce telemetry' reports)",
+      "optOut": "No public path. Must be pursued via data-subject-access-request (GDPR Art 15) or state-law equivalent",
+      "signalAsked": "employer-internal",
+      "installPaths": {
+        "win32": [],
+        "darwin": [],
+        "linux": []
+      },
+      "notes": "This catalog entry covers the case where the Meta / Salesforce / similar reporting applies: your employer has built or commissioned an internal tool that's neither a commercial SKU nor disclosed to you. Use this flag to generate a disclosure-demand letter citing your DSAR rights — the employer must tell you what's being collected or explain why they won't.",
+      "objectionTemplate": "workforce-monitoring-objection",
+      "sources": [
+        { "url": "https://gdpr-info.eu/art-15-gdpr/", "label": "GDPR Article 15 — Right of access by the data subject", "verifiedAt": "2026-04-15" }
+      ]
     }
   },
   "objectionTemplates": {
@@ -201,6 +471,10 @@
     "medical-ai": {
       "displayName": "Medical AI recording objection",
       "template": "To: [provider / clinic]\n\nSubject: Request to decline AI transcription during my visits\n\nHi [provider/clinic],\n\nI'm writing to decline use of {{toolNames}} (or any similar AI-based recording/transcription tool) during my medical visits.\n\nUnder HIPAA and my rights as a patient, I prefer that my conversations with my healthcare provider NOT be processed by AI tools, including but not limited to:\n- Audio recording or transcription\n- Retention of my voice or clinical conversations\n- Third-party AI analysis, even under a BAA\n\n{{jurisdictionClause}}\n\nPlease note this preference in my patient record and ensure it's honored across all my visits. I am happy to discuss alternative documentation methods (manual note-taking) with my provider.\n\nThank you,\n[Your name]"
+    },
+    "workforce-monitoring-objection": {
+      "displayName": "Workforce monitoring + AI-training objection (to employer)",
+      "template": "To: {{employerName}} — Human Resources + Legal + Data Protection Officer\n\nSubject: Data subject request — disclosure + objection regarding workforce monitoring and AI training use\n\nTo whom it may concern,\n\nI am submitting this as a formal written request with two components:\n\n1. DISCLOSURE REQUEST\n\nI request, in writing and within the statutory response window, the following information regarding monitoring software or systems deployed on my work device or on communication/collaboration services I use in the course of my employment with {{employerName}}:\n\n  (a) The name and vendor of each monitoring system currently active on my device or account, including but not limited to any of the following that may be in use: {{toolNames}}.\n  (b) The categories of data collected (including keystroke-rate data, mouse-movement telemetry, screen captures, application usage, file-system events, email/chat metadata or content, camera/microphone activation, location data, or biometric pattern data).\n  (c) The retention period applicable to each category.\n  (d) Whether any of this data is, has been, or may be used — directly or after de-identification or aggregation — to TRAIN, fine-tune, evaluate, or reinforce any artificial-intelligence model, AI agent, 'copilot', workflow-replication model, or behavioral-scoring system, whether operated by {{employerName}}, a subsidiary, a parent entity, or any third-party processor.\n  (e) The identity of any third-party processors (including cloud vendors and AI-model providers) who receive this data.\n  (f) The internal legal basis on which the monitoring is justified (e.g., business necessity, consent, legitimate interest), and the corresponding balancing test documentation.\n\n{{detectedPaths}}\n\n2. OBJECTION AND OPT-OUT\n\nSeparately from the disclosure request above, and regardless of whether the monitoring itself is permissible under applicable law, I hereby formally OBJECT to any use of data collected from me — whether on my work device, via my work accounts, or via my participation in meetings or chat — for purposes of TRAINING or IMPROVING any artificial-intelligence model, including but not limited to agentic-AI systems intended to replicate employee workflows.\n\nSpecifically, I object to:\n- Inclusion of my keystrokes, mouse movements, screen captures, or activity patterns in any dataset used to train or fine-tune an AI agent.\n- Use of my data in any automated decision-making or profiling that produces effects concerning me (employment evaluation, promotion, termination, compensation) without meaningful human review.\n\nLegal basis for this objection:\n{{jurisdictionClause}}\n\nAdditionally, and regardless of the primary jurisdiction cited above, I invoke:\n  - GDPR Article 15 (right of access) for the disclosure portion of this request.\n  - GDPR Article 21 (right to object to processing, including for direct marketing AND for processing based on legitimate interest).\n  - GDPR Article 22 (right not to be subject to a decision based solely on automated processing, including profiling, which produces legal effects).\n  - Any analogous rights under my jurisdiction's employment-privacy and data-protection statutes.\n\n3. RESPONSE REQUESTED\n\nPlease respond in writing within the statutory response period applicable to my jurisdiction (typically 30 days under GDPR, 45 days under CCPA) confirming:\n  (a) Receipt of this request.\n  (b) Whether you will comply with the AI-training objection and, if so, the technical controls that will enforce it.\n  (c) If you decline to comply, the specific legal basis for that refusal.\n\nI reserve all rights, including the right to lodge a complaint with the relevant supervisory authority (my national DPA for GDPR matters; the relevant state AG or Labor Commissioner for US state-law matters; the works council / Betriebsrat where applicable).\n\nRespectfully,\n[Your name]\n[Employee ID, if applicable]\n[Date]\n\n--\nSent via Vanish privacy toolkit — this request + any response is retained in a local HMAC-signed audit trail for evidentiary purposes."
     }
   }
 }

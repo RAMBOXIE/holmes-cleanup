@@ -29,10 +29,10 @@ test('catalog has >=10 tools across 3+ contexts', () => {
 });
 
 test('every tool has required metadata', () => {
+  const validContexts = ['workplace', 'hr-recruiting', 'medical', 'customer-service', 'workforce-monitoring'];
   for (const [key, t] of Object.entries(catalog.tools)) {
     assert.ok(t.displayName, `${key} missing displayName`);
-    assert.ok(['workplace', 'hr-recruiting', 'medical', 'customer-service'].includes(t.context),
-      `${key} invalid context: ${t.context}`);
+    assert.ok(validContexts.includes(t.context), `${key} invalid context: ${t.context}`);
     assert.ok(t.vendor, `${key} missing vendor`);
     assert.ok(Array.isArray(t.dataCollected), `${key} dataCollected must be array`);
     assert.ok(t.whoDeploys, `${key} missing whoDeploys`);
@@ -226,4 +226,214 @@ test('CLI --json outputs valid structure', () => {
   assert.ok(parsed.generatedAt);
   assert.ok(Array.isArray(parsed.plan));
   assert.ok(parsed.plan.length > 0);
+});
+
+// ─── Workforce-monitoring extension (v2) ──────────────────────
+
+import { detectInstalled, formatDetectedPathsForLetter } from '../src/third-party-ai/third-party-engine.mjs';
+
+test('catalog has workforce-monitoring context', () => {
+  assert.ok(catalog.contexts['workforce-monitoring']);
+  assert.match(catalog.contexts['workforce-monitoring'], /desktop|monitoring|AI-agent/i);
+});
+
+test('catalog has at least 8 workforce-monitoring tools', () => {
+  const wf = Object.entries(catalog.tools).filter(([, t]) => t.context === 'workforce-monitoring');
+  assert.ok(wf.length >= 8, `expected >=8 workforce tools, got ${wf.length}`);
+});
+
+test('every workforce-monitoring tool has installPaths per OS + workforce-monitoring-objection template', () => {
+  const wf = Object.entries(catalog.tools).filter(([, t]) => t.context === 'workforce-monitoring');
+  for (const [key, tool] of wf) {
+    assert.ok(tool.installPaths, `${key} missing installPaths`);
+    assert.ok('win32' in tool.installPaths, `${key} missing win32 installPaths key`);
+    assert.ok('darwin' in tool.installPaths, `${key} missing darwin installPaths key`);
+    assert.ok('linux' in tool.installPaths, `${key} missing linux installPaths key`);
+    assert.equal(tool.objectionTemplate, 'workforce-monitoring-objection',
+      `${key}.objectionTemplate should be workforce-monitoring-objection`);
+  }
+});
+
+test('employer-internal is a generic workforce entry with no install paths', () => {
+  const ei = catalog.tools['employer-internal'];
+  assert.ok(ei);
+  assert.equal(ei.context, 'workforce-monitoring');
+  assert.equal(ei.installPaths.win32.length, 0);
+  assert.equal(ei.installPaths.darwin.length, 0);
+  assert.equal(ei.installPaths.linux.length, 0);
+});
+
+test('catalog has 4 new workforce jurisdictions', () => {
+  assert.ok(catalog.jurisdictions['US-state-NY-EMA']);
+  assert.ok(catalog.jurisdictions['US-state-IL-BIPA']);
+  assert.ok(catalog.jurisdictions['DE-works-council']);
+  assert.ok(catalog.jurisdictions['EU-GDPR-art88']);
+});
+
+test('catalog has workforce-monitoring-objection template with correct variables', () => {
+  const tpl = catalog.objectionTemplates['workforce-monitoring-objection'];
+  assert.ok(tpl);
+  assert.match(tpl.template, /\{\{toolNames\}\}/);
+  assert.match(tpl.template, /\{\{jurisdictionClause\}\}/);
+  assert.match(tpl.template, /\{\{employerName\}\}/);
+  assert.match(tpl.template, /\{\{detectedPaths\}\}/);
+});
+
+test('selectJurisdictionClause US-state-NY-EMA cites the 2022 Electronic Monitoring Act', () => {
+  const clause = selectJurisdictionClause({ jurisdiction: 'US-state-NY-EMA' });
+  assert.match(clause, /Electronic Monitoring Act/);
+  assert.match(clause, /52-c/);
+});
+
+test('selectJurisdictionClause US-state-IL-BIPA cites statutory damages', () => {
+  const clause = selectJurisdictionClause({ jurisdiction: 'US-state-IL-BIPA' });
+  assert.match(clause, /Biometric Information Privacy Act|BIPA/);
+  assert.match(clause, /740 ILCS 14/);
+  assert.match(clause, /\$1,000|\$5,000/);
+});
+
+test('selectJurisdictionClause DE-works-council is in German citing §87', () => {
+  const clause = selectJurisdictionClause({ jurisdiction: 'DE-works-council' });
+  assert.match(clause, /Betriebsverfassungsgesetz|Betriebsrat/);
+  assert.match(clause, /§87/);
+});
+
+test('selectJurisdictionClause EU-GDPR-art88 cites Article 88 employment context', () => {
+  const clause = selectJurisdictionClause({ jurisdiction: 'EU-GDPR-art88' });
+  assert.match(clause, /Article 88/);
+  assert.match(clause, /collective agreement|proportionality/i);
+});
+
+// ─── detectInstalled ──────────────────────────────────────────
+
+test('detectInstalled returns structured results with found/missing per tool', () => {
+  // Use linux platform with empty env so no tool has any path that exists
+  const results = detectInstalled(['activtrak', 'teramind'], catalog, {
+    platform: 'linux',
+    homeDir: '/nonexistent/home',
+    env: {}
+  });
+  assert.equal(results.length, 2);
+  for (const r of results) {
+    assert.ok(typeof r.tool === 'string');
+    assert.ok(typeof r.displayName === 'string');
+    assert.ok(Array.isArray(r.found));
+    assert.ok(Array.isArray(r.missing));
+    assert.equal(typeof r.hasAny, 'boolean');
+  }
+  // activtrak has no linux paths in catalog → probedCount 0
+  const ata = results.find(r => r.tool === 'activtrak');
+  assert.equal(ata.probedCount, 0);
+  assert.equal(ata.found.length, 0);
+});
+
+test('detectInstalled on win32 with non-existent env paths returns all missing', () => {
+  const results = detectInstalled(['teramind'], catalog, {
+    platform: 'win32',
+    homeDir: 'C:\\Users\\fake',
+    env: {
+      APPDATA: 'C:\\Users\\fake\\AppData\\Roaming',
+      PROGRAMFILES: 'C:\\Program Files',
+      'PROGRAMFILES(X86)': 'C:\\Program Files (x86)',
+      WINDIR: 'C:\\Windows'
+    }
+  });
+  const tm = results[0];
+  assert.equal(tm.tool, 'teramind');
+  assert.equal(tm.hasAny, false);
+  assert.equal(tm.found.length, 0);
+  assert.ok(tm.missing.length > 0);
+  // Each missing entry carries resolved absolute path
+  for (const m of tm.missing) {
+    assert.match(m.path, /C:/);
+  }
+});
+
+test('detectInstalled against the test directory itself produces a "found" hit', () => {
+  // Craft a synthetic tool with installPaths pointing at the tests directory
+  const fakeCatalog = {
+    tools: {
+      'fake-tool': {
+        displayName: 'Fake Monitor',
+        installPaths: {
+          [process.platform]: [__dirname]  // __dirname from the test file = tests/
+        }
+      }
+    }
+  };
+  const results = detectInstalled(['fake-tool'], fakeCatalog);
+  assert.equal(results.length, 1);
+  assert.equal(results[0].hasAny, true);
+  assert.ok(results[0].found.length >= 1);
+  assert.equal(results[0].found[0].isDirectory, true);
+});
+
+test('formatDetectedPathsForLetter returns empty string on no hits', () => {
+  const text = formatDetectedPathsForLetter([
+    { tool: 'a', displayName: 'A', found: [], missing: [], hasAny: false, probedCount: 3 }
+  ]);
+  assert.equal(text, '');
+});
+
+test('formatDetectedPathsForLetter produces evidence block with paths', () => {
+  const text = formatDetectedPathsForLetter([
+    {
+      tool: 'activtrak',
+      displayName: 'ActivTrak',
+      found: [{ path: 'C:\\Program Files\\ActivTrak', bytes: 50000000, isDirectory: true, items: 12 }],
+      missing: [],
+      hasAny: true,
+      probedCount: 3
+    }
+  ]);
+  assert.match(text, /EVIDENCE OF INSTALLED/);
+  assert.match(text, /ActivTrak/);
+  assert.match(text, /C:\\Program Files\\ActivTrak/);
+});
+
+// ─── CLI integration for workforce-monitoring ─────────────────
+
+test('CLI --detect-installed alone runs a scan and exits 0', () => {
+  const result = spawnSync(process.execPath, [
+    SCRIPT, '--detect-installed'
+  ], { encoding: 'utf8', env: { ...process.env, NODE_ENV: 'test' } });
+  assert.equal(result.status, 0, `failed: ${result.stderr}`);
+  assert.match(result.stdout, /Local detection/i);
+  assert.match(result.stdout, /Best-effort only/);
+});
+
+test('CLI --teramind --jurisdiction US-state-IL-BIPA generates BIPA-cited letter', () => {
+  const result = spawnSync(process.execPath, [
+    SCRIPT, '--teramind', '--jurisdiction', 'US-state-IL-BIPA',
+    '--company', 'Acme Corp'
+  ], { encoding: 'utf8', env: { ...process.env, NODE_ENV: 'test' } });
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /Context: workforce-monitoring/);
+  assert.match(result.stdout, /Teramind/);
+  assert.match(result.stdout, /Biometric Information Privacy Act|BIPA/);
+  assert.match(result.stdout, /Acme Corp/);
+});
+
+test('CLI --context workforce-monitoring --detect-installed merges evidence into letter', () => {
+  const result = spawnSync(process.execPath, [
+    SCRIPT, '--context', 'workforce-monitoring', '--detect-installed',
+    '--jurisdiction', 'US-state-NY-EMA', '--company', 'Acme Corp'
+  ], { encoding: 'utf8', env: { ...process.env, NODE_ENV: 'test' } });
+  assert.equal(result.status, 0);
+  // Detection section present
+  assert.match(result.stdout, /Local detection/);
+  // Letter present with NY EMA clause + company name
+  assert.match(result.stdout, /Electronic Monitoring Act/);
+  assert.match(result.stdout, /Acme Corp/);
+});
+
+test('CLI --employer-internal flag produces a disclosure-demand letter for unknown vendors', () => {
+  const result = spawnSync(process.execPath, [
+    SCRIPT, '--employer-internal', '--jurisdiction', 'EU-GDPR-art88',
+    '--company', 'MegaCorp'
+  ], { encoding: 'utf8', env: { ...process.env, NODE_ENV: 'test' } });
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /MegaCorp/);
+  assert.match(result.stdout, /Article 88/);
+  assert.match(result.stdout, /DISCLOSURE REQUEST|disclosure/i);
 });

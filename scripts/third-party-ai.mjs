@@ -15,7 +15,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { resolveToolKeys, planObjections } from '../src/third-party-ai/third-party-engine.mjs';
+import {
+  resolveToolKeys,
+  planObjections,
+  detectInstalled,
+  formatDetectedPathsForLetter
+} from '../src/third-party-ai/third-party-engine.mjs';
 
 const require = createRequire(import.meta.url);
 const catalog = require('../src/third-party-ai/third-party-catalog.json');
@@ -72,10 +77,29 @@ Medical:
   --nuance         Nuance DAX / Microsoft (ambient AI)
   --suki           Suki AI
 
+Workforce monitoring (employer-installed agents training AI on your workflow):
+  --activtrak          ActivTrak (productivity analytics + 'Coach AI')
+  --teramind           Teramind (full-stack endpoint monitoring, stealth mode)
+  --hubstaff           Hubstaff (screenshots + keystroke-rate)
+  --time-doctor        Time Doctor (similar; has silent-mode option)
+  --insightful         Insightful / Workpuls (stealth-install supported)
+  --veriato            Veriato / SpectorSoft (historically 'insider threat')
+  --interguard         InterGuard / Awareness Technologies
+  --viva-insights      Microsoft Viva Insights / M365 Productivity Analytics
+  --employer-internal  Your employer's own closed-source tool (Meta-memo case)
+  --detect-installed   Scan this machine for which of the above are installed
+                        (best-effort; found paths become exhibit in letter)
+
 Context + jurisdiction:
   --context <c>    Filter by context: workplace | hr-recruiting | medical
-  --jurisdiction X Select jurisdiction clause: EU | CA | IL | NY | HIPAA
-  --company "..."  Company/employer name (for interview letter)
+                    | workforce-monitoring
+  --jurisdiction X Select jurisdiction clause:
+                    EU | CA | IL | NY | HIPAA  (original meeting/HR/medical)
+                    US-state-NY-EMA  (NY Electronic Monitoring Act 2022)
+                    US-state-IL-BIPA (Illinois biometric — keystroke patterns)
+                    DE-works-council (Germany §87 Betriebsverfassungsgesetz)
+                    EU-GDPR-art88    (GDPR employment-context processing)
+  --company "..."  Company/employer name (interview + workforce letters)
 
 Scope:
   --use <csv>      --use zoom,otter,fireflies
@@ -99,25 +123,97 @@ Examples:
   # Sales-call consent letter (Gong customer side, CA)
   vanish third-party-ai --gong --chorus --jurisdiction CA
 
+  # Workforce monitoring — scan this machine first, then generate evidence-
+  # backed objection letter citing NY Electronic Monitoring Act (2022)
+  vanish third-party-ai --context workforce-monitoring \\
+    --detect-installed \\
+    --jurisdiction US-state-NY-EMA \\
+    --company "Acme Corp" \\
+    --output workforce-objection.md
+
+  # BIPA-specific angle for keystroke-biometric tools (Illinois)
+  vanish third-party-ai --teramind --veriato \\
+    --jurisdiction US-state-IL-BIPA \\
+    --company "Acme Corp"
+
+  # Detection only (no letter, just "what's on this machine")
+  vanish third-party-ai --context workforce-monitoring --detect-installed
+
 Note: These templates are NOT legal advice. Consult a lawyer for
 jurisdiction-specific enforcement. Letters are designed to put vendors
 + deployers on notice, which often suffices to trigger accommodation.
+
+Workforce-monitoring detection is BEST-EFFORT: vendors can randomize
+install paths or use stealth installs. A negative detection does NOT
+mean you aren't being monitored. A positive detection is strong
+documentary evidence.
 `);
     process.exit(0);
   }
 
-  const keys = resolveToolKeys(args, catalog);
+  // Default key resolution — but if user gave ONLY --detect-installed with no
+  // other flags, default to scanning all workforce-monitoring tools.
+  let keys = resolveToolKeys(args, catalog);
+  const detectRequested = Boolean(args['detect-installed']);
+
+  if (keys.length === 0 && detectRequested) {
+    // Implicit: --detect-installed alone means "scan workforce-monitoring tools"
+    keys = Object.entries(catalog.tools)
+      .filter(([, t]) => t.context === 'workforce-monitoring')
+      .map(([k]) => k);
+  }
+
   if (keys.length === 0) {
     await writeAsync(process.stderr, `
 No tools specified. Use --help, or:
   vanish third-party-ai --zoom --otter
   vanish third-party-ai --context workplace
   vanish third-party-ai --all
+  vanish third-party-ai --detect-installed        (workforce-monitoring scan)
 `);
     process.exit(1);
   }
 
-  const plan = planObjections(keys, catalog, args);
+  // ─── Detection (workforce-monitoring only) ───────────────────
+  let detectionResults = null;
+  if (detectRequested) {
+    detectionResults = detectInstalled(keys, catalog);
+    const hits = detectionResults.filter(r => r.hasAny);
+    const probed = detectionResults.filter(r => r.probedCount > 0);
+    await writeAsync(process.stdout, `\n━━━ Local detection (best-effort) ━━━\n`);
+    await writeAsync(process.stdout, `Platform: ${process.platform}\n`);
+    await writeAsync(process.stdout, `Probed: ${probed.length} tools with documented install paths on this OS\n`);
+    await writeAsync(process.stdout, `Found installed: ${hits.length} tool(s)\n\n`);
+    for (const r of detectionResults) {
+      if (r.probedCount === 0) {
+        await writeAsync(process.stdout, `  —  ${r.displayName.padEnd(40)} (no install-paths catalogued for ${process.platform}, or generic entry)\n`);
+        continue;
+      }
+      if (r.hasAny) {
+        await writeAsync(process.stdout, `  ✓  ${r.displayName.padEnd(40)} INSTALLED (${r.found.length}/${r.probedCount} paths matched)\n`);
+        for (const f of r.found) {
+          await writeAsync(process.stdout, `       ${f.path}${f.bytes > 0 ? ` [${f.isDirectory ? 'dir' : 'file'}]` : ''}\n`);
+        }
+      } else {
+        await writeAsync(process.stdout, `  ·  ${r.displayName.padEnd(40)} not detected (probed ${r.probedCount} path${r.probedCount > 1 ? 's' : ''})\n`);
+      }
+    }
+    await writeAsync(process.stdout,
+      `\n⚠️  Best-effort only: stealth installs or custom-branded deployments\n`
+      + `   may sit at non-default paths. A negative result does NOT prove\n`
+      + `   you aren't being monitored — only a positive result is evidence.\n`
+    );
+
+    // If the user ONLY asked for detection (no other output flags AND no
+    // jurisdiction AND no context), print summary and exit.
+    const letterRequested = args.jurisdiction || args.context || args.output || args.json
+      || args.company || args.employer;
+    if (!letterRequested) {
+      process.exit(0);
+    }
+  }
+
+  const plan = planObjections(keys, catalog, args, detectionResults);
   if (plan.length === 0) {
     await writeAsync(process.stderr, `No objection templates apply to the selected tools.\n`);
     process.exit(1);

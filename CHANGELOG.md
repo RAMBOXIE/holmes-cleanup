@@ -4,6 +4,56 @@ All notable changes to Vanish will be documented here. Format follows [Keep a Ch
 
 ## [Unreleased]
 
+### Added
+- **⚖️ Workforce-monitoring coverage in `vanish third-party-ai`** — addresses the
+  emerging threat reported around Meta/Salesforce: employers installing desktop
+  agents that capture mouse/keystroke/screen telemetry to train AI agents on
+  employee workflows. Previously Vanish covered meeting-specific (Zoom AI,
+  Otter) and interview-specific (HireVue) tools only. Now covers always-on
+  desktop monitoring too.
+  - **New `workforce-monitoring` context** in the existing `third-party-ai`
+    catalog (no new subcommand — the threat fits the "AI tools OTHERS use on
+    you" framing)
+  - **9 new tool entries**: ActivTrak, Teramind, Hubstaff, Time Doctor,
+    Insightful (Workpuls), Veriato (SpectorSoft), InterGuard (Awareness
+    Technologies), Microsoft Viva Insights, plus an `employer-internal`
+    entry for closed-source employer-built tooling (the Meta-memo case)
+  - Each commercial tool lists per-OS `installPaths` (win32 / darwin /
+    linux) documenting the vendor's default install locations
+  - **4 new jurisdiction clauses** with real legal citations:
+    - `US-state-NY-EMA` — NY Electronic Monitoring Act (N.Y. Civil Rights
+      Law §52-c, effective May 2022): written notice + acknowledgment
+      required before monitoring
+    - `US-state-IL-BIPA` — Illinois Biometric Information Privacy Act
+      (740 ILCS 14/): keystroke-dynamics and mouse-movement patterns as
+      biometric identifiers, $1,000-$5,000 statutory damages per violation
+    - `DE-works-council` — Germany Betriebsverfassungsgesetz §87(1)(6)
+      requires works council (Betriebsrat) co-determination on monitoring
+      tools (clause rendered in German)
+    - `EU-GDPR-art88` — GDPR Article 88 employment-context processing
+      proportionality
+  - **New objection letter template** `workforce-monitoring-objection`:
+    dual-purpose letter with (1) formal DSAR-style disclosure request and
+    (2) explicit objection to AI-training use, independent of the
+    monitoring's general lawfulness. Templated vars include `{{employerName}}`
+    and `{{detectedPaths}}` (evidence exhibit from local scan)
+  - **New `--detect-installed` CLI flag**: best-effort local scan for the
+    8 commercial agents on the user's own work device. Reuses existing
+    `expandPath` + `statPath` from `src/ai-history/history-engine.mjs`.
+    Found paths are embedded in the objection letter as a forensic exhibit.
+    Extended `expandPath` to handle `%PROGRAMFILES%`, `%PROGRAMFILES(X86)%`,
+    `%PROGRAMDATA%`, `%WINDIR%`, `%SYSTEMROOT%` for system-installed services.
+  - New CLI examples in `--help` cover: detection alone, detection+letter
+    combined, BIPA-specific keystroke-biometric angle, generic employer-
+    internal disclosure demand
+  - 19 new tests (tests/third-party-ai.test.mjs → 44 total): catalog schema,
+    4 new jurisdictions, workforce-template variables, detectInstalled
+    correctness with mocked filesystem, evidence-block formatting, CLI
+    integration across all scenarios
+  - **Explicit non-goals**: Vanish does NOT kill processes, block phone-home,
+    or provide anti-detection. That's anti-malware territory. Scope is limited
+    to identification + jurisdiction-cited legal-request generation.
+
 ### Fixed
 - **`vanish verify` now handles every follow-up kind** (not just brokers): new
   dispatcher in `src/verifier/followup-kinds.mjs` routes broker entries to the

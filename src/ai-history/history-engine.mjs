@@ -24,9 +24,20 @@ export function expandPath(rawPath, { platform = process.platform, env = process
   const pathMod = platform === 'win32' ? path.win32 : path.posix;
 
   if (platform === 'win32') {
+    // User-profile-rooted paths
     expanded = expanded.replace(/%APPDATA%/g, env.APPDATA || pathMod.join(homeDir, 'AppData', 'Roaming'));
     expanded = expanded.replace(/%USERPROFILE%/g, env.USERPROFILE || homeDir);
     expanded = expanded.replace(/%LOCALAPPDATA%/g, env.LOCALAPPDATA || pathMod.join(homeDir, 'AppData', 'Local'));
+
+    // System-wide paths — common for workforce-monitoring agents that install
+    // as a service under Program Files or system directories.
+    // Note: PROGRAMFILES(X86) must be handled before PROGRAMFILES so the
+    // (X86) suffix isn't swallowed by the greedy match.
+    expanded = expanded.replace(/%PROGRAMFILES\(X86\)%/gi, env['PROGRAMFILES(X86)'] || 'C:\\Program Files (x86)');
+    expanded = expanded.replace(/%PROGRAMFILES%/gi, env.PROGRAMFILES || 'C:\\Program Files');
+    expanded = expanded.replace(/%PROGRAMDATA%/gi, env.PROGRAMDATA || 'C:\\ProgramData');
+    expanded = expanded.replace(/%WINDIR%/gi, env.WINDIR || env.SYSTEMROOT || 'C:\\Windows');
+    expanded = expanded.replace(/%SYSTEMROOT%/gi, env.SYSTEMROOT || 'C:\\Windows');
   }
 
   if (expanded.startsWith('~/') || expanded === '~') {

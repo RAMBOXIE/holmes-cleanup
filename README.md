@@ -63,7 +63,8 @@ Most privacy tools blur these. We don't.
 | **Face-search opt-out** (`vanish face-opt-out`) | 8 services | Form guidance + CCPA/GDPR citations | High — you submit; Vanish records audit |
 | **LLM memorization probe** (`vanish llm-memory-check`) | 2 providers (OpenAI, Anthropic) | User's own API key | Depends on model + your identity |
 | **Training-dataset membership** (`vanish dataset-check`) | 8 datasets | Common Crawl CDX = live query; others = walkthrough | CC is automated + accurate; rest need you to visit |
-| **Third-party AI objection letters** (`vanish third-party-ai`) | 13 tools, 4 letter templates | Jurisdiction-cited letter generator | Legal templates — you send |
+| **Third-party AI objection letters** (`vanish third-party-ai`) | 22 tools across 5 contexts, 5 letter templates | Jurisdiction-cited letter generator | Legal templates — you send |
+| **Workforce-monitoring scan + AI-training objection** (`third-party-ai --detect-installed`) | 8 commercial agents (ActivTrak/Teramind/Hubstaff/Time Doctor/Insightful/Veriato/InterGuard/Viva Insights) + generic employer-internal | Local best-effort file scan + NY EMA / IL BIPA / DE works-council / GDPR Art 88 letter | Detection is best-effort (stealth installs evade); letters you send |
 | **AI history cleanup** (`vanish clean-ai-history`) | 9 tools (4 local + 5 web) | Prints paths + commands; you copy-paste | Safer than auto-delete |
 | **NCII / leak takedown** (`vanish takedown`) | 12 leak sites + StopNCII + Google intimate-imagery | DMCA + legal letter drafting | You send the letters; audit is HMAC-signed evidence |
 | **Re-verify any of the above** (`vanish verify`) | All kinds | HTTP liveness for brokers, manual reminder for AI/face | Automated for brokers, reminder for the rest |
@@ -344,6 +345,44 @@ Generates jurisdiction-aware objection letter templates citing:
 
 Covers 13 tools across workplace / HR / medical. `--output letters.txt` writes them to a file you can email directly.
 
+##### 🔎 Workforce-monitoring sub-scope (`--context workforce-monitoring`)
+
+Reports suggest employers are increasingly deploying **desktop agents that capture mouse/keyboard/screen telemetry specifically to train AI agents on employee workflows** (Meta internal memo, Salesforce "Agentforce" training, similar). This is distinct from meeting-specific AI (Zoom, Otter): it's **always-on desktop monitoring** with explicit AI-training data-use.
+
+Vanish covers 8 commercial agents (**ActivTrak · Teramind · Hubstaff · Time Doctor · Insightful · Veriato · InterGuard · Microsoft Viva Insights**) plus a generic `employer-internal` entry for the "my employer built something they won't disclose" case.
+
+```bash
+# Scan THIS machine for which of the 8 commercial agents are installed
+# (best-effort — stealth installs evade; but a positive hit is evidence)
+vanish third-party-ai --detect-installed
+
+# Detection + BIPA-cited objection letter (Illinois keystroke-biometrics)
+vanish third-party-ai --teramind --veriato \
+  --jurisdiction US-state-IL-BIPA --company "Acme Corp"
+
+# NY Electronic Monitoring Act disclosure demand + evidence from local scan
+vanish third-party-ai --context workforce-monitoring \
+  --detect-installed \
+  --jurisdiction US-state-NY-EMA \
+  --company "Acme Corp" \
+  --output workforce-objection.md
+
+# The Meta-memo case: your employer won't disclose what's installed
+# → generic disclosure-demand letter citing GDPR Art 88 + Art 15 DSAR
+vanish third-party-ai --employer-internal \
+  --jurisdiction EU-GDPR-art88 --company "MegaCorp"
+```
+
+Four jurisdiction clauses specific to this context:
+- **NY Electronic Monitoring Act** (N.Y. Civil Rights Law §52-c, 2022) — requires written notice + acknowledgment before monitoring
+- **Illinois BIPA** (740 ILCS 14/) — keystroke-dynamics / mouse-movement biometric patterns, $1,000-$5,000 statutory damages per violation
+- **Germany Betriebsverfassungsgesetz §87** — works council (Betriebsrat) co-determination required (clause rendered in German)
+- **GDPR Article 88** — employment-context processing proportionality + DPIA required
+
+The generated letter is dual-purpose: (1) formal DSAR-style disclosure demand, (2) explicit objection to AI-training use of your data **regardless** of whether the monitoring itself is lawful for business-necessity reasons. When combined with `--detect-installed`, found install paths are embedded in the letter as a **forensic exhibit**.
+
+⚠️ **Scope boundary**: Vanish does NOT kill processes, block phone-home, or provide anti-detection — that's anti-malware territory. This feature is strictly identification + legal-request generation.
+
 #### 🧹 `vanish clean-ai-history` — where does your AI history actually live?
 
 Every AI tool you use caches conversations somewhere. Some are local (Cursor's workspace cache), some are cloud-only (ChatGPT web), some are both. Wiping "everything" requires knowing every location.
@@ -599,7 +638,7 @@ Vanish stores **nothing** sensitive:
 - **Persistent Queues** — retry (exponential backoff) / manual-review / dead-letter with SHA-256 dedupe
 - **Local Dashboard** — static HTML, watches queue state, zero backend
 - **Safety Gates** — manual trigger only, triple-confirm for high-risk, export-before-delete, compliance snapshot
-- **315 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
+- **334 Tests** — unit + integration + CLI + e2e against `postman-echo.com`, every commit runs on Ubuntu/macOS/Windows × Node 20/22 (6 matrix jobs)
 
 ### 🛡️ NCII / leak content takedown (unique to Vanish)
 
@@ -776,7 +815,7 @@ vanish dashboard data/queue-state.json
 # Proof report (audit trail in Markdown)
 vanish report ./path/to/execution-result.json
 
-# All 315 tests (109 broker + 19 share-card + 22 ai-scan + 13 ai-opt-out + 23 face-scan + 30 llm-memory-check + 24 clean-ai-history + 20 dataset-check + 25 third-party-ai + 31 takedown + 26 verify incl. kind dispatch)
+# All 334 tests (109 broker + 19 share-card + 22 ai-scan + 13 ai-opt-out + 23 face-scan + 30 llm-memory-check + 24 clean-ai-history + 20 dataset-check + 44 third-party-ai incl. workforce-monitoring + 31 takedown + 26 verify incl. kind dispatch)
 npm test
 ```
 
@@ -838,7 +877,7 @@ prompts/wizard/                 # 18 .md prompt templates per state
 scripts/                        # CLI entry points (scan, ai-scan, face-scan, llm-memory-check,
                                 #   dataset-check, third-party-ai, opt-out, ai-opt-out,
                                 #   face-opt-out, clean-ai-history, takedown, verify, ...)
-tests/                          # 315 tests across 26 files
+tests/                          # 334 tests across 26 files
 web/                            # Static web app v2 (Vite + vanilla JS) — 3 tabs: broker scan,
                                 #   AI training checkbox grid, face-search directory. Shares
                                 #   src/scanner + src/ai-scanner + src/face-scanner catalogs.
