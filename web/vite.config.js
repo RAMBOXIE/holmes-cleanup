@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -32,5 +33,10 @@ export default defineConfig({
     emptyOutDir: true,
     // Fail the build if any dynamic import goes over 500KB — forces us to keep the bundle tight
     chunkSizeWarningLimit: 500
+  },
+
+  test: {
+    environment: 'jsdom',
+    include: ['tests/**/*.test.js']
   }
 });

@@ -112,8 +112,11 @@
           <div class="face-services-grid" id="face-services-grid">
             <!-- Populated by JS from the face-services catalog -->
           </div>
+          <div class="walkthrough-host" id="face-walkthrough-host" hidden>
+            <!-- Walkthrough panel rendered into here when user clicks "Walk through" on a face service card -->
+          </div>
           <p class="face-cta-cli">
-            Need guided opt-out from all 8 (including <strong>Clearview AI</strong> via CCPA/GDPR)?
+            Need the same flow with HMAC-signed local audit trail?
             Run <code>npx github:RAMBOXIE/vanish face-opt-out --all</code> in your terminal.
           </p>
         </div>
@@ -139,6 +142,9 @@
       <section id="ai-results" class="results" hidden>
         <div class="score-card" id="ai-score-card"></div>
         <div class="ai-quick-wins" id="ai-quick-wins"></div>
+        <div class="walkthrough-host" id="ai-walkthrough-host" hidden>
+          <!-- Walkthrough panel rendered into here when user clicks "Walk through" on an AI quick-win card -->
+        </div>
         <div class="ai-licensed" id="ai-licensed"></div>
         <div class="ai-safe" id="ai-safe"></div>
         <div class="share-actions" id="ai-share-actions"></div>

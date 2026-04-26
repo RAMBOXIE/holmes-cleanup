@@ -761,8 +761,212 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   font-size: 12px;
 }
 
+/* ─── WALKTHROUGH PANEL ───────────────────────────────────────── */
+
+.walkthrough-host {
+  margin: 32px 0;
+}
+
+.walkthrough-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.walkthrough-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.walkthrough-head h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.walkthrough-close {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.walkthrough-close:hover {
+  background: var(--bg-elev);
+  color: var(--text);
+}
+
+.walkthrough-link {
+  margin: 8px 0 16px;
+  font-size: 15px;
+}
+
+.walkthrough-link a {
+  font-weight: 600;
+}
+
+.walkthrough-link-hint {
+  display: block;
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.walkthrough-target {
+  background: var(--bg-elev);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.walkthrough-target strong {
+  color: var(--text);
+}
+
+.walkthrough-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  counter-reset: walkthrough-step;
+}
+
+.walkthrough-step {
+  counter-increment: walkthrough-step;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  transition: background 120ms ease;
+}
+
+.walkthrough-step.done {
+  background: rgba(52, 199, 89, 0.08);
+  border-color: rgba(52, 199, 89, 0.3);
+}
+
+.walkthrough-step label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.walkthrough-step label::before {
+  content: counter(walkthrough-step) ".";
+  color: var(--text-muted);
+  font-weight: 600;
+  min-width: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.walkthrough-step input[type="checkbox"] {
+  margin-top: 4px;
+  accent-color: var(--low);
+  cursor: pointer;
+}
+
+.walkthrough-step.done .walkthrough-step-text {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.walkthrough-verification,
+.walkthrough-tier-override {
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.walkthrough-verification {
+  background: rgba(52, 199, 89, 0.08);
+  border: 1px solid rgba(52, 199, 89, 0.25);
+  color: var(--text-dim);
+}
+
+.walkthrough-verification strong {
+  color: var(--low);
+}
+
+.walkthrough-tier-override {
+  background: rgba(255, 204, 0, 0.08);
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  color: var(--text-dim);
+}
+
+.walkthrough-tier-override strong {
+  color: var(--moderate);
+}
+
+.walkthrough-progress {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.walkthrough-progress label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-dim);
+}
+
+.walkthrough-progress-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Walkthrough trigger buttons (in AI quick-win cards + face service cards) */
+.ai-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ai-card-walkthrough {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ai-card-walkthrough:hover {
+  background: var(--accent-hover);
+}
+
+.face-btn-walkthrough {
+  cursor: pointer;
+  font-family: inherit;
+}
+
 @media (max-width: 600px) {
   .tabs { flex-direction: column; gap: 4px; }
   .tab { padding: 14px; }
   .face-card-actions { flex-direction: column; }
+  .ai-card-actions { flex-direction: column; }
+  .walkthrough-step label { gap: 10px; }
 }

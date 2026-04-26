@@ -10,9 +10,12 @@ import {
   runAiExposureScan,
   runAiAllPlatformsScan,
   getAiCatalog,
-  getFaceCatalog
+  getFaceCatalog,
+  getAiWalkthrough,
+  getFaceWalkthrough
 } from './lib/scan-runner.js';
 import { svgToPngBlob, downloadBlob, svgStringToDataUrl } from './lib/svg-to-png.js';
+import { renderWalkthrough } from './lib/walkthrough-renderer.js';
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
@@ -297,11 +300,15 @@ function renderAiQuickWins(result) {
             <span class="ai-card-time">~${w.estimatedSeconds || 60}s</span>
           </div>
           <p class="ai-card-setting">Look for: <strong>"${escape(w.notes?.match(/"([^"]+)"/)?.[1] || w.optOutDifficulty)}"</strong></p>
-          ${w.optOutUrl ? `<a class="ai-card-link" href="${escape(w.optOutUrl)}" target="_blank" rel="noopener">Open opt-out page ↗</a>` : ''}
+          <div class="ai-card-actions">
+            ${getAiWalkthrough(w.platform) ? `<button type="button" class="ai-card-walkthrough" data-platform-key="${escape(w.platform)}">Walk me through this →</button>` : ''}
+            ${w.optOutUrl ? `<a class="ai-card-link" href="${escape(w.optOutUrl)}" target="_blank" rel="noopener">Open page ↗</a>` : ''}
+          </div>
         </article>
       `).join('')}
     </div>
   `;
+  wireAiWalkthroughButtons('#ai-quick-wins');
 }
 
 function renderAiLicensed(result) {
@@ -317,11 +324,38 @@ function renderAiLicensed(result) {
             <h3>${escape(w.displayName)}</h3>
           </div>
           <p class="ai-card-meta">Sold to: ${escape((w.aiModels || []).join(', '))}</p>
-          ${w.optOutUrl ? `<a class="ai-card-link" href="${escape(w.optOutUrl)}" target="_blank" rel="noopener">Opt-out page ↗</a>` : ''}
+          <div class="ai-card-actions">
+            ${getAiWalkthrough(w.platform) ? `<button type="button" class="ai-card-walkthrough" data-platform-key="${escape(w.platform)}">Walk me through this →</button>` : ''}
+            ${w.optOutUrl ? `<a class="ai-card-link" href="${escape(w.optOutUrl)}" target="_blank" rel="noopener">Opt-out page ↗</a>` : ''}
+          </div>
         </article>
       `).join('')}
     </div>
   `;
+  wireAiWalkthroughButtons('#ai-licensed');
+}
+
+function wireAiWalkthroughButtons(scopeSelector) {
+  const scope = $(scopeSelector);
+  if (!scope) return;
+  scope.querySelectorAll('.ai-card-walkthrough').forEach((btn) => {
+    btn.addEventListener('click', () => openAiWalkthrough(btn.dataset.platformKey));
+  });
+}
+
+function openAiWalkthrough(platformKey) {
+  const data = getAiWalkthrough(platformKey);
+  const host = $('#ai-walkthrough-host');
+  if (!data || !host) return;
+  host.hidden = false;
+  renderWalkthrough(host, {
+    flowKey: `ai:${platformKey}`,
+    serviceName: data.serviceName,
+    optOutUrl: data.optOutUrl,
+    walkthrough: data.walkthrough,
+    onClose: () => { host.hidden = true; }
+  });
+  host.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function renderAiSafe(result) {
@@ -367,7 +401,10 @@ function populateFaceGrid() {
       ? `<a class="face-btn-primary" href="${escape(s.searchUrl)}" target="_blank" rel="noopener">Check yourself ↗</a>`
       : `<span class="face-btn-primary disabled">No public search</span>`;
 
-    const optOutBtn = s.optOutUrl
+    const hasWalkthrough = Boolean(getFaceWalkthrough(key));
+    const optOutBtn = hasWalkthrough
+      ? `<button type="button" class="face-btn-secondary face-btn-walkthrough" data-service-key="${escape(key)}">Walk me through opt-out →</button>`
+      : s.optOutUrl
       ? `<a class="face-btn-secondary" href="${escape(s.optOutUrl)}" target="_blank" rel="noopener">Opt out ↗</a>`
       : '';
 
@@ -390,6 +427,25 @@ function populateFaceGrid() {
     `;
   }).join('');
   $('#face-services-grid').innerHTML = html;
+
+  $('#face-services-grid').querySelectorAll('.face-btn-walkthrough').forEach((btn) => {
+    btn.addEventListener('click', () => openFaceWalkthrough(btn.dataset.serviceKey));
+  });
+}
+
+function openFaceWalkthrough(serviceKey) {
+  const data = getFaceWalkthrough(serviceKey);
+  const host = $('#face-walkthrough-host');
+  if (!data || !host) return;
+  host.hidden = false;
+  renderWalkthrough(host, {
+    flowKey: `face:${serviceKey}:opt-out`,
+    serviceName: data.serviceName,
+    optOutUrl: data.optOutUrl,
+    walkthrough: data.walkthrough,
+    onClose: () => { host.hidden = true; }
+  });
+  host.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 populateFaceGrid();

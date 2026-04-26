@@ -51,3 +51,33 @@ export function getAiCatalog() {
 export function getFaceCatalog() {
   return faceCatalog;
 }
+
+// ─── Walkthrough lookups (PR1: AI + Face opt-out flows) ────────
+
+/**
+ * Look up an AI platform's opt-out walkthrough by catalog key.
+ * Returns null if the platform has no walkthrough (already-safe defaults).
+ */
+export function getAiWalkthrough(platformKey) {
+  const platform = aiCatalog.platforms?.[platformKey];
+  if (!platform || !platform.walkthrough) return null;
+  return {
+    serviceName: platform.displayName,
+    optOutUrl: platform.optOutUrl || null,
+    walkthrough: platform.walkthrough
+  };
+}
+
+/**
+ * Look up a face-search service's opt-out walkthrough by catalog key.
+ * Returns null if the service has no opt-out walkthrough.
+ */
+export function getFaceWalkthrough(serviceKey) {
+  const service = faceCatalog.services?.[serviceKey];
+  if (!service || !service.optOutWalkthrough) return null;
+  return {
+    serviceName: service.displayName,
+    optOutUrl: service.optOutUrl || null,
+    walkthrough: service.optOutWalkthrough
+  };
+}
