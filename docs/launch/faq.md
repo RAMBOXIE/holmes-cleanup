@@ -172,6 +172,163 @@ Perplexity Pro, Sora, Runway, Midjourney training corpus.
 
 ---
 
+## Face-search (PimEyes / Clearview / etc.)
+
+### Q5.8: Does Vanish actually upload my face anywhere?
+
+```
+NO. Vanish never sees your photo. `vanish face-scan` opens each service's
+own search page in your browser — you're the one who uploads to PimEyes /
+FaceCheck / etc. Vanish just maintains the service catalog (pricing,
+jurisdiction, what to expect) and walks you through it.
+
+Same with `face-opt-out` — we open the opt-out form, tell you what to
+upload (your photos go to the service for identity verification, NOT
+to Vanish), and record an HMAC-signed audit when you confirm submission.
+```
+
+### Q5.9: Why include Clearview AI if I can't search myself?
+
+```
+Because you have a legal right to delete yourself from Clearview's index
+even though only law enforcement can search it. Under California CCPA
+§1798.105 + GDPR Article 17, Clearview must delete your biometric data
+on request — and they comply, despite being a closed-to-public LE-only
+database. Vanish's `face-opt-out --clearview` walkthrough generates the
+exact CCPA/GDPR-citing request with government-ID verification template.
+
+Illinois residents have stronger BIPA rights — Clearview was banned from
+collecting biometric data of IL residents and ordered to delete past
+collections (2022 ACLU settlement).
+```
+
+---
+
+## NCII / leak content takedown
+
+### Q5.10: My intimate photos got leaked — what should I do FIRST?
+
+```
+StopNCII.org. Hash-register your images there before anything else.
+`vanish takedown --stopncii` walks you through it.
+
+StopNCII is operated by the Revenge Porn Helpline UK in partnership with
+Meta, TikTok, Bumble, Reddit, OnlyFans, Pornhub, Snap, and others. Your
+images are processed LOCALLY in your browser — only cryptographic hashes
+upload. The participating platforms then auto-block matching uploads
+going forward. ~100K victims have used it since 2021. Free.
+
+Then run `vanish takedown --google-intimate` for Google's dedicated
+intimate-imagery removal form (24-72h processing — faster than general
+DMCA). Then `vanish takedown --dmca-letter --all-leak-sites` to draft
+DMCA notices for the 12 leak/aggregator sites we have catalogued.
+
+If you're in immediate crisis: `vanish takedown --support` prints
+hotlines (CCRI 1-844-878-CCRI in the US, Revenge Porn Helpline UK,
+Australia eSafety Commissioner).
+```
+
+### Q5.11: Is Vanish for OnlyFans regret specifically?
+
+```
+No — it's for ANY non-consensual or unwanted intimate imagery situation:
+- Ex-partner posting revenge porn
+- Deepfakes depicting you
+- Pirated paid creator content (OnlyFans / Patreon / Fansly)
+- Career-change legacy content (sex work, modeling)
+- Minor-age content (any content from when you were under 18 — separate
+  CyberTipline path via NCMEC)
+
+Catalog terminology is deliberately neutral. The toolkit doesn't judge
+why you need takedown support — it just gives you the most effective
+free tools (StopNCII first), the dedicated search-engine forms, the
+DMCA letter generator with proper §512(c) sworn-statement format, and
+jurisdiction-aware C&D / police report / civil pre-suit demand templates.
+```
+
+### Q5.12: Are the legal templates actually legally sound?
+
+```
+They cite real law (DMCA §512(c), Shield Act 18 U.S.C. §2261A, Take It
+Down Act 2025, GDPR Art 17, UK Online Safety Act 2023, Canada §162.1,
+Australia OSA 2021, 48 US state NCII statutes via cybercivilrights.org/map),
+include the standard sworn-statement + perjury attestation language for
+DMCA, and follow the structure that reasonable people sending these
+letters use.
+
+That said: I'm not a lawyer, the templates aren't legal representation,
+and jurisdiction-specific enforcement varies. They're starting points —
+consult a privacy attorney for high-stakes situations. Cyber Civil Rights
+Initiative (cybercivilrights.org) has a pro-bono lawyer network that
+Vanish surfaces via `--support`.
+```
+
+---
+
+## Workforce-monitoring (Meta-memo case)
+
+### Q5.13: Can Vanish detect Teramind / ActivTrak on my work computer?
+
+```
+Best-effort yes. `vanish third-party-ai --detect-installed` scans your
+machine for the documented default install paths of 8 commercial
+workforce-monitoring vendors: ActivTrak, Teramind, Hubstaff, Time
+Doctor, Insightful, Veriato, InterGuard, Microsoft Viva Insights.
+
+A POSITIVE detection is strong forensic evidence — install paths get
+embedded in the objection letter as an exhibit. A NEGATIVE detection
+does NOT prove you aren't being monitored: vendors can use stealth
+installs at randomized paths, or your employer might have built
+internal tooling (the Meta-memo case). Use `--employer-internal`
+flag in that case to generate a generic disclosure-demand letter.
+```
+
+### Q5.14: Will Vanish kill the monitoring process or block its phone-home?
+
+```
+NO. That's anti-malware territory and explicitly out of scope. Vanish
+does:
+  ✓ Identify what's installed
+  ✓ Print the path so you can document it
+  ✓ Generate a jurisdiction-cited objection letter (NY EMA / IL BIPA /
+    German BetrVG §87 / GDPR Art 88)
+  ✓ Embed detected paths into the letter as forensic evidence
+
+Vanish does NOT:
+  ✗ Kill processes
+  ✗ Block network traffic
+  ✗ Provide anti-detection
+  ✗ Tamper with the monitoring agent
+
+Going beyond identification + legal-request would (a) likely violate
+employer ToS and possibly CFAA, (b) blur Vanish's "open-source privacy
+toolkit" identity into "employee anti-surveillance SaaS" territory.
+```
+
+### Q5.15: I'm in Illinois. Is keystroke logging actually a BIPA violation?
+
+```
+Plausibly yes, and there are pending class actions on this exact theory.
+Illinois BIPA (740 ILCS 14/) defines "biometric identifier" to include
+identifying patterns derived from physiological behavior. Keystroke
+dynamics (typing rhythm, hold-times, flight-times) and mouse-movement
+signatures are increasingly used by monitoring tools as user
+authentication / identification — which courts have begun treating as
+biometric collection requiring written informed consent + retention
+schedules + $1,000-$5,000 per-violation statutory damages.
+
+`vanish third-party-ai --teramind --jurisdiction US-state-IL-BIPA`
+generates the demand letter citing BIPA + statutory damages
+calculation. Standing for class action requires actual collection
+without proper consent — your detected install paths help establish
+that.
+
+Not legal advice. Talk to an Illinois employment-rights attorney before
+filing.
+```
+
+---
+
 ## Scope / Roadmap
 
 ### Q6: Why only 58 browser-assisted out of 210?
@@ -227,7 +384,7 @@ format is clean enough to extend.
 ### Q9: Windows / macOS / Linux support?
 
 ```
-All three are covered in CI (6 matrix combinations × 109 tests).
+All three are covered in CI (6 matrix combinations × 346 tests).
 Developed primarily on Windows, tested via GitHub Actions on Ubuntu,
 macOS, Windows × Node 20, Node 22.
 
@@ -319,7 +476,7 @@ devDep for the web app). `npx github:...` pulls ~500 KB.
 ### Q15: How confident are you in the 109 test count?
 
 ```
-CI runs all 109 on every commit × Ubuntu/macOS/Windows × Node 20/22
+CI runs all 346 on every commit × Ubuntu/macOS/Windows × Node 20/22
 = effectively 654 test executions per push. Failure in any matrix
 blocks merge.
 

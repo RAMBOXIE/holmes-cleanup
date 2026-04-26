@@ -9,20 +9,53 @@ privacy / open-source community.
 2. Verify GitHub Pages is live at https://ramboxie.github.io/vanish/
 3. Run `npm test` one last time (expect 129 passing — 109 original + 20 ai-scan)
 
-## Positioning
+## Positioning (v0.3 — 7 threats, 11 subcommands)
 
-Two killer claims for the posts:
+The launch story has expanded from "DeleteMe alternative + AI scan" (v0.2)
+to "open-source toolkit covering the full AI-era privacy surface" (v0.3).
+Pick the angle that matches the audience:
 
-1. **"Free alternative to DeleteMe / Optery / Incogni"** — familiar frame,
-   clear value prop (saves $99-$129/yr).
-2. **"Only tool that checks AI training exposure across 30 LLM platforms"** —
-   unique angle, no commercial competitor covers this. LinkedIn (Sept 2024),
-   Reddit (Google deal 2024), Twitter/X (Grok), Meta (forced opt-in) all
-   flipped defaults to opted-in-by-default while no one was looking.
+### For HN (engineering-minded)
+**Lead with the capability matrix.** HN respects honest distinction
+between triage / walkthrough / live-adapter (most privacy tools blur
+these). The "Capability matrix" section in the README is the strongest
+artifact — it shows we know exactly what does and doesn't work.
 
-Leading with AI scan hooks the r/privacy crowd that's been discussing
-these policy changes for months. Leading with brokers hooks the HN crowd
-that's used DeleteMe and wants a cheaper/cleaner alternative.
+Title candidates: "Vanish — open-source privacy toolkit for the AI era"
+or "Vanish — DMCA letter generator + workforce-monitoring detector +
+210 data brokers"
+
+### For r/privacy (rights-minded, news-aware)
+**Lead with the most timely sub-feature.** r/privacy has been discussing
+LinkedIn's Sept 2024 AI flip, Reddit's Google deal, the Meta workforce-
+monitoring memo, the Take It Down Act (2025), and BIPA class actions
+against employers using keystroke biometrics. Vanish has CLI commands
+that map 1:1 to these news cycles.
+
+Title candidates: "First open-source tool to detect employer-installed
+workforce-monitoring agents + generate BIPA / NY EMA / GDPR Art 88
+objection letters" or "Open-source NCII takedown toolkit (StopNCII +
+DMCA + Google intimate-imagery removal in one CLI)"
+
+### For r/selfhosted, r/opensource (technical-but-pragmatic)
+**Lead with the brand honesty.** Capability matrix + Non-goals + Clawhub
+compliance test. "We don't kill processes, don't send notifications,
+don't auto-submit. Identification + jurisdiction-cited legal-letter
+generation + HMAC audit trail. That's it."
+
+### Threat surfaces (use as tagline list)
+1. 🏢 Data brokers (210, with 58 walkthrough opt-out + all 3 US credit bureaus)
+2. 🤖 AI training exposure (30 platforms, 26 walkthrough opt-out)
+3. 👤 Face-search (8 services including Clearview)
+4. 🛡️ NCII / leak takedown (12 leak sites + StopNCII + Google intimate-imagery)
+5. ⚖️ Third-party AI + workforce-monitoring (22 tools across workplace/HR/medical/agentic)
+6. 🧠 LLM memorization probing + dataset membership check
+7. 🧹 AI conversation history cleanup (9 tools across local + web)
+
+### Differentiator one-liner
+"DeleteMe / Optery / Incogni are still fighting the 2018 broker war.
+Vanish covers the AI era — the threats privacy tools have ignored
+through 18 months of industry pivot."
 
 ## Files
 

@@ -6,13 +6,17 @@ https://news.ycombinator.com/submit
 ## Title (copy exactly, < 80 chars)
 
 ```
-Show HN: Vanish – scan 210 data brokers + 30 AI training platforms
+Show HN: Vanish – open-source privacy toolkit for the AI era
 ```
 
-**Alternative titles if the above feels overused**:
-- `Show HN: Vanish – find who's training AI on your data (30 platforms, open-source)`
-- `Show HN: Vanish – open-source DeleteMe alternative + AI training opt-out scan`
-- `Show HN: Vanish – privacy scanner for 210 data brokers, MIT licensed`
+**Strong alternative titles** (pick whichever feels best given current news cycle):
+- `Show HN: Vanish – scan brokers, AI training, face-search, dataset membership`
+- `Show HN: Vanish – DMCA letter generator + workforce-monitoring detector + 210 data brokers`
+- `Show HN: Vanish – privacy toolkit covering 7 AI-era threats (NCII, BIPA, GDPR Art 88)`
+- `Show HN: Vanish – check if GPT-4 has memorized your phone number (and 10 other things)`
+
+**Older v0.2-style fallback** (if you want to lead with the broker comparison):
+- `Show HN: Vanish – open-source DeleteMe alternative + AI training opt-out`
 
 ## URL field
 
@@ -28,41 +32,112 @@ that have both a URL and Text are split oddly. Submit URL-only.
 ```
 Hi HN! Author here. Quick context on why this exists:
 
-I looked at DeleteMe ($129+/yr), Optery ($99+/yr), Incogni ($99+/yr) and
-realized the core job is: fill out opt-out forms, wait for email verification,
-re-check in 30 days. That doesn't need a subscription.
+I started this as a free DeleteMe-alternative for data brokers. What it
+became (v0.3, just shipped): an open-source toolkit that covers SEVEN
+AI-era privacy threats most commercial services don't touch.
 
-What's in the repo:
+== The 11 subcommands across 5 threat surfaces ==
 
-• Local scan of 210 data brokers → 0-100 privacy score.
-  Pure heuristic — no API calls, no data transmitted. Runs in browser
-  (https://ramboxie.github.io/vanish/) or CLI (npx github:RAMBOXIE/vanish).
-• Browser-assisted opt-out for 58 brokers: Vanish opens the real opt-out URL,
-  pre-fills the form data in your clipboard, you solve the captcha and click
-  submit (~3 seconds per broker).
-• 30-day HTTP liveness verify (`vanish verify`) proves whether removal
-  actually worked — classifies each as removed / still-present / unknown.
-• AI training exposure scan (`vanish ai-scan`): 30 LLM-training platforms
-  (LinkedIn, Reddit, ChatGPT, Claude, Gemini, Copilot, Grammarly + 23 more)
-  classified as exposed / licensed / safe / action-needed. Every big platform
-  quietly flipped to opted-in-by-default in 2024-2025 — LinkedIn's AI-training
-  toggle, Reddit's Google deal, Twitter/X feeding Grok, Meta's forced opt-in.
-  DeleteMe / Optery / Incogni don't cover any of this.
-• HMAC-signed audit trail; encrypted local secret store (scrypt + per-secret
-  salt).
-• Covers all 3 US credit bureaus (Equifax / Experian / TransUnion) —
-  DeleteMe and Optery don't.
+🏢 DATA BROKERS (the original DeleteMe-style scope)
+• `vanish scan` — local heuristic across 210 brokers, 0-100 score, zero
+  HTTP. Pure local computation. Browser version at
+  ramboxie.github.io/vanish/
+• `vanish opt-out --broker X` — browser-assisted walkthrough for 58
+  brokers including all 3 US credit bureaus. Vanish opens the real
+  opt-out URL, pre-fills data into your clipboard, you solve captcha
+  and click submit. (Captchas are YOUR job — refusing 2captcha keeps
+  the zero-cost promise.)
+• `vanish verify` — 30-day HTTP liveness check on submitted profile
+  URLs. Removed / still-present / unknown classification.
+
+🤖 AI TRAINING EXPOSURE (every platform flipped to opted-in 2024-2025)
+• `vanish ai-scan` — classify 30 LLM platforms as exposed / licensed /
+  safe / action-needed. Zero personal data collected; takes only
+  platform names.
+• `vanish ai-opt-out --chatgpt --linkedin --cursor` — browser-assisted
+  walkthrough with EXACT toggle name + tier overrides
+  ("ChatGPT Team is already opted-out, skip"). 60-day reverify because
+  platforms silently reset settings.
+
+👤 FACE-SEARCH (PimEyes / Clearview / FindClone / etc.)
+• `vanish face-scan` + `vanish face-opt-out` — directory of 8 services
+  including Clearview AI (you can't search yourself but have CCPA/GDPR
+  deletion rights). Vanish never uploads your photo — opens each
+  service's own page.
+
+🛡️ NCII / LEAK TAKEDOWN (the gap nobody fills)
+• `vanish takedown --stopncii --google-intimate --dmca-letter
+  --all-leak-sites` — hash-register with StopNCII.org (your images
+  stay LOCAL, only hashes upload), Google's intimate-imagery
+  removal form, plus DMCA §512(c) notices for 12 leak/aggregator
+  sites (coomer / kemono / thothub / etc.). 4 legal letter
+  templates with jurisdiction-cited clauses (DMCA, Shield Act,
+  Take It Down Act 2025, GDPR Art 17, UK OSA, Canada §162.1, AU OSA).
+
+⚖️ THIRD-PARTY AI (tools OTHERS use on you, including the Meta-memo case)
+• `vanish third-party-ai --teramind --activtrak --detect-installed
+  --jurisdiction US-state-IL-BIPA` — local scan for 8 commercial
+  workforce-monitoring agents (ActivTrak / Teramind / Hubstaff / Time
+  Doctor / Insightful / Veriato / InterGuard / MS Viva Insights), then
+  generates a BIPA-cited objection letter with detected install paths
+  embedded as forensic evidence. Cites real law: NY Electronic
+  Monitoring Act §52-c, Illinois BIPA 740 ILCS 14/, German BetrVG §87,
+  GDPR Art 88. Also covers meeting AI (Zoom / Otter / Fireflies / Gong)
+  and HR/medical AI (HireVue / Pymetrics / Abridge / Nuance DAX).
+
+🧠 DEEP CHECKS (research-grade)
+• `vanish llm-memory-check --name "X" --email X@Y` — sends 15 stalker-
+  style probe prompts to GPT-4o-mini + Claude 3.5 Haiku via your own
+  API keys, reports verbatim-leak rate. First open-source tool to do
+  this for arbitrary individuals. ~$0.01/scan.
+• `vanish dataset-check --url X --all` — REAL Common Crawl CDX query
+  + walkthroughs for The Pile / C4 / LAION (HIBT) / RedPajama / Dolma /
+  FineWeb / WebText.
+• `vanish clean-ai-history --cursor --chatgpt --claude` — locate AI
+  conversation caches across 9 tools (Cursor, VS Code Copilot, ChatGPT
+  Desktop, Claude Desktop, web services). Prints exact shell command;
+  Vanish never runs `rm` for you.
+
+== Things deliberately NOT done ==
+
+No background daemons. No notification emails. No process killing.
+No anti-detection. No auto-submit of legal documents. No upload of
+your photos / emails / identity anywhere.
+
+Capability matrix in the README distinguishes triage / walkthrough /
+live-adapter clearly — the "210 brokers" is a triage catalog (local
+scoring), 58 have walkthrough opt-out, 8 have an EXPERIMENTAL live
+adapter that mostly fails on real broker captchas. The brand
+honesty is the point.
+
+== What's HMAC-signed ==
+
+Every confirmed opt-out / takedown / objection is recorded as an
+HMAC-SHA256 audit event in your local queue state. Admissible as
+evidence later. Three-tier secret store with scrypt KDF if you
+need credential persistence.
+
+== Stack ==
+
+Pure Node 20+ stdlib (zero npm deps in CLI; vite as devDep for the
+web app). 346 tests / 6-matrix CI / Ubuntu/macOS/Windows × Node 20/22.
+All catalogs are JSON; PRs adding a broker / AI platform / leak site
+are ~10 lines.
 
 Honest limits:
-- Captchas are YOUR job. I refuse to hook 2captcha — breaks the zero-cost
-  open-source promise.
-- Email verification links are your job (we remind you in the flow).
-- 58/210 brokers for opt-out (rest are scan-only blueprints with verified
-  opt-out URLs — add endpoint config to upgrade).
-- No legal review. Use at your own risk.
+• Captchas are YOUR job (no 2captcha integration).
+• Workforce-monitoring detection paths are based on vendor docs,
+  not live-verified on real installs (PRs welcome).
+• Letters cite real law but I'm not a lawyer; consult one for
+  jurisdiction-specific enforcement.
+• OpenAI/Anthropic API keys are bring-your-own; --dry-run uses a
+  mock provider for testing without keys.
 
-Would love feedback from anyone who's tried DeleteMe/Optery/Incogni — what
-did they do that I'm missing? And suggestions for the next 50 brokers to add.
+Would love feedback from anyone who's:
+- Tried DeleteMe/Optery/Incogni and can compare
+- Has experience with NY EMA / IL BIPA enforcement against employers
+- Has Teramind/ActivTrak installed and wants to verify our detection
+  paths against the real install (would take a 10-min PR)
 
 https://github.com/RAMBOXIE/vanish
 ```

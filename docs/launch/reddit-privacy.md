@@ -19,18 +19,18 @@ Secondary:
 ## Title
 
 ```
-[Open source] Privacy scanner for 210 data brokers + 30 AI training platforms (LinkedIn, Reddit, ChatGPT, etc). Free, local-first, MIT. Sharing for r/privacy feedback after HN.
+[Open source] Vanish v0.3 — privacy toolkit covering 7 AI-era threats: data brokers, AI training, face-search (PimEyes/Clearview), NCII takedown, workforce monitoring, dataset membership, LLM memorization. Free, local-first, MIT.
 ```
 
-**Alternative title if the above is too long for mobile**:
-```
-[Open source] Made a free scanner that checks your data exposure across 210 brokers AND which AI companies train on your data (30 platforms).
-```
+**Alternative titles** (pick by current news cycle):
+- `[Open source] First open-source tool to detect employer-installed workforce-monitoring agents (ActivTrak/Teramind/etc) + generates BIPA + NY EMA + GDPR Art 88 objection letters`
+- `[Open source] Open-source NCII takedown toolkit — StopNCII hash registry + DMCA letters for 12 leak sites + Google intimate-imagery removal in one CLI`
+- `[Open source] Made a privacy scanner that also checks which AI companies have memorized your phone number (yes, GPT-4 might know it)`
 
 **Key phrases that help pass mod filters**:
 - "Open source" in brackets = legit signal
-- "AI training" hook = timely, r/privacy has been discussing LinkedIn/Reddit AI deals for months
-- "sharing for feedback" = framing as asking, not pushing
+- "Free, local-first, MIT" = matches r/privacy values
+- Link to specific sub-feature (workforce monitoring / NCII / LLM memorization) in alt titles — different angles draw different commenters
 
 ## Body (use Markdown)
 
@@ -42,69 +42,125 @@ for what's essentially filling opt-out forms, waiting for email confirmation,
 and re-checking in 30 days. So I built [Vanish](https://github.com/RAMBOXIE/vanish) —
 an open-source alternative.
 
-**What it does**:
+**What it does (v0.3, just shipped)**:
 
-1. **Scan**: Enter your name → get a 0-100 privacy exposure score across
-   210 data brokers in 10 seconds. 100% client-side — browser and CLI both
-   run the scoring heuristic locally. No data transmitted.
+Vanish covers **7 distinct privacy threats** across 11 CLI subcommands. The
+first three are the "DeleteMe-alternative" core; the next four are AI-era
+threats commercial services don't touch.
 
-2. **Browser-assisted opt-out** (58 brokers): Opens your browser to the
-   real opt-out URL, pre-fills form data to your clipboard. You handle the
-   captcha + submit (because I refuse to hook 2captcha — breaks the zero-cost
-   OSS promise).
+🏢 **Data brokers (210)** — `vanish scan` (local heuristic, 0-100 score, zero
+network), `vanish opt-out --broker X` (browser-assisted for 58 incl. all 3
+credit bureaus), `vanish verify` (30-day HTTP liveness re-check)
 
-3. **30-day verify**: After submitting, Vanish records a follow-up. On day 30,
-   `vanish verify` checks each URL via HTTP — 404 = removed ✅, 200 = still
-   present ❌ (time to re-submit), other = unknown.
+🤖 **AI training exposure (30 platforms)** — `vanish ai-scan` classifies
+ChatGPT, Claude, Gemini, Copilot, LinkedIn, Reddit, Twitter/X, Meta AI,
+Cursor, GitHub Copilot, Grammarly + 19 others. LinkedIn flipped to ON in
+Sept 2024, Reddit signed a $60M/yr Google deal, Twitter feeds Grok, Meta
+forced GDPR objections — Vanish maps each platform's tier rules
+(Team/Enterprise often opted-out by default).
 
-4. **AI training exposure scan** (this is the part I'm most curious about
-   your feedback on): `vanish ai-scan --all` checks 30 LLM-training
-   platforms — ChatGPT, Claude, Gemini, Copilot, LinkedIn, Reddit,
-   Twitter/X (Grok), Meta AI, Grammarly, Notion AI, Gmail, Zoom, and 18
-   others. Classifies each as `exposed` (opted-in by default), `licensed`
-   (already sold to AI companies — Reddit/Tumblr/Medium), `safe` (opted-out
-   by default — Anthropic Claude), or `action-needed`.
-   
-   Most people don't know: LinkedIn flipped its AI-training toggle to ON
-   by default in Sept 2024. Reddit signed a reported $60M/yr Google training
-   deal. Twitter/X auto-feeds everything to Grok. Meta made users file GDPR
-   objections. All in the last 18 months. **Commercial services don't check
-   any of this.**
+👤 **Face-search (8 services incl. Clearview AI)** — `vanish face-scan`
++ `vanish face-opt-out` for PimEyes / FaceCheck.ID / FindClone / Lenso /
+TinEye / Yandex / Google Lens / Clearview. Vanish never uploads your
+photo — opens each service's own page. Clearview AI is LE-only but you
+have CCPA/GDPR deletion rights.
 
-5. **HMAC-signed audit trail** for proof of submissions (useful for
-   journalists, lawyers, or anyone who needs GDPR/CCPA receipts).
+🛡️ **NCII / leak content takedown** — `vanish takedown` covers StopNCII.org
+hash registration (your images stay LOCAL, only hashes upload), Google's
+intimate-imagery removal form (faster than general DMCA), DMCA §512(c)
+letters for 12 leak/aggregator sites (coomer / kemono / thothub / etc.),
+plus Cease & Desist + police report + civil pre-suit demand templates.
+Jurisdictions: US Shield Act + Take It Down Act 2025, GDPR Art 17, UK
+Online Safety Act, Canada §162.1, Australia OSA. Crisis hotlines (CCRI,
+Revenge Porn Helpline UK) built in via `vanish takedown --support`.
+
+⚖️ **Third-party AI + workforce-monitoring** — `vanish third-party-ai` covers
+22 tools: meeting AI (Zoom / Otter / Fireflies / Gong / Read.ai), HR/medical
+(HireVue / Pymetrics / Abridge / Nuance DAX), AND **8 commercial workforce-
+monitoring agents** (ActivTrak / Teramind / Hubstaff / Time Doctor /
+Insightful / Veriato / InterGuard / MS Viva Insights). The flag
+`--detect-installed` scans your machine for any of the 8 and embeds the
+found install paths into the objection letter as forensic evidence. Cites
+real law per jurisdiction: NY Electronic Monitoring Act §52-c (2022),
+Illinois BIPA 740 ILCS 14/ ($1k-$5k stat damages for keystroke biometric
+collection), German BetrVG §87 (works council co-determination), GDPR Art 88
+(employment-context proportionality).
+
+🧠 **Deep checks (research-grade)**:
+- `vanish llm-memory-check` — 15 stalker-style probes against GPT-4o-mini
+  + Claude 3.5 Haiku via your own API key. Detects verbatim leaks of
+  email/phone/workplace. **First open-source tool to do this for arbitrary
+  individuals.** Cost ~$0.01.
+- `vanish dataset-check --url X` — REAL Common Crawl CDX query + walkthroughs
+  for The Pile / C4 / LAION / RedPajama / Dolma / FineWeb / WebText.
+- `vanish clean-ai-history` — locate AI conversation caches across 9 tools
+  (Cursor, VS Code Copilot, ChatGPT/Claude Desktop, web services). Prints
+  exact shell command. Vanish never runs `rm` for you.
+
+**Audit trail**: Every confirmed action is HMAC-SHA256 signed in the local
+queue state. Admissible as evidence later (relevant for GDPR Art 21
+objections, CCPA "Do Not Sell" disputes).
 
 **Differentiation vs commercial services**:
 
 | | Vanish | DeleteMe | Optery | Incogni |
 |--|:--:|:--:|:--:|:--:|
 | Price | Free (MIT) | $129+/yr | $99+/yr | $99+/yr |
-| Brokers | 210 | 750+ | 350+ | 180+ |
-| AI training exposure scan | ✅ (30 platforms) | ❌ | ❌ | ❌ |
+| Data brokers | 210 | 750+ | 350+ | 180+ |
+| All 3 US credit bureaus | ✅ | ❌ | ❌ | ❌ |
+| AI training exposure (30 platforms) | ✅ | ❌ | ❌ | ❌ |
+| Face-search (PimEyes / Clearview) | ✅ | ❌ | ❌ | ❌ |
+| NCII / leak-site DMCA + StopNCII | ✅ | ❌ | ❌ | ❌ |
+| Workforce-monitoring detection | ✅ | ❌ | ❌ | ❌ |
+| LLM memorization probe | ✅ | ❌ | ❌ | ❌ |
+| Training-dataset membership check | ✅ | ❌ | ❌ | ❌ |
 | Open source | ✅ | ❌ | ❌ | ❌ |
 | Local-first (no data sent) | ✅ | ❌ | ❌ | ❌ |
-| Covers all 3 credit bureaus | ✅ | ❌ | ❌ | ❌ |
 
 **Honest limits** (don't want to oversell):
-- Captchas + email links are your job
-- 58/210 brokers have browser-assisted opt-out; rest are blueprints
-- No legal review of DMCA templates (use at own risk)
-- Scan is heuristic (not confirmed presence — that requires Google dorks,
-  which is planned but not yet)
+- Captchas + email links are your job (no 2captcha integration)
+- Workforce-monitoring detection is **best-effort** — paths are based on
+  vendor docs, not live-verified on real installs (PRs welcome)
+- Letters cite real law but I'm not a lawyer; consult one for enforcement
+- LLM memory check requires your own OpenAI / Anthropic API key (`--dry-run`
+  uses a mock provider for testing without keys)
+- 58/210 brokers for browser-assisted opt-out; rest are scan-only triage
+  blueprints with verified opt-out URLs
 
 **HN discussion** (if useful context):
 [link to your HN Show HN post — update this before submitting]
 
 **Try it**:
-- Browser: https://ramboxie.github.io/vanish/
-- Broker scan: `npx github:RAMBOXIE/vanish scan --name "Your Name"`
-- AI training scan: `npx github:RAMBOXIE/vanish ai-scan --all`
-  (takes no personal info — just checks which of the 30 platforms you use)
+```bash
+# Browser (broker scan + AI scan + face directory)
+https://ramboxie.github.io/vanish/
+
+# Broker scan (10s, zero network)
+npx github:RAMBOXIE/vanish scan --name "Your Name"
+
+# AI training exposure (no personal info, just platform names)
+npx github:RAMBOXIE/vanish ai-scan --all
+
+# Face-search audit (Vanish never uploads your photo)
+npx github:RAMBOXIE/vanish face-scan --pimeyes --facecheck
+
+# Workforce-monitoring detect on your work device
+npx github:RAMBOXIE/vanish third-party-ai --detect-installed
+
+# NCII takedown — start with StopNCII.org hash registration
+npx github:RAMBOXIE/vanish takedown --stopncii
+
+# Any concerns? See crisis hotlines + legal aid:
+npx github:RAMBOXIE/vanish takedown --support
+```
 
 Would love to hear:
 - Which brokers I'm missing that r/privacy folks care about?
 - Non-US brokers I should prioritize (EU/UK/JP/etc.)?
 - Which AI platforms should I add next? (current list leans US/EN)
+- Anyone with Teramind / ActivTrak installed who can verify our detection
+  paths against the real install? (would take ~10 min — just run
+  `--detect-installed` and report whether install paths match)
 - Anyone tried the commercial services — what did they do well that I
   should emulate?
 
