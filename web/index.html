@@ -32,6 +32,7 @@
           <button type="button" class="tab" data-tab="ai" role="tab" aria-selected="false">🤖 AI Training</button>
           <button type="button" class="tab" data-tab="face" role="tab" aria-selected="false">👤 Face Search</button>
           <button type="button" class="tab" data-tab="takedown" role="tab" aria-selected="false">🛡️ Takedown</button>
+          <button type="button" class="tab" data-tab="report" role="tab" aria-selected="false">📋 Report & Verify</button>
         </nav>
 
         <!-- BROKER TAB -->
@@ -207,6 +208,44 @@
           <p class="cli-upsell-mini">
             All of the above also works on the command line:
             <code>npx github:RAMBOXIE/vanish takedown --help</code>
+          </p>
+        </div>
+
+        <!-- REPORT & VERIFY TAB -->
+        <div class="tab-panel" data-panel="report" role="tabpanel" hidden>
+          <p class="panel-intro">
+            <strong>Inspect a CLI-generated report or queue-state file.</strong>
+            Drop in the JSON output of <code>vanish report</code> or your local
+            <code>data/queue-state.json</code> to see verification status,
+            audit chain, and queue health.
+            Files are parsed entirely in your browser — they are not uploaded anywhere.
+          </p>
+
+          <section class="takedown-section">
+            <h3>Drop your audit JSON here</h3>
+            <p class="takedown-section-intro">
+              Accepts a <code>vanish report</code> JSON or a <code>queue-state.json</code>.
+              10 MB cap. <strong>HMAC verification cannot be done in the browser without
+              leaking the secret</strong> — the audit chain below is checked for shape
+              only; for cryptographic verification re-run on the machine that holds
+              <code>VANISH_AUDIT_HMAC_KEY</code>.
+            </p>
+            <label class="report-dropzone" id="report-dropzone">
+              <input type="file" id="report-file-input" accept=".json,application/json" />
+              <span class="report-dropzone-label">📥 Click here or drop a JSON file</span>
+              <span class="report-dropzone-hint">e.g. <code>reports/proof-2026-04-26-*.md</code> or <code>data/queue-state.json</code></span>
+            </label>
+            <div class="report-error" id="report-error" hidden></div>
+          </section>
+
+          <section class="takedown-section" id="report-output-section" hidden>
+            <div class="report-output" id="report-output"></div>
+            <button type="button" class="takedown-cta" id="report-clear-btn">← Drop another file</button>
+          </section>
+
+          <p class="cli-upsell-mini">
+            Generate a fresh report on the CLI:
+            <code>npx github:RAMBOXIE/vanish report ./path/to/result.json</code>
           </p>
         </div>
 

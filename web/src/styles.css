@@ -1400,6 +1400,379 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   color: var(--text);
 }
 
+/* ─── REPORT & VERIFY TAB (PR 3: structural-only audit inspector) ─── */
+
+.report-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px;
+  background: var(--bg-elev);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease;
+  margin-top: 8px;
+}
+
+.report-dropzone:hover,
+.report-dropzone.dragover {
+  border-color: var(--accent);
+  background: rgba(255, 149, 0, 0.04);
+}
+
+.report-dropzone input[type="file"] {
+  display: none;
+}
+
+.report-dropzone-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.report-dropzone-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.report-dropzone-hint code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  background: var(--bg-card);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.report-error {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 59, 48, 0.08);
+  border: 1px solid var(--critical);
+  border-radius: 8px;
+  color: var(--critical);
+  font-size: 13px;
+}
+
+.report-output {
+  margin-bottom: 16px;
+}
+
+/* Artifact view (queue-renderer output) */
+.artifact-head {
+  margin-bottom: 16px;
+}
+
+.artifact-head-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.artifact-head h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.artifact-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.artifact-meta code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  background: var(--bg-elev);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--text-dim);
+}
+
+.artifact-issues {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: rgba(255, 204, 0, 0.08);
+  border: 1px solid var(--moderate);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.status-badge {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.status-ok {
+  background: rgba(52, 199, 89, 0.12);
+  color: var(--low);
+  border: 1px solid var(--low);
+}
+
+.status-warn {
+  background: rgba(255, 204, 0, 0.10);
+  color: var(--moderate);
+  border: 1px solid var(--moderate);
+}
+
+.status-blocked,
+.status-err {
+  background: rgba(255, 59, 48, 0.10);
+  color: var(--critical);
+  border: 1px solid var(--critical);
+}
+
+.status-unknown,
+.status-mode {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.hmac-disclaimer {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: rgba(255, 204, 0, 0.06);
+  border: 1px solid var(--moderate);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.hmac-disclaimer strong {
+  color: var(--moderate);
+}
+
+.hmac-disclaimer code {
+  background: var(--bg-card);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  color: var(--text);
+}
+
+.hmac-summary {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.artifact-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.summary-cell {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.summary-cell-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.summary-cell-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.artifact-section {
+  margin-top: 18px;
+}
+
+.artifact-section h4 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.artifact-count {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+
+.artifact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.artifact-table th,
+.artifact-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.artifact-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.artifact-table code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.status-pill {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.bucket-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bucket-item {
+  font-size: 13px;
+  padding: 8px 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+}
+
+.bucket-item code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.bucket-time {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.bucket-more {
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.artifact-extra-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+/* Audit timeline */
+.audit-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.audit-entry {
+  padding: 10px 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.audit-entry-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.audit-event {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.audit-at {
+  margin-left: auto;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.audit-reason {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.audit-sig {
+  margin-top: 4px;
+}
+
+.audit-sig code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  word-break: break-all;
+}
+
+.audit-event-summary {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.audit-event-pill {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
 /* Walkthrough trigger buttons (in AI quick-win cards + face service cards) */
 .ai-card-actions {
   display: flex;

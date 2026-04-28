@@ -26,6 +26,13 @@ import {
   generateDmcaBatch,
   generateLetter
 } from './lib/takedown-letter.js';
+import {
+  safeParseJson,
+  parseAuditArtifact,
+  validateStructure,
+  MAX_INPUT_BYTES
+} from './lib/audit-parser.js';
+import { renderArtifactView } from './lib/queue-renderer.js';
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
@@ -766,6 +773,81 @@ async function copyToClipboardWithFeedback(btn, text) {
 }
 
 populateTakedownTab();
+
+// ─── Report & Verify (PR 3: drop-in audit / queue-state inspector) ───
+
+function wireReportTab() {
+  const input = $('#report-file-input');
+  const dropzone = $('#report-dropzone');
+  const errBox = $('#report-error');
+  const outputSection = $('#report-output-section');
+  const output = $('#report-output');
+  const clearBtn = $('#report-clear-btn');
+  if (!input || !dropzone) return;
+
+  const showError = (msg) => {
+    if (!errBox) return;
+    errBox.hidden = false;
+    errBox.textContent = msg;
+  };
+  const clearError = () => {
+    if (!errBox) return;
+    errBox.hidden = true;
+    errBox.textContent = '';
+  };
+
+  const handleFile = (file) => {
+    clearError();
+    if (!file) return;
+    if (file.size > MAX_INPUT_BYTES) {
+      showError(`File is ${(file.size / 1024 / 1024).toFixed(1)} MB — over the 10 MB cap.`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onerror = () => showError('Could not read file.');
+    reader.onload = () => {
+      const text = String(reader.result || '');
+      const parsed = safeParseJson(text);
+      if (!parsed.ok) { showError(parsed.error); return; }
+      const view = parseAuditArtifact(parsed.value);
+      const validation = validateStructure(parsed.value);
+      renderArtifactView(output, view, validation);
+      outputSection.hidden = false;
+      outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    reader.readAsText(file);
+  };
+
+  input.addEventListener('change', () => {
+    const file = input.files?.[0];
+    if (file) handleFile(file);
+  });
+
+  // Drag-and-drop
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    const file = e.dataTransfer?.files?.[0];
+    if (file) handleFile(file);
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      output.innerHTML = '';
+      outputSection.hidden = true;
+      input.value = '';
+      clearError();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+}
+
+wireReportTab();
 
 // ─── Share card actions (shared broker + AI) ────────────────────
 
